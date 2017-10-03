@@ -1,6 +1,8 @@
 (ns manager.db.core
   (:require
     [cheshire.core :refer [generate-string parse-string]]
+    [camel-snake-kebab.extras :refer [transform-keys]]
+    [camel-snake-kebab.core :refer [->kebab-case-keyword]]
     [clj-time.jdbc]
     [clojure.java.jdbc :as jdbc]
     [conman.core :as conman]
@@ -54,3 +56,29 @@
   (sql-value [value] (to-pg-json value))
   IPersistentVector
   (sql-value [value] (to-pg-json value)))
+
+; ------------------------------------------------------------------------------
+; Massaging key names from SQL to Clojure style
+; ------------------------------------------------------------------------------
+
+(defn result-one-snake->kebab
+  [this result options]
+  (->> (hugsql.adapter/result-one this result options)
+       (transform-keys ->kebab-case-keyword)))
+
+(defn result-many-snake->kebab
+  [this result options]
+  (->> (hugsql.adapter/result-many this result options)
+       (map #(transform-keys ->kebab-case-keyword %))))
+
+(defmethod hugsql.core/hugsql-result-fn :1 [sym]
+  'yuggoth.db.core/result-one-snake->kebab)
+
+(defmethod hugsql.core/hugsql-result-fn :one [sym]
+  'yuggoth.db.core/result-one-snake->kebab)
+
+(defmethod hugsql.core/hugsql-result-fn :* [sym]
+  'yuggoth.db.core/result-many-snake->kebab)
+
+(defmethod hugsql.core/hugsql-result-fn :many [sym]
+  'yuggoth.db.core/result-many-snake->kebab)

@@ -1,14 +1,28 @@
 (ns manager.core
-  (:require [reagent.core :as r]
-            [re-frame.core :as rf]
-            [secretary.core :as secretary]
-            [goog.events :as events]
-            [goog.history.EventType :as HistoryEventType]
-            [markdown.core :refer [md->html]]
-            [ajax.core :refer [GET POST]]
-            [manager.ajax :refer [load-interceptors!]]
-            [manager.events])
-  (:import goog.History))
+  (:require
+   [reagent.core :as r :refer [atom]]
+   [re-frame.core :as rf]
+   [manager.ajax :refer [load-interceptors!]]
+   [manager.events]
+   [manager.routes :refer [hook-browser-navigation!]]
+   ;;; Views
+   [manager.components :refer [base breadcrumbs thead tbody]]
+   [manager.pages.task :as task]))
+
+; ------------------------------------------------------------------------------
+; Utils
+; ------------------------------------------------------------------------------
+
+(defn index-of [s v]
+  (loop [idx 0 items s]
+    (cond
+      (empty? items) nil
+      (= v (first items)) idx
+      :else (recur (inc idx) (rest items)))))
+
+; ------------------------------------------------------------------------------
+; Components
+; ------------------------------------------------------------------------------
 
 (defn navbar []
   [:nav.navbar.navbar-inverse
@@ -23,59 +37,55 @@
       [:span.icon-bar]
       [:span.icon-bar]
       [:span.icon-bar]]
-     [:a.navbar-brand {:href "#"} "Manager"]]
+     [:a.navbar-brand {:href "/"} "Manager"]]
     [:div#bs-example-navbar-collapse-1.collapse.navbar-collapse
      [:ul.nav.navbar-nav.navbar-right
       [:li [:a {:href "#"} "Link"]]]]]])
 
-
-(defn about-page []
-  [:div.container
-   [:div.row
-    [:div.col-md-12
-     [:img {:src (str js/context "/img/warning_clojure.png")}]]]])
+(defn project-page []
+  (r/with-let [project (rf/subscribe [:project])]
+    [base
+     [breadcrumbs
+      [(str "/projects/" (:id @project)) (:title @project) :active]]
+     [:div.panel.panel-default
+      [:div.panel-heading
+       [:h2
+        [:a {:href (str "/projects/" (:id @project))}
+         (:title @project)]
+        " "
+        [:a.btn.btn-primary
+         {:href (str "/projects/" (:id @project) "/tasks/new")}
+         [:i.glyphicon.glyphicon-plus] " Add new"]]]
+      [:div.panel-body
+       [task/tasks project]]]]))
 
 (defn home-page []
-  [:div.container
-   (when-let [docs @(rf/subscribe [:docs])]
-     [:div.row>div.col-sm-12
-      [:div {:dangerouslySetInnerHTML
-             {:__html (md->html docs)}}]])])
+  (r/with-let [projects (rf/subscribe [:projects])]
+    [base
+     [breadcrumbs]
+     (for [project (vals @projects)]
+       ^{:key (:id project)}
+       [:div.row
+        [:div.col-md-12
+         [:div.panel.panel-default
+          [:div.panel-heading
+           [:h2
+            [:a {:href (str "/projects/" (:id project))}
+             (:title project)]]]]]])]))
 
 (def pages
   {:home #'home-page
-   :about #'about-page})
+   :project #'project-page
+   :edit-task #'task/edit-task-page})
 
 (defn page []
   [:div
    [navbar]
    [(pages @(rf/subscribe [:page]))]])
 
-;; -------------------------
-;; Routes
-(secretary/set-config! :prefix "#")
-
-(secretary/defroute "/" []
-  (rf/dispatch [:set-active-page :home]))
-
-(secretary/defroute "/about" []
-  (rf/dispatch [:set-active-page :about]))
-
-;; -------------------------
-;; History
-;; must be called after routes have been defined
-(defn hook-browser-navigation! []
-  (doto (History.)
-    (events/listen
-      HistoryEventType/NAVIGATE
-      (fn [event]
-        (secretary/dispatch! (.-token event))))
-    (.setEnabled true)))
-
-;; -------------------------
-;; Initialize app
-(defn fetch-docs! []
-  (GET "/docs" {:handler #(rf/dispatch [:set-docs %])}))
+; ------------------------------------------------------------------------------
+; Initialize app
+; ------------------------------------------------------------------------------
 
 (defn mount-components []
   (rf/clear-subscription-cache!)
@@ -84,6 +94,5 @@
 (defn init! []
   (rf/dispatch-sync [:initialize-db])
   (load-interceptors!)
-  (fetch-docs!)
   (hook-browser-navigation!)
   (mount-components))

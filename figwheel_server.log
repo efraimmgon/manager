@@ -15,3 +15,956 @@ notifying browser that file changed:  target/cljsbuild/public/js/out/manager/cor
 [0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
 [32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.459 seconds.[0m
 notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.569 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/db.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.594 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 2.573 seconds.[0m
+[36m----  Could not Analyze  src/cljs/manager/core.cljs   line:45  column:5  ----[0m
+
+  [1mWrong number of args (1) passed to: core/for[0m
+
+  [36m43[0m  [36m       ^{:key th}[0m
+  [36m44[0m  [36m       [:th th]))[0m
+  [33m45[0m  [1m    (for [th headers])]])[0m
+  [0m  [0m  [33m    ^--- Wrong number of args (1) passed to: core/for[0m
+  [36m46[0m  [36m[0m
+  [36m47[0m  [36m(defn tbody [rows][0m
+  [36m48[0m  [36m  (into[0m
+
+[36m----  Analysis Error : Please see src/cljs/manager/core.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.029 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.287 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.989 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.062 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.953 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.37 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.385 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.311 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.502 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.246 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.277 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.946 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.984 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.821 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.848 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.441 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/core.cljs   line:77  column:21  ----[0m
+
+  [1mUse of undeclared Var manager.core/project[0m
+
+  [36m73[0m  [36m   (conj headers "Edit" "Delete")])[0m
+  [36m74[0m  [36m[0m
+  [36m75[0m  [36m(defn tbody-editable [rows][0m
+  [36m76[0m  [36m  [tbody-indexed[0m
+  [33m77[0m  [1m   (->> (:schedules project)[0m
+  [0m  [0m  [33m                    ^--- Use of undeclared Var manager.core/project[0m
+  [36m78[0m  [36m        (map (juxt :feature :task :orig-est :curr-est :priority :elapsed :remain :status))[0m
+  [36m79[0m  [36m        (map #(conj % [:i.glyphicon.glyphicon-pencil] [:i.glyphicon.glyphicon-remove])))])[0m
+  [36m80[0m  [36m[0m
+  [36m81[0m  [36m(defn schedules [project][0m
+  [36m82[0m  [36m  [:div[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/core.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.768 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.588 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.795 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.265 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.832 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.552 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.432 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.361 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.43 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.113 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.483 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/db.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.066 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.818 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/goog/deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/db.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.067 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.951 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.785 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 4.337 seconds.[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.064 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 0.045 seconds.[0m
+[36m----  Could not Analyze  src/cljs/manager/routes.cljs   line:1  column:1  ----[0m
+
+  [1mOnly :refer-clojure, :require, :require-macros, :use, :use-macros, and :import libspecs supported. Got [re-frame.core :as rf] instead. at line 1 src/cljs/manager/routes.cljs[0m
+
+  [33m1[0m  [1m(ns manager.routes[0m
+  [0m [0m  [33m^--- Only :refer-clojure, :require, :require-macros, :use, :use-macros, and :import libspecs supported. Got [re-frame.core :as rf] instead. at line 1 src/cljs/manager/routes.cljs[0m
+  [36m2[0m  [36m  (:require[0m
+  [36m3[0m  [36m   [accountant.core :as accountant])[0m
+  [36m4[0m  [36m   [re-frame.core :as rf][0m
+
+[36m----  Analysis Error : Please see src/cljs/manager/routes.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 1.723 seconds.[0m
+[36m----  Could not Analyze  src/cljs/manager/routes.cljs  ----[0m
+
+  [1mNo such namespace: accountant.core, could not locate accountant/core.cljs, accountant/core.cljc, or JavaScript source providing "accountant.core" [0m
+
+[36m----  Analysis Error : Please see src/cljs/manager/routes.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 0.64 seconds.[0m
+[36m----  Could not Analyze  src/cljs/manager/routes.cljs  ----[0m
+
+  [1mNo such namespace: accountant.core, could not locate accountant/core.cljs, accountant/core.cljc, or JavaScript source providing "accountant.core" [0m
+
+[36m----  Analysis Error : Please see src/cljs/manager/routes.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/core.cljs   line:160  column:4  ----[0m
+
+  [1mUse of undeclared Var manager.core/hook-browser-navigation![0m
+
+  [36m157[0m  [36m(defn init! [][0m
+  [36m158[0m  [36m  (rf/dispatch-sync [:initialize-db])[0m
+  [36m159[0m  [36m  (load-interceptors!)[0m
+  [33m160[0m  [1m  (hook-browser-navigation!)[0m
+  [0m   [0m  [33m   ^--- Use of undeclared Var manager.core/hook-browser-navigation![0m
+  [36m161[0m  [36m  (mount-components))[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/core.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.288 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/goog/deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.122 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.232 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.037 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.565 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/routes.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.89 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/routes.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.609 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/db.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.789 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.032 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/db.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.888 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.485 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/db.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 4.173 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.031 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 4.32 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 4.606 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.907 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 0.811 seconds.[0m
+[36m----  Could not Read  src/cljs/manager/core.cljs   line:76  column:30  ----[0m
+
+  [1mNested #()s are not allowed[0m
+
+  [36m74[0m  [36m(map #(conj %[0m
+  [36m75[0m  [36m            [:button.btn.btn-default[0m
+  [33m76[0m  [1m             {:on-click #(rf/dispatch [:delete-task project-id (first %)])}[0m
+  [0m  [0m  [33m                          ^--- Nested #()s are not allowed[0m
+  [36m77[0m  [36m             [:i.glyphicon.glyphicon-pencil]][0m
+  [36m78[0m  [36m            [:button.btn.btn-default [:i.glyphicon.glyphicon-remove]])[0m
+  [36m79[0m  [36m     rows)])[0m
+
+[36m----  Reader Error : Please see src/cljs/manager/core.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.632 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.922 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.252 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.969 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/routes.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.938 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/routes.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.261 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.789 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/routes.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.174 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.752 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/routes.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.3 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/routes.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/events.cljs   line:78  column:3  ----[0m
+
+  [1mWrong number of args (0) passed to manager.events/query[0m
+
+  [36m74[0m  [36m query)[0m
+  [36m75[0m  [36m[0m
+  [36m76[0m  [36m(reg-sub[0m
+  [36m77[0m  [36m  :project[0m
+  [33m78[0m  [1m  (query))[0m
+  [0m  [0m  [33m  ^--- Wrong number of args (0) passed to manager.events/query[0m
+  [36m79[0m  [36m[0m
+  [36m80[0m  [36m; Tasks ------------------------------------------------------------------------[0m
+  [36m81[0m  [36m[0m
+  [36m82[0m  [36m(reg-sub[0m
+  [36m83[0m  [36m :task[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/events.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.256 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.906 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.686 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.333 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.827 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.968 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.988 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.033 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.487 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.833 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.955 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.547 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.804 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.182 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.902 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.975 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/routes.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.007 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.847 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.246 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.133 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 4.133 seconds.[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.336 seconds.[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.143 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/goog/deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/components.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.162 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/pages/task.cljs   line:12  column:6  ----[0m
+
+  [1mUse of undeclared Var manager.pages.task/tbody[0m
+
+  [36m 8[0m  [36m Assumes the first item in the row is the id."[0m
+  [36m 9[0m  [36m[][0m
+  [36m10[0m  [36m(r/with-let [project (rf/subscribe [:project])[0m
+  [36m11[0m  [36m             tasks (rf/subscribe [:tasks])][0m
+  [33m12[0m  [1m  [tbody[0m
+  [0m  [0m  [33m   ^--- Use of undeclared Var manager.pages.task/tbody[0m
+  [36m13[0m  [36m   (map (fn [row][0m
+  [36m14[0m  [36m          (conj row[0m
+  [36m15[0m  [36m                [:a.btn.btn-default[0m
+  [36m16[0m  [36m                 {:href (str "/projects/" (:id @project) "/tasks/" (first row) "/edit")}[0m
+  [36m17[0m  [36m                 [:i.glyphicon.glyphicon-pencil]][0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/pages/task.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/manager/pages/task.cljs   line:27  column:6  ----[0m
+
+  [1mUse of undeclared Var manager.pages.task/thead-editable[0m
+
+  [36m24[0m  [36m(defn tasks [project][0m
+  [36m25[0m  [36m  [:div[0m
+  [36m26[0m  [36m   [:table.table.table-striped.table-hover.table-bordered[0m
+  [33m27[0m  [1m    [thead-editable[0m
+  [0m  [0m  [33m     ^--- Use of undeclared Var manager.pages.task/thead-editable[0m
+  [36m28[0m  [36m      ["task-id"[0m
+  [36m29[0m  [36m       "Feature"[0m
+  [36m30[0m  [36m       "Task"[0m
+  [36m31[0m  [36m       "Orig est"[0m
+  [36m32[0m  [36m       "Curr est"[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/pages/task.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.556 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.155 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.661 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.604 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.852 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 4.708 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.485 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.254 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.954 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/pages/task.cljs   line:91  column:20  ----[0m
+
+  [1mWrong number of args (3) passed to :elapsed[0m
+
+  [36m88[0m  [36m         [:div.form-group[0m
+  [36m89[0m  [36m          [:h4 [:label {:for "elapsed"} "Elapsed"]][0m
+  [36m90[0m  [36m          [:input#elapsed.form-control[0m
+  [33m91[0m  [1m           {:value (:elapsed @task, :type "number")}]][0m
+  [0m  [0m  [33m                   ^--- Wrong number of args (3) passed to :elapsed[0m
+  [36m92[0m  [36m[0m
+  [36m93[0m  [36m         [:div.form-group[0m
+  [36m94[0m  [36m          [:h4 [:label {:for "remain"} "Remain"]][0m
+  [36m95[0m  [36m          [:input#remain.form-control[0m
+  [36m96[0m  [36m           {:value (:remain @task), :type "number"}]][0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/pages/task.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.196 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.095 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.458 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.591 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.732 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.143 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 1.38 seconds.[0m
+[36m----  Could not Read  src/cljs/manager/pages/task.cljs   line:77 ----[0m
+
+  [1m/Users/efraimmgon/projects/manager/src/cljs/manager/pages/task.cljs [line 77, col 71] The map literal starting with :for on line 77 column 43 contains 3 form(s). Map literals must contain an even number of forms.[0m
+
+  [36m76[0m  [36m[:div.form-group[0m
+  [33m77[0m  [1m [:label.col-sm-2.control-label {:for "curr-est" "Curr est"}][0m
+  [0m  [0m  [33m /Users/efraimmgon/projects/manager/src/cljs/manager/pages/task.cljs [line 77, col 71] The map literal starting with :for on line 77 column 43 contains 3 form(s). Map literals must contain an even number of forms.[0m
+  [36m78[0m  [36m [:div.col-sm-10[0m
+  [36m79[0m  [36m  [:input#feature.form-control[0m
+  [36m80[0m  [36m   {:value (:curr-est @task), :type "number"}]]][0m
+
+[36m----  Reader Error : Please see src/cljs/manager/pages/task.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 1.33 seconds.[0m
+[36m----  Could not Read  src/cljs/manager/pages/task.cljs   line:83 ----[0m
+
+  [1m/Users/efraimmgon/projects/manager/src/cljs/manager/pages/task.cljs [line 83, col 71] The map literal starting with :for on line 83 column 43 contains 3 form(s). Map literals must contain an even number of forms.[0m
+
+  [36m82[0m  [36m[:div.form-group[0m
+  [33m83[0m  [1m [:label.col-sm-2.control-label {:for "priority" "Priority"}][0m
+  [0m  [0m  [33m /Users/efraimmgon/projects/manager/src/cljs/manager/pages/task.cljs [line 83, col 71] The map literal starting with :for on line 83 column 43 contains 3 form(s). Map literals must contain an even number of forms.[0m
+  [36m84[0m  [36m [:div.col-sm-10[0m
+  [36m85[0m  [36m  [:select#priority.form-control[0m
+  [36m86[0m  [36m    [:option "1 - urgent"][0m
+
+[36m----  Reader Error : Please see src/cljs/manager/pages/task.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.097 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.436 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.85 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 5.268 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/goog/deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/pages/task.cljs   line:59  column:26  ----[0m
+
+  [1mUse of undeclared Var manager.pages.task/task[0m
+
+  [36m55[0m  [36m   [:div.form-group[0m
+  [36m56[0m  [36m    [:label.col-sm-2.control-label {:for "feature"} "Feature"][0m
+  [36m57[0m  [36m    [:div.col-sm-10[0m
+  [36m58[0m  [36m     [:input#feature.form-control[0m
+  [33m59[0m  [1m      {:value (:feature @task), :type "text"}]]][0m
+  [0m  [0m  [33m                         ^--- Use of undeclared Var manager.pages.task/task[0m
+  [36m60[0m  [36m[0m
+  [36m61[0m  [36m   [:div.form-group[0m
+  [36m62[0m  [36m    [:label.col-sm-2.control-label {:for "orig-est"} "Orig est"][0m
+  [36m63[0m  [36m    [:div.col-sm-10[0m
+  [36m64[0m  [36m     [:input#orig-est.form-control[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/pages/task.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/manager/pages/task.cljs   line:65  column:27  ----[0m
+
+  [1mUse of undeclared Var manager.pages.task/task[0m
+
+  [36m61[0m  [36m   [:div.form-group[0m
+  [36m62[0m  [36m    [:label.col-sm-2.control-label {:for "orig-est"} "Orig est"][0m
+  [36m63[0m  [36m    [:div.col-sm-10[0m
+  [36m64[0m  [36m     [:input#orig-est.form-control[0m
+  [33m65[0m  [1m      {:value (:orig-est @task), :type "number"}]]][0m
+  [0m  [0m  [33m                          ^--- Use of undeclared Var manager.pages.task/task[0m
+  [36m66[0m  [36m[0m
+  [36m67[0m  [36m   [:div.form-group[0m
+  [36m68[0m  [36m    [:label.col-sm-2.control-label {:for "curr-est"} "Curr est"][0m
+  [36m69[0m  [36m    [:div.col-sm-10[0m
+  [36m70[0m  [36m     [:input#feature.form-control[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/pages/task.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/manager/pages/task.cljs   line:71  column:27  ----[0m
+
+  [1mUse of undeclared Var manager.pages.task/task[0m
+
+  [36m67[0m  [36m   [:div.form-group[0m
+  [36m68[0m  [36m    [:label.col-sm-2.control-label {:for "curr-est"} "Curr est"][0m
+  [36m69[0m  [36m    [:div.col-sm-10[0m
+  [36m70[0m  [36m     [:input#feature.form-control[0m
+  [33m71[0m  [1m      {:value (:curr-est @task), :type "number"}]]][0m
+  [0m  [0m  [33m                          ^--- Use of undeclared Var manager.pages.task/task[0m
+  [36m72[0m  [36m[0m
+  [36m73[0m  [36m   [:div.form-group[0m
+  [36m74[0m  [36m    [:label.col-sm-2.control-label {:for "priority"} "Priority"][0m
+  [36m75[0m  [36m    [:div.col-sm-10[0m
+  [36m76[0m  [36m     [:select#priority.form-control[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/pages/task.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/manager/pages/task.cljs   line:89  column:26  ----[0m
+
+  [1mUse of undeclared Var manager.pages.task/task[0m
+
+  [36m85[0m  [36m   [:div.form-group[0m
+  [36m86[0m  [36m    [:label.col-sm-2.control-label {:for "elapsed"} "Elapsed"][0m
+  [36m87[0m  [36m    [:div.col-sm-10[0m
+  [36m88[0m  [36m     [:input#elapsed.form-control[0m
+  [33m89[0m  [1m      {:value (:elapsed @task), :type "number"}]]][0m
+  [0m  [0m  [33m                         ^--- Use of undeclared Var manager.pages.task/task[0m
+  [36m90[0m  [36m[0m
+  [36m91[0m  [36m   [:div.form-group[0m
+  [36m92[0m  [36m    [:label.col-sm-2.control-label {:for "remain"} "Remain"][0m
+  [36m93[0m  [36m    [:div.col-sm-10[0m
+  [36m94[0m  [36m     [:input#remain.form-control[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/pages/task.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/manager/pages/task.cljs   line:95  column:25  ----[0m
+
+  [1mUse of undeclared Var manager.pages.task/task[0m
+
+  [36m 91[0m  [36m   [:div.form-group[0m
+  [36m 92[0m  [36m    [:label.col-sm-2.control-label {:for "remain"} "Remain"][0m
+  [36m 93[0m  [36m    [:div.col-sm-10[0m
+  [36m 94[0m  [36m     [:input#remain.form-control[0m
+  [33m 95[0m  [1m      {:value (:remain @task), :type "number"}]]][0m
+  [0m   [0m  [33m                        ^--- Use of undeclared Var manager.pages.task/task[0m
+  [36m 96[0m  [36m[0m
+  [36m 97[0m  [36m   [:div.form-group[0m
+  [36m 98[0m  [36m    [:label.col-sm-2.control-label {:for "status"} "Status"][0m
+  [36m 99[0m  [36m    [:div.col-sm-10[0m
+  [36m100[0m  [36m     [:select#status.form-control[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/pages/task.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.961 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.343 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.829 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.62 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/components.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.916 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.694 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.85 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.764 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.219 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.937 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.619 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.251 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.256 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.822 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.373 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.831 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.76 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.416 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.208 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.501 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.821 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/events.cljs   line:20  column:5  ----[0m
+
+  [1mUse of undeclared Var manager.events/delete[0m
+
+  [36m16[0m  [36m(reg-event-db[0m
+  [36m17[0m  [36m :create-task[0m
+  [36m18[0m  [36m (fn [db [_ project-id]][0m
+  [36m19[0m  [36m   ; POST task params from DB, then:[0m
+  [33m20[0m  [1m   (delete db project-id task-id)))[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var manager.events/delete[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m[0m
+  [36m23[0m  [36m(defn delete[0m
+  [36m24[0m  [36m  "`dissoc`s a task from the project's tasks."[0m
+  [36m25[0m  [36m  [db project-id task-id][0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/events.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/manager/events.cljs   line:20  column:26  ----[0m
+
+  [1mUse of undeclared Var manager.events/task-id[0m
+
+  [36m16[0m  [36m(reg-event-db[0m
+  [36m17[0m  [36m :create-task[0m
+  [36m18[0m  [36m (fn [db [_ project-id]][0m
+  [36m19[0m  [36m   ; POST task params from DB, then:[0m
+  [33m20[0m  [1m   (delete db project-id task-id)))[0m
+  [0m  [0m  [33m                         ^--- Use of undeclared Var manager.events/task-id[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m[0m
+  [36m23[0m  [36m(defn delete[0m
+  [36m24[0m  [36m  "`dissoc`s a task from the project's tasks."[0m
+  [36m25[0m  [36m  [db project-id task-id][0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/events.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.668 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/events.cljs   line:20  column:5  ----[0m
+
+  [1mUse of undeclared Var manager.events/delete[0m
+
+  [36m16[0m  [36m(reg-event-db[0m
+  [36m17[0m  [36m :create-task[0m
+  [36m18[0m  [36m (fn [db [_ project-id]][0m
+  [36m19[0m  [36m   ; POST task params from DB, then:[0m
+  [33m20[0m  [1m   (delete db project-id task-id)))[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var manager.events/delete[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m[0m
+  [36m23[0m  [36m(defn delete[0m
+  [36m24[0m  [36m  "`dissoc`s a task from the project's tasks."[0m
+  [36m25[0m  [36m  [db project-id task-id][0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/events.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/manager/events.cljs   line:20  column:26  ----[0m
+
+  [1mUse of undeclared Var manager.events/task-id[0m
+
+  [36m16[0m  [36m(reg-event-db[0m
+  [36m17[0m  [36m :create-task[0m
+  [36m18[0m  [36m (fn [db [_ project-id]][0m
+  [36m19[0m  [36m   ; POST task params from DB, then:[0m
+  [33m20[0m  [1m   (delete db project-id task-id)))[0m
+  [0m  [0m  [33m                         ^--- Use of undeclared Var manager.events/task-id[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m[0m
+  [36m23[0m  [36m(defn delete[0m
+  [36m24[0m  [36m  "`dissoc`s a task from the project's tasks."[0m
+  [36m25[0m  [36m  [db project-id task-id][0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/events.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.876 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/routes.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/events.cljs   line:20  column:5  ----[0m
+
+  [1mUse of undeclared Var manager.events/delete[0m
+
+  [36m16[0m  [36m(reg-event-db[0m
+  [36m17[0m  [36m :create-task[0m
+  [36m18[0m  [36m (fn [db [_ project-id]][0m
+  [36m19[0m  [36m   ; POST task params from DB, then:[0m
+  [33m20[0m  [1m   (delete db project-id task-id)))[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var manager.events/delete[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m[0m
+  [36m23[0m  [36m(defn delete[0m
+  [36m24[0m  [36m  "`dissoc`s a task from the project's tasks."[0m
+  [36m25[0m  [36m  [db project-id task-id][0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/events.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/manager/events.cljs   line:20  column:26  ----[0m
+
+  [1mUse of undeclared Var manager.events/task-id[0m
+
+  [36m16[0m  [36m(reg-event-db[0m
+  [36m17[0m  [36m :create-task[0m
+  [36m18[0m  [36m (fn [db [_ project-id]][0m
+  [36m19[0m  [36m   ; POST task params from DB, then:[0m
+  [33m20[0m  [1m   (delete db project-id task-id)))[0m
+  [0m  [0m  [33m                         ^--- Use of undeclared Var manager.events/task-id[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m[0m
+  [36m23[0m  [36m(defn delete[0m
+  [36m24[0m  [36m  "`dissoc`s a task from the project's tasks."[0m
+  [36m25[0m  [36m  [db project-id task-id][0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/events.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.834 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/routes.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/events.cljs   line:20  column:5  ----[0m
+
+  [1mUse of undeclared Var manager.events/delete[0m
+
+  [36m16[0m  [36m(reg-event-db[0m
+  [36m17[0m  [36m :create-task[0m
+  [36m18[0m  [36m (fn [db [_ project-id]][0m
+  [36m19[0m  [36m   ; POST task params from DB, then:[0m
+  [33m20[0m  [1m   (delete db project-id task-id)))[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var manager.events/delete[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m[0m
+  [36m23[0m  [36m(defn delete[0m
+  [36m24[0m  [36m  "`dissoc`s a task from the project's tasks."[0m
+  [36m25[0m  [36m  [db project-id task-id][0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/events.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/manager/events.cljs   line:20  column:26  ----[0m
+
+  [1mUse of undeclared Var manager.events/task-id[0m
+
+  [36m16[0m  [36m(reg-event-db[0m
+  [36m17[0m  [36m :create-task[0m
+  [36m18[0m  [36m (fn [db [_ project-id]][0m
+  [36m19[0m  [36m   ; POST task params from DB, then:[0m
+  [33m20[0m  [1m   (delete db project-id task-id)))[0m
+  [0m  [0m  [33m                         ^--- Use of undeclared Var manager.events/task-id[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m[0m
+  [36m23[0m  [36m(defn delete[0m
+  [36m24[0m  [36m  "`dissoc`s a task from the project's tasks."[0m
+  [36m25[0m  [36m  [db project-id task-id][0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/events.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.053 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.606 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/events.cljs   line:20  column:5  ----[0m
+
+  [1mUse of undeclared Var manager.events/delete[0m
+
+  [36m16[0m  [36m(reg-event-db[0m
+  [36m17[0m  [36m :create-task[0m
+  [36m18[0m  [36m (fn [db [_ project-id]][0m
+  [36m19[0m  [36m   ; POST task params from DB, then:[0m
+  [33m20[0m  [1m   (delete db project-id task-id)))[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var manager.events/delete[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m[0m
+  [36m23[0m  [36m(defn delete[0m
+  [36m24[0m  [36m  "`dissoc`s a task from the project's tasks."[0m
+  [36m25[0m  [36m  [db project-id task-id][0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/events.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/manager/events.cljs   line:20  column:26  ----[0m
+
+  [1mUse of undeclared Var manager.events/task-id[0m
+
+  [36m16[0m  [36m(reg-event-db[0m
+  [36m17[0m  [36m :create-task[0m
+  [36m18[0m  [36m (fn [db [_ project-id]][0m
+  [36m19[0m  [36m   ; POST task params from DB, then:[0m
+  [33m20[0m  [1m   (delete db project-id task-id)))[0m
+  [0m  [0m  [33m                         ^--- Use of undeclared Var manager.events/task-id[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m[0m
+  [36m23[0m  [36m(defn delete[0m
+  [36m24[0m  [36m  "`dissoc`s a task from the project's tasks."[0m
+  [36m25[0m  [36m  [db project-id task-id][0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/events.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.83 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/routes.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/events.cljs   line:25  column:5  ----[0m
+
+  [1mUse of undeclared Var manager.events/delete[0m
+
+  [36m21[0m  [36m(reg-event-db[0m
+  [36m22[0m  [36m :create-task[0m
+  [36m23[0m  [36m (fn [db [_ project-id]][0m
+  [36m24[0m  [36m   ; POST task params from DB, then:[0m
+  [33m25[0m  [1m   (delete db project-id task-id)))[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var manager.events/delete[0m
+  [36m26[0m  [36m[0m
+  [36m27[0m  [36m[0m
+  [36m28[0m  [36m(defn delete[0m
+  [36m29[0m  [36m  "`dissoc`s a task from the project's tasks."[0m
+  [36m30[0m  [36m  [db project-id task-id][0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/events.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/manager/events.cljs   line:25  column:26  ----[0m
+
+  [1mUse of undeclared Var manager.events/task-id[0m
+
+  [36m21[0m  [36m(reg-event-db[0m
+  [36m22[0m  [36m :create-task[0m
+  [36m23[0m  [36m (fn [db [_ project-id]][0m
+  [36m24[0m  [36m   ; POST task params from DB, then:[0m
+  [33m25[0m  [1m   (delete db project-id task-id)))[0m
+  [0m  [0m  [33m                         ^--- Use of undeclared Var manager.events/task-id[0m
+  [36m26[0m  [36m[0m
+  [36m27[0m  [36m[0m
+  [36m28[0m  [36m(defn delete[0m
+  [36m29[0m  [36m  "`dissoc`s a task from the project's tasks."[0m
+  [36m30[0m  [36m  [db project-id task-id][0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/events.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.953 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.317 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.708 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 1.486 seconds.[0m
+[36m----  Could not Read  src/cljs/manager/core.cljs   line:48 ----[0m
+
+  [1m/Users/efraimmgon/projects/manager/src/cljs/manager/core.cljs [line 48, col 7] Invalid keyword: :.[0m
+
+  [36m46[0m  [36m  [:div.container[0m
+  [36m47[0m  [36m   [:div.row[0m
+  [33m48[0m  [1m    [:]]])[0m
+  [0m  [0m  [33m    /Users/efraimmgon/projects/manager/src/cljs/manager/core.cljs [line 48, col 7] Invalid keyword: :.[0m
+  [36m49[0m  [36m[0m
+  [36m50[0m  [36m(defn project-page [][0m
+  [36m51[0m  [36m  (r/with-let [project (rf/subscribe [:project])][0m
+
+[36m----  Reader Error : Please see src/cljs/manager/core.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.226 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.546 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.213 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.368 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.008 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.648 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.181 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.388 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.091 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/components.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 0.983 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 1.476 seconds.[0m
+[36m----  Could not Analyze  src/cljs/manager/pages/task.cljs  ----[0m
+
+  [1mInvalid :refer, var manager.components/components does not exist [0m
+
+[36m----  Analysis Error : Please see src/cljs/manager/pages/task.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 1.045 seconds.[0m
+[36m----  Could not Analyze  src/cljs/manager/pages/task.cljs   line:105  column:8  ----[0m
+
+  [1mToo few arguments to if at line 105 src/cljs/manager/pages/task.cljs[0m
+
+  [36m103[0m  [36m[:div.panel.panel-default[0m
+  [36m104[0m  [36m [:div.panel-heading[0m
+  [33m105[0m  [1m  (if @task)[0m
+  [0m   [0m  [33m  ^--- Too few arguments to if at line 105 src/cljs/manager/pages/task.cljs[0m
+  [36m106[0m  [36m  [:h2[0m
+  [36m107[0m  [36m   "Edit: "[0m
+  [36m108[0m  [36m   [:a {:href (str "/projects/" (:id @project))}[0m
+
+[36m----  Analysis Error : Please see src/cljs/manager/pages/task.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.921 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/task.js

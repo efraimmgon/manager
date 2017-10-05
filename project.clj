@@ -31,12 +31,14 @@
                  [org.webjars/font-awesome "4.7.0"]
                  [re-frame "0.10.1"]
                  [reagent "0.7.0"]
+                 [reagent-forms "0.5.31"]
                  [reagent-utils "0.2.1"]
                  [ring-webjars "0.2.0"]
                  [ring/ring-core "1.6.2"]
                  [ring/ring-defaults "0.3.1"]
                  [secretary "1.2.3"]
-                 [selmer "1.11.1"]]
+                 [selmer "1.11.1"]
+                 [venantius/accountant "0.2.0"]]
 
   :min-lein-version "2.0.0"
 

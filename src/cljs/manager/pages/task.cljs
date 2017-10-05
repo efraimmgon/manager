@@ -98,24 +98,22 @@
     [base
      [breadcrumbs
       [(str "/projects/" (:id @project)) (:title @project)]
-      [nil (:task @task) :active]]
+      [nil (or (:task @task) "New task") :active]]
 
      [:div.panel.panel-default
       [:div.panel-heading
-       [:h2
-        "Edit: "
-        [:a {:href (str "/projects/" (:id @project))}
-         (:title @project)]
-        " / "
-        (:task @task)]]
+       (if @task
+         [:h2 "Edit task"]
+         [:h2 "Create task"])]
       [:div.panel-body
-       [c/pretty-display "task" task]
-       [c/pretty-display "doc" doc]
-
        [bind-fields
         form-template
         doc]
        [:div.col-sm-offset-2.col-sm-10
-        [:button.btn.btn-default
-         {:on-click #(rf/dispatch [:edit-task (:id @project) @doc])}
-         "Save"]]]]]))
+        (if @task
+          [:button.btn.btn-primary
+           {:on-click #(rf/dispatch [:edit-task (:id @project) @doc])}
+           "Save"]
+          [:button.btn.btn-primary
+           {:on-click #(rf/dispatch [:create-task (:id @project) @doc])}
+           "Save"])]]]]))

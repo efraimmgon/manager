@@ -16,13 +16,13 @@
 ; --------------------------------------------------------------------
 
 (defn breadcrumbs [& items]
-  (let [items (cons ["/" "Home"] items)]
-    [:ol.breadcrumb
-     (for [[href title active] items]
-       ^{:key href}
-       (if active
-         [:li.active title]
-         [:li [:a {:href href} title]]))]))
+  (into
+   [:ol.breadcrumb
+    [:li [:a {:href "/"} "Home"]]]
+   (for [[href title active] items]
+     (if active
+       [:li.active title]
+       [:li [:a {:href href} title]]))))
 
 (defn base [& body]
   (into

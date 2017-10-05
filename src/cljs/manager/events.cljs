@@ -11,19 +11,7 @@
 ; Events
 ; ------------------------------------------------------------------------------
 
-; Tasks ------------------------------------------------------------------------
-
-(reg-event-db
- :close-task
- (fn [db _]
-   (dissoc db :task)))
-
-(reg-event-db
- :create-task
- (fn [db [_ project-id]]
-   ; POST task params from DB, then:
-   (delete db project-id task-id)))
-
+; Helpers ----------------------------------------------------------------------
 
 (defn delete
   "`dissoc`s a task from the project's tasks."
@@ -32,16 +20,40 @@
              [:projects project-id :tasks]
              dissoc task-id))
 
+(defn save
+  "`assoc`s a task id with its task in its respective project"
+  [db project-id task]
+  (update-in db
+             [:projects project-id :tasks]
+             assoc (:id task) task))
+
+; Tasks ------------------------------------------------------------------------
+
+(reg-event-db
+ :close-task
+ (fn [db _]
+   (dissoc db :task)))
+
+
+(reg-event-db
+ :create-task
+ (fn [db [_ project-id task]]
+   (let [next-id (-> (get-in db [:projects project-id :tasks])
+                     (keys)
+                     (last)
+                     (inc))]
+     ; POST task params from DB
+     ; after the key is returned from the DB:
+     (navigate! (str "/projects/" project-id))
+     (save db project-id (assoc task :id next-id)))))
+
+
+
 (reg-event-db
  :delete-task
  (fn [db [_ project-id task-id]]
    ; DELETE task key from DB, then:
    (delete db project-id task-id)))
-
-(defn save [db project-id task]
-  (update-in db
-             [:projects project-id :tasks]
-             assoc (:id task) task))
 
 (reg-event-db
  :edit-task

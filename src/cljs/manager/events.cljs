@@ -13,19 +13,34 @@
 
 ; Helpers ----------------------------------------------------------------------
 
+(defn find-by [f coll obj]
+  (some #(when (= (f %) obj)
+           %)
+        coll))
+
+(defn index-of [coll obj f]
+  (loop [remain coll
+         i 0]
+    (cond
+      (empty? remain) nil
+      (= (f (first remain)) obj) i
+      :default (recur (rest remain) (inc i)))))
+
 (defn delete
   "`dissoc`s a task from the project's tasks."
   [db project-id task-id]
   (update-in db
              [:projects project-id :tasks]
-             dissoc task-id))
+             #(filter (fn [m]
+                        (not= (:id m) task-id))
+                      %)))
 
 (defn save
-  "`assoc`s a task id with its task in its respective project"
+  "`conj`s a task in its respective project"
   [db project-id task]
   (update-in db
              [:projects project-id :tasks]
-             assoc (:id task) task))
+             conj task))
 
 ; Tasks ------------------------------------------------------------------------
 
@@ -34,20 +49,26 @@
  (fn [db _]
    (dissoc db :task)))
 
+(defn gen-next-id [db project-id]
+  (->> (get-in db [:projects project-id :tasks])
+       (map :id)
+       (sort >)
+       (first)
+       (inc)))
 
+;; NOTE: next-id, prototype only
 (reg-event-db
  :create-task
  (fn [db [_ project-id task]]
-   (let [next-id (-> (get-in db [:projects project-id :tasks])
-                     (keys)
-                     (last)
-                     (inc))]
+   (let [next-id (or (:next-id db)
+                     (gen-next-id db project-id))]
      ; POST task params from DB
      ; after the key is returned from the DB:
      (navigate! (str "/projects/" project-id))
-     (save db project-id (assoc task :id next-id)))))
-
-
+     (-> (save db project-id (assoc task :id next-id))
+         ;; re-sort
+         (update-in [:projects project-id :tasks] #(sort-by :priority %))
+         (assoc :next-id (inc next-id))))))
 
 (reg-event-db
  :delete-task
@@ -113,13 +134,15 @@
  :task
  (fn [db _]
    (when-let [[project-id task-id] (:task db)]
-     (get-in db [:projects project-id :tasks task-id]))))
+     (find-by :id
+              (get-in db [:projects project-id :tasks])
+              task-id))))
 
 (reg-sub
  :tasks
  :<- [:project]
  (fn [project _]
-   (vals (:tasks project))))
+   (:tasks project)))
 
 ; Misc -------------------------------------------------------------------------
 

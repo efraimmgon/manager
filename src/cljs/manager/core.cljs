@@ -8,7 +8,7 @@
    ;;; Views
    [manager.components :refer [base breadcrumbs thead tbody]]
    [manager.pages.project.views :as project :refer
-    [home-page project-features-page feature-tasks-page]]
+    [project-features-page feature-tasks-page]]
    [manager.pages.task :as task]))
 
 ; ------------------------------------------------------------------------------
@@ -45,7 +45,7 @@
       [:li [:a {:href "/projects/new"} "Create project"]]]]]])
 
 (def pages
-  {:home #'home-page
+  {:home #'project/projects-page
    :edit-project #'project/edit-project-page
    :project #'project-features-page
    :edit-feature #'project/edit-feature-page

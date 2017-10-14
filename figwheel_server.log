@@ -2452,3 +2452,83 @@ notifying browser that file changed:  target/cljsbuild/public/js/out/manager/eve
 [0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
 [32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.826 seconds.[0m
 notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 3.279 seconds.[0m
+[36m----  Could not Analyze  src/cljs/manager/core.cljs   line:47  column:1  ----[0m
+
+  [1mUnable to resolve var: home-page in this context at line 47 src/cljs/manager/core.cljs[0m
+
+  [36m45[0m  [36m      [:li [:a {:href "/projects/new"} "Create project"]]]]]])[0m
+  [36m46[0m  [36m[0m
+  [33m47[0m  [1m(def pages[0m
+  [0m  [0m  [33m^--- Unable to resolve var: home-page in this context at line 47 src/cljs/manager/core.cljs[0m
+  [36m48[0m  [36m  {:home #'home-page[0m
+  [36m49[0m  [36m   :edit-project #'project/edit-project-page[0m
+  [36m50[0m  [36m   :project #'project-features-page[0m
+
+[36m----  Analysis Error : Please see src/cljs/manager/core.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 1.972 seconds.[0m
+[36m----  Could not Analyze  src/cljs/manager/core.cljs   line:47  column:1  ----[0m
+
+  [1mUnable to resolve var: home-page in this context at line 47 src/cljs/manager/core.cljs[0m
+
+  [36m45[0m  [36m      [:li [:a {:href "/projects/new"} "Create project"]]]]]])[0m
+  [36m46[0m  [36m[0m
+  [33m47[0m  [1m(def pages[0m
+  [0m  [0m  [33m^--- Unable to resolve var: home-page in this context at line 47 src/cljs/manager/core.cljs[0m
+  [36m48[0m  [36m  {:home #'home-page[0m
+  [36m49[0m  [36m   :edit-project #'project/edit-project-page[0m
+  [36m50[0m  [36m   :project #'project-features-page[0m
+
+[36m----  Analysis Error : Please see src/cljs/manager/core.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.137 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/goog/deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/core.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.448 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/project/views.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.931 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/project/views.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.508 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/project/views.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.65 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/project/views.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.778 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/project/views.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[31mFailed to compile "target/cljsbuild/public/js/app.js" in 1.625 seconds.[0m
+[36m----  Could not Read  src/cljs/manager/pages/project/views.cljs   line:172 ----[0m
+
+  [1m/Users/efraimmgon/projects/manager/src/cljs/manager/pages/project/views.cljs [line 172, col 53] The map literal starting with :key on line 162 column 14 contains 3 form(s). Map literals must contain an even number of forms.[0m
+
+  [36m170[0m  [36m                [:i.glyphicon.glyphicon-edit]][0m
+  [36m171[0m  [36m               [:button.btn.btn-link {:on-click #(rf/dispatch [:delete-feature (:feature-id feature)])}[0m
+  [33m172[0m  [1m                [:i.glyphicon.glyphicon-remove]]]]]}))]]]]))[0m
+  [0m   [0m  [33m                /Users/efraimmgon/projects/manager/src/cljs/manager/pages/project/views.cljs [line 172, col 53] The map literal starting with :key on line 162 column 14 contains 3 form(s). Map literals must contain an even number of forms.[0m
+  [36m173[0m  [36m[0m
+  [36m174[0m  [36m(defn projects-page [][0m
+  [36m175[0m  [36m  (r/with-let [projects (rf/subscribe [:projects])][0m
+
+[36m----  Reader Error : Please see src/cljs/manager/pages/project/views.cljs  ----[0m
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.501 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/project/views.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.878 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/project/views.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.528 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/project/views.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.198 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/project/views.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.912 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/components.js

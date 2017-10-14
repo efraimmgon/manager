@@ -29,13 +29,6 @@
    [:div.container]
    body))
 
-(defn panel [heading body & [footer]]
-  [:div.panel.panel-default
-   [:div.panel-heading heading]
-   [:div.panel-body body]
-   (when footer
-     [:div.panel-footer footer])])
-
 (defn thead [headers]
   [:thead
    [:tr

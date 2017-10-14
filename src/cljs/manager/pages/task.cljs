@@ -93,13 +93,19 @@
 
 (defn edit-task-page []
   (r/with-let [project (rf/subscribe [:project])
+               feature (rf/subscribe [:feature])
                task (rf/subscribe [:task])
-               doc (atom @task)]
+               doc (atom (-> @task
+                             (assoc :project-id (:project-id @project))
+                             (assoc :feature-id (:feature-id @feature))))]
     [base
      [breadcrumbs
-      [(str "/projects/" (:id @project)) (:title @project)]
-      [nil (or (:task @task) "New task") :active]]
-
+      {:href (str "/projects/" (:id @project))
+       :title (:title @project)}
+      {:href (str "/projects/" (:id @project) "/features/" (:feature-id @feature))
+       :title (:title @feature)}
+      {:title (or (:task @task) "New task")
+       :active? true}]
      [:div.panel.panel-default
       [:div.panel-heading
        (if @task
@@ -112,8 +118,66 @@
        [:div.col-sm-offset-2.col-sm-10
         (if @task
           [:button.btn.btn-primary
-           {:on-click #(rf/dispatch [:edit-task (:id @project) @doc])}
+           {:on-click #(rf/dispatch [:edit-task @doc])}
            "Save"]
           [:button.btn.btn-primary
-           {:on-click #(rf/dispatch [:create-task (:id @project) @doc])}
-           "Save"])]]]]))
+           {:on-click #(rf/dispatch [:create-task @doc])}
+           "Create"])]]]]))
+
+(defn task-page []
+  (r/with-let [project (rf/subscribe [:project])
+               feature (rf/subscribe [:feature])
+               task (rf/subscribe [:task])]
+    [base
+     [breadcrumbs
+      {:href (str "/projects/" (:project-id @project))
+       :title (:title @project)}
+      {:href (str "/projects/" (:project-id @project)
+                  "/features/" (:feature-id @feature))
+       :title (:title @feature)}
+      {:title (:title @task)
+       :active? true}]
+     [:div.panel.panel-default
+      [:div.panel-heading>h2
+       (:title @task)]
+      [:ul.list-group
+       [:li.list-group-item
+        [:div.row
+         [:div.col-md-2 "id"]
+         [:div.col-md-10
+          (:task-id @task)]]]
+       [:li.list-group-item
+        [:div.row
+         [:div.col-md-2 "Description"]
+         [:div.col-md-10
+          (:description @task)]]]
+       [:li.list-group-item
+        [:div.row
+         [:div.col-md-2 "Orig est"]
+         [:div.col-md-10
+          (:orig-est @task)]]]
+       [:li.list-group-item
+        [:div.row
+         [:div.col-md-2 "Curr est"]
+         [:div.col-md-10
+          (:curr-est @task)]]]
+       [:li.list-group-item
+        [:div.row
+         [:div.col-md-2 "Priority"]
+         [:div.col-md-10
+          (:priority @task)]]]
+       [:li.list-group-item
+        [:div.row
+         [:div.col-md-2 "Elapsed"]
+         [:div.col-md-10
+          (:elapsed @task)]]]
+       [:li.list-group-item
+        [:div.row
+         [:div.col-md-2 "Remain"]
+         [:div.col-md-10
+          (:remain @task)]]]
+       [:li.list-group-item
+        [:div.row
+         [:div.col-md-2 "Status"]
+         [:div.col-md-10
+          (:status @task)]]]]]]))

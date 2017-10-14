@@ -7,6 +7,8 @@
    [manager.routes :refer [hook-browser-navigation!]]
    ;;; Views
    [manager.components :refer [base breadcrumbs thead tbody]]
+   [manager.pages.project.views :as project :refer
+    [home-page project-features-page feature-tasks-page]]
    [manager.pages.task :as task]))
 
 ; ------------------------------------------------------------------------------
@@ -40,42 +42,15 @@
      [:a.navbar-brand {:href "/"} "Manager"]]
     [:div#bs-example-navbar-collapse-1.collapse.navbar-collapse
      [:ul.nav.navbar-nav.navbar-right
-      [:li [:a {:href "#"} "Link"]]]]]])
-
-(defn project-page []
-  (r/with-let [project (rf/subscribe [:project])]
-    [base
-     [breadcrumbs
-      [(str "/projects/" (:id @project)) (:title @project) :active]]
-     [:div.panel.panel-default
-      [:div.panel-heading
-       [:h2
-        [:a {:href (str "/projects/" (:id @project))}
-         (:title @project)]
-        " "
-        [:a.btn.btn-primary
-         {:href (str "/projects/" (:id @project) "/tasks/new")}
-         [:i.glyphicon.glyphicon-plus] " Add new"]]]
-      [:div.panel-body
-       [task/tasks project]]]]))
-
-(defn home-page []
-  (r/with-let [projects (rf/subscribe [:projects])]
-    [base
-     [breadcrumbs]
-     (for [project (vals @projects)]
-       ^{:key (:id project)}
-       [:div.row
-        [:div.col-md-12
-         [:div.panel.panel-default
-          [:div.panel-heading
-           [:h2
-            [:a {:href (str "/projects/" (:id project))}
-             (:title project)]]]]]])]))
+      [:li [:a {:href "/projects/new"} "Create project"]]]]]])
 
 (def pages
   {:home #'home-page
-   :project #'project-page
+   :edit-project #'project/edit-project-page
+   :project #'project-features-page
+   :edit-feature #'project/edit-feature-page
+   :feature-tasks #'feature-tasks-page
+   :task #'task/task-page
    :edit-task #'task/edit-task-page})
 
 (defn page []

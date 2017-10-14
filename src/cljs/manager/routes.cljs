@@ -21,25 +21,82 @@
 ; Routes
 ; ------------------------------------------------------------------------------
 
-;; TODO: get project from db
-(secretary/defroute "/" []
-  (rf/dispatch [:set-active-page :home]))
+; projects ---------------------------------------------------------------------
 
-;; TODO: get project tasks from db
+(secretary/defroute "/" []
+  (run-events [[:load-projects]
+               [:set-active-page :home]]))
+
+;; create
+(secretary/defroute "/projects/new" []
+  (rf/dispatch-sync [:close-project])
+  (run-events [[:set-active-page :edit-project]]))
+
+;; read
 (secretary/defroute "/projects/:id" [id]
-  (run-events [[:set-active-project (js/parseInt id)]
+  (run-events [[:load-project (js/parseInt id)]
+               [:load-features-for (js/parseInt id)]
                [:set-active-page :project]]))
 
-(secretary/defroute "/projects/:id/tasks/new" [id]
+;; update
+(secretary/defroute "/projects/:id/edit" [id]
+  (run-events [[:load-project (js/parseInt id)]
+               [:set-active-page :edit-project]]))
+
+;; delete
+
+; features ---------------------------------------------------------------------
+
+;; create
+(secretary/defroute "/projects/:project-id/features/new" [project-id]
+  (rf/dispatch-sync [:close-feature])
+  (run-events [[:load-project (js/parseInt project-id)]
+               [:set-active-page :edit-feature]]))
+
+;; read
+(secretary/defroute "/projects/:project-id/features/:feature-id"
+  [project-id feature-id]
+  (run-events [[:load-project (js/parseInt project-id)]
+               [:load-feature (js/parseInt feature-id)]
+               [:load-tasks-for (js/parseInt feature-id)]
+               [:set-active-page :feature-tasks]]))
+
+;; update
+(secretary/defroute "/projects/:project-id/features/:feature-id/edit"
+  [project-id feature-id]
+  (run-events [[:load-project (js/parseInt project-id)]
+               [:load-feature (js/parseInt feature-id)]
+               [:set-active-page :edit-feature]]))
+
+;; delete
+
+; tasks ------------------------------------------------------------------------
+
+;; create
+(secretary/defroute "/projects/:project-id/features/:feature-id/tasks/new"
+  [project-id feature-id task-id]
   (rf/dispatch-sync [:close-task])
-  (run-events [[:set-active-project (js/parseInt id)]
+  (run-events [[:load-project (js/parseInt project-id)]
+               [:load-feature (js/parseInt feature-id)]
                [:set-active-page :edit-task]]))
 
-;; TODO: get project tasks from db
-(secretary/defroute "/projects/:project-id/tasks/:task-id/edit" [project-id task-id]
-  (run-events [[:set-active-project (js/parseInt project-id)]
-               [:set-active-task (js/parseInt project-id) (js/parseInt task-id)]
+;; read
+(secretary/defroute "/projects/:project-id/features/:feature-id/tasks/:task-id"
+  [project-id feature-id task-id]
+  (run-events [[:load-project (js/parseInt project-id)]
+               [:load-feature (js/parseInt feature-id)]
+               [:load-task (js/parseInt task-id)]
+               [:set-active-page :task]]))
+
+;; update
+(secretary/defroute "/projects/:project-id/features/:feature-id/tasks/:task-id/edit"
+  [project-id feature-id task-id]
+  (run-events [[:load-project (js/parseInt project-id)]
+               [:load-feature (js/parseInt feature-id)]
+               [:load-task (js/parseInt task-id)]
                [:set-active-page :edit-task]]))
+
+;; delete
 
 ; ------------------------------------------------------------------------------
 ; History

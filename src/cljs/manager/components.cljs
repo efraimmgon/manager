@@ -19,8 +19,8 @@
   (into
    [:ol.breadcrumb
     [:li [:a {:href "/"} "Home"]]]
-   (for [[href title active] items]
-     (if active
+   (for [{:keys [href title active?] :as item} items]
+     (if active?
        [:li.active title]
        [:li [:a {:href href} title]]))))
 
@@ -28,6 +28,13 @@
   (into
    [:div.container]
    body))
+
+(defn panel [heading body & [footer]]
+  [:div.panel.panel-default
+   [:div.panel-heading heading]
+   [:div.panel-body body]
+   (when footer
+     [:div.panel-footer footer])])
 
 (defn thead [headers]
   [:thead

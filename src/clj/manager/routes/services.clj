@@ -1,10 +1,12 @@
 (ns manager.routes.services
-  (:require [ring.util.http-response :refer :all]
-            [compojure.api.sweet :refer :all]
-            [schema.core :as s]
-            [compojure.api.meta :refer [restructure-param]]
-            [buddy.auth.accessrules :refer [restrict]]
-            [buddy.auth :refer [authenticated?]]))
+  (:require
+   [ring.util.http-response :refer :all]
+   [compojure.api.sweet :refer :all]
+   [schema.core :as s]
+   [compojure.api.meta :refer [restructure-param]]
+   [buddy.auth.accessrules :refer [restrict]]
+   [buddy.auth :refer [authenticated?]]
+   [manager.routes.services.projects :as projects]))
 
 (defn access-error [_ _]
   (unauthorized {:error "unauthorized"}))
@@ -27,40 +29,15 @@
              :data {:info {:version "1.0.0"
                            :title "Sample API"
                            :description "Sample Services"}}}}
-  
-  (GET "/authenticated" []
-       :auth-rules authenticated?
-       :current-user user
-       (ok {:user user}))
-  (context "/api" []
-    :tags ["thingie"]
 
-    (GET "/plus" []
-      :return       Long
-      :query-params [x :- Long, {y :- Long 1}]
-      :summary      "x+y with query-parameters. y defaults to 1."
-      (ok (+ x y)))
+  (context
+    "/api" []
+    :tags ["private"]
 
-    (POST "/minus" []
-      :return      Long
-      :body-params [x :- Long, y :- Long]
-      :summary     "x-y with body-parameters."
-      (ok (- x y)))
+    (GET "/projects" []
+         :summary "list available projects"
+         (projects/all-projects))
 
-    (GET "/times/:x/:y" []
-      :return      Long
-      :path-params [x :- Long, y :- Long]
-      :summary     "x*y with path-parameters"
-      (ok (* x y)))
-
-    (POST "/divide" []
-      :return      Double
-      :form-params [x :- Long, y :- Long]
-      :summary     "x/y with form-parameters"
-      (ok (/ x y)))
-
-    (GET "/power" []
-      :return      Long
-      :header-params [x :- Long, y :- Long]
-      :summary     "x^y with header-parameters"
-      (ok (long (Math/pow x y))))))
+    (POST "/projects" req
+          :summary "create a new project"
+          (projects/create-project! (:params req)))))

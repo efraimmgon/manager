@@ -7,9 +7,9 @@
    [manager.routes :refer [hook-browser-navigation!]]
    ;;; Views
    [manager.components :refer [base breadcrumbs thead tbody]]
-   [manager.pages.project.views :as project :refer
-    [project-features-page feature-tasks-page]]
-   [manager.pages.task :as task]))
+   [manager.pages.features :as features]
+   [manager.pages.projects :as projects]
+   [manager.pages.tasks :as tasks]))
 
 ; ------------------------------------------------------------------------------
 ; Utils
@@ -45,13 +45,13 @@
       [:li [:a {:href "/projects/new"} "Create project"]]]]]])
 
 (def pages
-  {:home #'project/projects-page
-   :edit-project #'project/edit-project-page
-   :project #'project-features-page
-   :edit-feature #'project/edit-feature-page
-   :feature-tasks #'feature-tasks-page
-   :task #'task/task-page
-   :edit-task #'task/edit-task-page})
+  {:home #'projects/projects-page
+   :edit-project #'projects/edit-project-page
+   :project #'features/project-features-page
+   :edit-feature #'features/edit-feature-page
+   :feature-tasks #'tasks/feature-tasks-page
+   :task #'tasks/task-page
+   :edit-task #'tasks/edit-task-page})
 
 (defn page []
   [:div

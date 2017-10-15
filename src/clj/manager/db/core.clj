@@ -72,13 +72,16 @@
        (map #(transform-keys ->kebab-case-keyword %))))
 
 (defmethod hugsql.core/hugsql-result-fn :1 [sym]
-  'yuggoth.db.core/result-one-snake->kebab)
+  'manager.db.core/result-one-snake->kebab)
 
 (defmethod hugsql.core/hugsql-result-fn :one [sym]
-  'yuggoth.db.core/result-one-snake->kebab)
+  'manager.db.core/result-one-snake->kebab)
 
 (defmethod hugsql.core/hugsql-result-fn :* [sym]
-  'yuggoth.db.core/result-many-snake->kebab)
+  'manager.db.core/result-many-snake->kebab)
 
 (defmethod hugsql.core/hugsql-result-fn :many [sym]
-  'yuggoth.db.core/result-many-snake->kebab)
+  'manager.db.core/result-many-snake->kebab)
+
+(defmethod hugsql.core/hugsql-result-fn :raw [sym]
+  'manager.db.core/result-many-snake->kebab)

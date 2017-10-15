@@ -58,6 +58,9 @@
     (fn [v] (-> ^ReadableInstant v .getMillis))
     (fn [v] (-> ^ReadableInstant v .getMillis .toString))))
 
+(println "DEFAULT OPTIONS => ")
+(clojure.pprint/pprint muuntaja/default-options)
+
 (def restful-format-options
   (update
     muuntaja/default-options

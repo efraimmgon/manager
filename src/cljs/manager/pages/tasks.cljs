@@ -1,6 +1,6 @@
-(ns manager.pages.task
+(ns manager.pages.tasks
   (:require
-   [manager.components :as c :refer [base breadcrumbs tbody thead-editable]]
+   [manager.components :as c :refer [base breadcrumbs form-group tbody thead-editable]]
    [reagent.core :as r :refer [atom]]
    [reagent-forms.core :refer [bind-fields]]
    [re-frame.core :as rf]))
@@ -37,14 +37,6 @@
        "Remain"
        "Status"]]
     [tbody-editable]]])
-
-
-(defn form-group [label & input]
-  [:div.form-group
-   [:label.col-sm-2.control-label label]
-   (into
-    [:div.col-sm-10]
-    input)])
 
 (def form-template
   [:div.form-horizontal
@@ -181,3 +173,43 @@
          [:div.col-md-2 "Status"]
          [:div.col-md-10
           (:status @task)]]]]]]))
+
+(defn feature-tasks-page []
+  (r/with-let [project (rf/subscribe [:project])
+               feature (rf/subscribe [:feature])
+               tasks (rf/subscribe [:tasks])]
+    [base
+     [breadcrumbs
+      {:href (str "/projects/" (:project-id @project))
+       :title (:title @project)}
+      {:href (str "/projects/" (:project-id @project) "/features/" (:feature-id @feature))
+       :title (:title @feature)
+       :active? true}]
+     [:div.panel.panel-default
+      [:div.panel-heading
+       [:h2 (:title @feature)
+        [:div.pull-right
+         [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
+                                      "/features/" (:feature-id @feature)
+                                      "/tasks/new")}
+          [:i.glyphicon.glyphicon-plus]
+          " New task"]]]]
+      [:ul.list-group
+       (doall
+         (for [task @tasks]
+           ^{:key (:task-id task)}
+           [:li.list-group-item
+            [:h3
+             [:a {:href (str "/projects/" (:project-id @project)
+                             "/features/" (:feature-id @feature)
+                             "/tasks/" (:task-id task))}
+              (:title task)]
+             [:div.pull-right
+              (:priority task)
+              [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
+                                           "/features/" (:feature-id @feature)
+                                           "/tasks/" (:task-id task) "/edit")}
+               [:i.glyphicon.glyphicon-edit]]
+              [:button.btn.btn-link {:on-click #(rf/dispatch [:delete-task (:task-id task)])}
+               [:i.glyphicon.glyphicon-remove]]]]
+            [:p (:description task)]]))]]]))

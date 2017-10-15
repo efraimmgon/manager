@@ -15,6 +15,13 @@
 ; MISC
 ; --------------------------------------------------------------------
 
+(defn form-group [label & input]
+  [:div.form-group
+   [:label.col-sm-2.control-label label]
+   (into
+    [:div.col-sm-10]
+    input)])
+
 (defn breadcrumbs [& items]
   (into
    [:ol.breadcrumb

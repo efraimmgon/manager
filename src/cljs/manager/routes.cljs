@@ -43,8 +43,6 @@
   (run-events [[:load-project (js/parseInt id)]
                [:set-active-page :edit-project]]))
 
-;; delete
-
 ; features ---------------------------------------------------------------------
 
 ;; create
@@ -67,8 +65,6 @@
   (run-events [[:load-project (js/parseInt project-id)]
                [:load-feature (js/parseInt feature-id)]
                [:set-active-page :edit-feature]]))
-
-;; delete
 
 ; tasks ------------------------------------------------------------------------
 
@@ -95,8 +91,6 @@
                [:load-feature (js/parseInt feature-id)]
                [:load-task (js/parseInt task-id)]
                [:set-active-page :edit-task]]))
-
-;; delete
 
 ; ------------------------------------------------------------------------------
 ; History

@@ -20,9 +20,12 @@
     [:input.form-control
      {:field :text, :id :description}])])
 
-(defn edit-project-page []
+(defn edit-project-page
+  "Template to CREATE / EDIT a project"
+  []
   (r/with-let [project (rf/subscribe [:project])
-               doc (atom @project)]
+               doc (atom {})]
+    (reset! doc @project)
     [base
      [breadcrumbs
       {:title (or (:title @project) "New project")
@@ -45,7 +48,9 @@
            {:on-click #(rf/dispatch [:create-project doc])}
            "Create"])]]]]))
 
-(defn projects-page []
+(defn projects-page
+  "Template to LIST all projects"
+  []
   (r/with-let [projects (rf/subscribe [:projects])]
     [base
      [breadcrumbs]

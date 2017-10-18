@@ -36,29 +36,38 @@
  (fn [{:keys [db]} [_ project]]
    (ajax/POST "/api/projects"
               {:params @project
-               :handler #(do
-                          (js/console.log "result => " %)
-                          (navigate! (str "/projects/" (:project-id (first %)))))
-               :error-handler #(js/console.log %)})))
+               :handler #(navigate! (str "/projects/" (:project-id (first %))))
+               :error-handler #(dispatch [:ajax-error %])})
+   nil))
 
 (reg-event-fx
  :delete-project
  (fn [{:keys [db]} [_ project-id]]
-   ; DELETE project key from DB, then:
-   (navigate! "/")))
+   (ajax/DELETE "/api/projects"
+                {:params {:project-id project-id}
+                 :handler #(navigate! "/")
+                 :error-handler #(dispatch [:ajax-error %])})
+   nil))
 
 (reg-event-fx
  :edit-project
  (fn [{:keys [db]} [_ project]]
-   ; PUT feature params to server, then:
-   (navigate! (str "/projects/" (:project-id project)))))
+   (ajax/PUT "/api/projects"
+             {:params (select-keys @project [:project-id :title :description])
+              :handler #(navigate! (str "/projects/" (:project-id @project)))
+              :error-handler #(dispatch [:ajax-error %])})
+   nil))
 
 (reg-event-fx
  :load-project
  (fn [{:keys [db]} [_ project-id]]
    ; GET project by id
-   {:db (assoc db :project
-               {:project-id project-id :title (str "project " project-id)})}))
+   (ajax/GET (str "/api/projects/" project-id)
+             {:handler #(dispatch [:set-project %])
+              :error-handler #(dispatch [:ajax-error %])
+              :response-format :json
+              :keywords? true})
+   nil))
 
 (reg-event-fx
  :load-projects
@@ -66,8 +75,15 @@
    ; GET all projects
    (ajax/GET "/api/projects"
              {:handler #(dispatch [:set-projects %])
-              :error-handler #(js/console.log %)})
+              :error-handler #(dispatch [:ajax-error %])
+              :response-format :json
+              :keywords? true})
    nil))
+
+(reg-event-db
+ :set-project
+ (fn [db [_ project]]
+   (assoc db :project project)))
 
 (reg-event-db
  :set-projects

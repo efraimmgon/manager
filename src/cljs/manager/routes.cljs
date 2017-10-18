@@ -40,6 +40,7 @@
 
 ;; update
 (secretary/defroute "/projects/:id/edit" [id]
+  (rf/dispatch-sync [:close-project])
   (run-events [[:load-project (js/parseInt id)]
                [:set-active-page :edit-project]]))
 

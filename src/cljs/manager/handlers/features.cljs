@@ -37,19 +37,22 @@
    ; POST feature params from DB
    ; after the key is returned from the DB:
    (navigate! (str "/projects/" (:project-id feature)
-                   "/features/" 1))))
+                   "/features/" 1))
+   nil))
 
 (reg-event-fx
  :delete-feature
  (fn [{:keys [db]} [_ feature-id]]
    ; DELETE feature key from DB, then:
-   (navigate! (str "/projects/" (get-in db [:project :project-id])))))
+   (navigate! (str "/projects/" (get-in db [:project :project-id])))
+   nil))
 
 (reg-event-fx
  :edit-feature
  (fn [{:keys [db]} [_ feature]]
    ; PUT feature params to server, then:
-   (navigate! (str "/projects/" (get-in db [:project :project-id])))))
+   (navigate! (str "/projects/" (get-in db [:project :project-id])))
+   nil))
 
 (reg-event-fx
  :load-feature
@@ -60,10 +63,19 @@
 (reg-event-fx
  :load-features-for
  (fn [{:keys [db]} [_ project-id]]
-   ; GET features for project-id
-   {:db (assoc db :features (gen-features 5))}))
+   (ajax/GET (str "/api/features/by-project/" project-id)
+             {:handler #(dispatch [:set-features %])
+              :error-handler #(dispatch [:ajax-error %])
+              :response-format :json
+              :keywords? true})
+   nil))
 
 (reg-event-db
  :set-active-feature
  (fn [db [_ feature-id]]
    (assoc db :feature feature-id)))
+
+(reg-event-db
+ :set-features
+ (fn [db [_ features]]
+   (assoc db :features features)))

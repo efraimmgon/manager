@@ -67,6 +67,8 @@
           [:i.glyphicon.glyphicon-plus]
           " New feature"]]]]
       [:ul.list-group
+       (when-not (seq @features)
+         [:li.list-group-item "No features yet."])
        (doall
          (for [feature @features]
            ^{:key (:feature-id feature)}

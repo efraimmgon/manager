@@ -38,6 +38,11 @@
   (fn [db [_ docs]]
     (assoc db :docs docs)))
 
+(reg-event-fx
+ :ajax-error
+ (fn [_ [_ error]]
+   (js/console.log error)
+   nil))
 
 ; ------------------------------------------------------------------------------
 ; Subs

@@ -3,7 +3,7 @@
    [ajax.core :as ajax]
    [manager.db :as db]
    [manager.routes :refer [navigate!]]
-   [re-frame.core :refer [reg-event-db reg-event-fx reg-sub]]))
+   [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub]]))
 
 (defn query [db [event-id]]
   (event-id db))
@@ -68,5 +68,14 @@
 (reg-event-fx
  :load-tasks-for
  (fn [{:keys [db]} [_ feature-id]]
-   ; GET tasks for feature-id
-   {:db (assoc db :tasks (sort-by :priority (gen-tasks 10)))}))
+   (ajax/GET (str "/api/features/" feature-id "/tasks")
+             {:handler #(dispatch [:set-tasks %])
+              :error-handler #(dispatch [:ajax-error %])
+              :response-format :json
+              :keywords? true})
+   nil))
+
+(reg-event-db
+ :set-tasks
+ (fn [db [_ tasks]]
+   (assoc db :tasks tasks)))

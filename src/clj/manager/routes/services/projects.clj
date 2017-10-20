@@ -2,7 +2,16 @@
   (:require
    [manager.db.core :as db]
    [schema.core :as s]
-   [ring.util.http-response :refer :all]))
+   [ring.util.http-response :refer :all])
+  (:import
+   [org.joda.time]))
+
+(def Project
+  {:project-id s/Int
+   :title s/Str
+   :description s/Str
+   :created-at org.joda.time.DateTime
+   :updated-at org.joda.time.DateTime})
 
 (defn delete-project! [params]
   (ok (db/delete-project! params)))

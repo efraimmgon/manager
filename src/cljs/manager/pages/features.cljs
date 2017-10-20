@@ -25,7 +25,8 @@
 (defn edit-feature-page []
   (r/with-let [project (rf/subscribe [:project])
                feature (rf/subscribe [:feature])
-               doc (atom @feature)]
+               doc (atom {})]
+    (reset! doc @feature)
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
@@ -35,7 +36,7 @@
 
      [:div.panel.panel-default
       [:div.panel-heading
-       (if @project
+       (if @feature
          [:h2 "Edit feature"]
          [:h2 "Create feature"])]
       [:div.panel-body
@@ -43,12 +44,12 @@
         feature-form-template
         doc]
        [:div.col-sm-offset-2.col-sm-10
-        (if @project
+        (if @feature
           [:button.btn.btn-primary
-           {:on-click #(rf/dispatch [:edit-feature (:feature-id @feature) @doc])}
+           {:on-click #(rf/dispatch [:edit-feature doc])}
            "Save"]
           [:button.btn.btn-primary
-           {:on-click #(rf/dispatch [:create-project (:project-id @project) @doc])}
+           {:on-click #(rf/dispatch [:create-feature doc])}
            "Create"])]]]]))
 
 (defn project-features-page []

@@ -8,12 +8,6 @@
 (defn query [db [event-id]]
   (event-id db))
 
-(defn gen-features [n]
-  (for [i (range 1 (inc n))]
-    {:feature-id i
-     :title (str "feature " i)
-     :description "Nostrud occaecat ad ut veniam incididunt laborum elit anim."}))
-
 ; ------------------------------------------------------------------------------
 ; Subs
 ; ------------------------------------------------------------------------------
@@ -33,37 +27,47 @@
 
 (reg-event-fx
  :create-feature
- (fn [{:keys [db]} [_ feature]]
-   ; POST feature params from DB
-   ; after the key is returned from the DB:
-   (navigate! (str "/projects/" (:project-id feature)
-                   "/features/" 1))
+ (fn [{:keys [db]} [_ project-id feature]]
+   (ajax/POST (str "/api/projects/" project-id "/features")
+              {:params @feature
+               :handler #(navigate! (str "/projects/" project-id
+                                         "/features/" (:feature-id (first %))))
+               :error-handler #(dispatch [:ajax-error %])})
    nil))
 
 (reg-event-fx
  :delete-feature
  (fn [{:keys [db]} [_ feature-id]]
-   ; DELETE feature key from DB, then:
-   (navigate! (str "/projects/" (get-in db [:project :project-id])))
+   (ajax/DELETE "/api/features"
+                {:params {:feature-id feature-id}
+                 :handler #(navigate! (str "/projects/" (get-in db [:project :project-id])))
+                 :error-handler #(dispatch [:ajax-error %])})
    nil))
 
 (reg-event-fx
  :edit-feature
  (fn [{:keys [db]} [_ feature]]
-   ; PUT feature params to server, then:
-   (navigate! (str "/projects/" (get-in db [:project :project-id])))
+   (ajax/PUT "/api/features"
+             {:params (select-keys @feature [:feature-id :title :description])
+              :handler #(navigate! (str "/projects/" (get-in db [:project :project-id])
+                                        "/features/" (:feature-id @feature)))
+              :error-handler #(dispatch [:ajax-error %])})
    nil))
 
 (reg-event-fx
  :load-feature
  (fn [{:keys [db]} [_ feature-id]]
-   ; GET feature by id
-   {:db (assoc db :feature (first (gen-features 1)))}))
+   (ajax/GET (str "/api/features/" feature-id)
+             {:handler #(dispatch [:set-feature %])
+              :error-handler #(dispatch [:ajax-error %])
+              :response-format :json
+              :keywords? true})
+   nil))
 
 (reg-event-fx
  :load-features-for
  (fn [{:keys [db]} [_ project-id]]
-   (ajax/GET (str "/api/features/by-project/" project-id)
+   (ajax/GET (str "/api/projects/" project-id "/features")
              {:handler #(dispatch [:set-features %])
               :error-handler #(dispatch [:ajax-error %])
               :response-format :json
@@ -79,3 +83,8 @@
  :set-features
  (fn [db [_ features]]
    (assoc db :features features)))
+
+(reg-event-db
+ :set-feature
+ (fn [db [_ feature]]
+   (assoc db :feature feature)))

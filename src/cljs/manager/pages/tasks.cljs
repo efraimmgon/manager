@@ -174,7 +174,9 @@
          [:div.col-md-10
           (:status @task)]]]]]]))
 
-(defn feature-tasks-page []
+(defn feature-tasks-page
+  "Template listing all the feature's tasks"
+  []
   (r/with-let [project (rf/subscribe [:project])
                feature (rf/subscribe [:feature])
                tasks (rf/subscribe [:tasks])]
@@ -195,6 +197,9 @@
           [:i.glyphicon.glyphicon-plus]
           " New task"]]]]
       [:ul.list-group
+       (when-not (seq @tasks)
+         [:li.list-group-item
+          "No tasks yet."])
        (doall
          (for [task @tasks]
            ^{:key (:task-id task)}

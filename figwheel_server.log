@@ -3430,3 +3430,235 @@ notifying browser that file changed:  target/cljsbuild/public/js/out/manager/han
 [0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
 [32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.219 seconds.[0m
 notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/projects.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.496 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/projects.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/handlers/features.cljs   line:55  column:36  ----[0m
+
+  [1mUse of undeclared Var manager.handlers.features/gen-features[0m
+
+  [36m51[0m  [36m(reg-event-fx[0m
+  [36m52[0m  [36m :load-feature[0m
+  [36m53[0m  [36m (fn [{:keys [db]} [_ feature-id]][0m
+  [36m54[0m  [36m   ; GET feature by id[0m
+  [33m55[0m  [1m   {:db (assoc db :feature (first (gen-features 1)))}))[0m
+  [0m  [0m  [33m                                   ^--- Use of undeclared Var manager.handlers.features/gen-features[0m
+  [36m56[0m  [36m[0m
+  [36m57[0m  [36m(reg-event-fx[0m
+  [36m58[0m  [36m :load-features-for[0m
+  [36m59[0m  [36m (fn [{:keys [db]} [_ project-id]][0m
+  [36m60[0m  [36m   (ajax/GET (str "/api/features/by-project/" project-id)[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/handlers/features.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.668 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/features.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.801 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/features.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/handlers/features.cljs   line:57  column:36  ----[0m
+
+  [1mUse of undeclared Var manager.handlers.features/gen-features[0m
+
+  [36m53[0m  [36m(reg-event-fx[0m
+  [36m54[0m  [36m :load-feature[0m
+  [36m55[0m  [36m (fn [{:keys [db]} [_ feature-id]][0m
+  [36m56[0m  [36m   ; GET feature by id[0m
+  [33m57[0m  [1m   {:db (assoc db :feature (first (gen-features 1)))}))[0m
+  [0m  [0m  [33m                                   ^--- Use of undeclared Var manager.handlers.features/gen-features[0m
+  [36m58[0m  [36m[0m
+  [36m59[0m  [36m(reg-event-fx[0m
+  [36m60[0m  [36m :load-features-for[0m
+  [36m61[0m  [36m (fn [{:keys [db]} [_ project-id]][0m
+  [36m62[0m  [36m   (ajax/GET (str "/api/projects/" project-id "/features")[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/handlers/features.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.661 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/features.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.746 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/features.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/handlers/features.cljs   line:56  column:36  ----[0m
+
+  [1mUse of undeclared Var manager.handlers.features/gen-features[0m
+
+  [36m52[0m  [36m(reg-event-fx[0m
+  [36m53[0m  [36m :load-feature[0m
+  [36m54[0m  [36m (fn [{:keys [db]} [_ feature-id]][0m
+  [36m55[0m  [36m   ; GET feature by id[0m
+  [33m56[0m  [1m   {:db (assoc db :feature (first (gen-features 1)))}))[0m
+  [0m  [0m  [33m                                   ^--- Use of undeclared Var manager.handlers.features/gen-features[0m
+  [36m57[0m  [36m[0m
+  [36m58[0m  [36m(reg-event-fx[0m
+  [36m59[0m  [36m :load-features-for[0m
+  [36m60[0m  [36m (fn [{:keys [db]} [_ project-id]][0m
+  [36m61[0m  [36m   (ajax/GET (str "/api/projects/" project-id "/features")[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/handlers/features.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.737 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/features.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.409 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/features.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.242 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/features.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.032 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/tasks.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.022 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/routes.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.25 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/features.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/handlers/tasks.cljs   line:71  column:36  ----[0m
+
+  [1mUse of undeclared Var manager.handlers.tasks/project-id[0m
+
+  [36m68[0m  [36m(reg-event-fx[0m
+  [36m69[0m  [36m :load-tasks-for[0m
+  [36m70[0m  [36m (fn [{:keys [db]} [_ feature-id]][0m
+  [33m71[0m  [1m   (ajax/GET (str "/api/projects/" project-id "/features/" feature-id "/tasks")[0m
+  [0m  [0m  [33m                                   ^--- Use of undeclared Var manager.handlers.tasks/project-id[0m
+  [36m72[0m  [36m             {:handler #(dispatch [:set-tasks %])[0m
+  [36m73[0m  [36m              :error-handler #(dispatch [:ajax-error %])[0m
+  [36m74[0m  [36m              :response-format :json[0m
+  [36m75[0m  [36m              :keywords? true})))[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/handlers/tasks.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/manager/handlers/tasks.cljs   line:72  column:26  ----[0m
+
+  [1mUse of undeclared Var manager.handlers.tasks/dispatch[0m
+
+  [36m68[0m  [36m(reg-event-fx[0m
+  [36m69[0m  [36m :load-tasks-for[0m
+  [36m70[0m  [36m (fn [{:keys [db]} [_ feature-id]][0m
+  [36m71[0m  [36m   (ajax/GET (str "/api/projects/" project-id "/features/" feature-id "/tasks")[0m
+  [33m72[0m  [1m             {:handler #(dispatch [:set-tasks %])[0m
+  [0m  [0m  [33m                         ^--- Use of undeclared Var manager.handlers.tasks/dispatch[0m
+  [36m73[0m  [36m              :error-handler #(dispatch [:ajax-error %])[0m
+  [36m74[0m  [36m              :response-format :json[0m
+  [36m75[0m  [36m              :keywords? true})))[0m
+  [36m76[0m  [36m[0m
+  [36m77[0m  [36m(reg-event-db[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/handlers/tasks.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/manager/handlers/tasks.cljs   line:73  column:32  ----[0m
+
+  [1mUse of undeclared Var manager.handlers.tasks/dispatch[0m
+
+  [36m69[0m  [36m :load-tasks-for[0m
+  [36m70[0m  [36m (fn [{:keys [db]} [_ feature-id]][0m
+  [36m71[0m  [36m   (ajax/GET (str "/api/projects/" project-id "/features/" feature-id "/tasks")[0m
+  [36m72[0m  [36m             {:handler #(dispatch [:set-tasks %])[0m
+  [33m73[0m  [1m              :error-handler #(dispatch [:ajax-error %])[0m
+  [0m  [0m  [33m                               ^--- Use of undeclared Var manager.handlers.tasks/dispatch[0m
+  [36m74[0m  [36m              :response-format :json[0m
+  [36m75[0m  [36m              :keywords? true})))[0m
+  [36m76[0m  [36m[0m
+  [36m77[0m  [36m(reg-event-db[0m
+  [36m78[0m  [36m :set-tasks[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/handlers/tasks.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.939 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/tasks.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[36m----  Compiler Warning on   src/cljs/manager/handlers/tasks.cljs   line:72  column:26  ----[0m
+
+  [1mUse of undeclared Var manager.handlers.tasks/dispatch[0m
+
+  [36m68[0m  [36m(reg-event-fx[0m
+  [36m69[0m  [36m :load-tasks-for[0m
+  [36m70[0m  [36m (fn [{:keys [db]} [_ feature-id]][0m
+  [36m71[0m  [36m   (ajax/GET (str "/api/features/" feature-id "/tasks")[0m
+  [33m72[0m  [1m             {:handler #(dispatch [:set-tasks %])[0m
+  [0m  [0m  [33m                         ^--- Use of undeclared Var manager.handlers.tasks/dispatch[0m
+  [36m73[0m  [36m              :error-handler #(dispatch [:ajax-error %])[0m
+  [36m74[0m  [36m              :response-format :json[0m
+  [36m75[0m  [36m              :keywords? true})))[0m
+  [36m76[0m  [36m[0m
+  [36m77[0m  [36m(reg-event-db[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/handlers/tasks.cljs  ----[0m
+[36m----  Compiler Warning on   src/cljs/manager/handlers/tasks.cljs   line:73  column:32  ----[0m
+
+  [1mUse of undeclared Var manager.handlers.tasks/dispatch[0m
+
+  [36m69[0m  [36m :load-tasks-for[0m
+  [36m70[0m  [36m (fn [{:keys [db]} [_ feature-id]][0m
+  [36m71[0m  [36m   (ajax/GET (str "/api/features/" feature-id "/tasks")[0m
+  [36m72[0m  [36m             {:handler #(dispatch [:set-tasks %])[0m
+  [33m73[0m  [1m              :error-handler #(dispatch [:ajax-error %])[0m
+  [0m  [0m  [33m                               ^--- Use of undeclared Var manager.handlers.tasks/dispatch[0m
+  [36m74[0m  [36m              :response-format :json[0m
+  [36m75[0m  [36m              :keywords? true})))[0m
+  [36m76[0m  [36m[0m
+  [36m77[0m  [36m(reg-event-db[0m
+  [36m78[0m  [36m :set-tasks[0m
+
+[36m----  Compiler Warning : Please see src/cljs/manager/handlers/tasks.cljs  ----[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.248 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/tasks.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 1.92 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/tasks.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.806 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 7.111 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/tasks.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.213 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 4.165 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 4.038 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/features.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 6.191 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/events.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 11.75 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/features.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 9.675 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/routes.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 4.413 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/goog/deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/cljs_deps.js
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/features.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.092 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/tasks.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.276 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/tasks.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.209 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/tasks.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.102 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/tasks.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.209 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/tasks.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.208 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/features.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.623 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/features.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 3.062 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/pages/features.js
+[0mCompiling "target/cljsbuild/public/js/app.js" from ["src/cljs" "src/cljc" "env/dev/cljs"]...[0m
+[32mSuccessfully compiled "target/cljsbuild/public/js/app.js" in 2.344 seconds.[0m
+notifying browser that file changed:  target/cljsbuild/public/js/out/manager/handlers/features.js

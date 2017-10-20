@@ -8,12 +8,6 @@
 (defn query [db [event-id]]
   (event-id db))
 
-(defn gen-projects [n]
-  (for [i (range 1 (inc n))]
-    {:project-id i
-     :title (str "project " i)
-     :description (str "project-desc " i)}))
-
 ; ------------------------------------------------------------------------------
 ; Subs
 ; ------------------------------------------------------------------------------

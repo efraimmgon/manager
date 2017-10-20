@@ -7,7 +7,8 @@
    [buddy.auth.accessrules :refer [restrict]]
    [buddy.auth :refer [authenticated?]]
    [manager.routes.services.projects :as projects]
-   [manager.routes.services.features :as features]))
+   [manager.routes.services.features :as features]
+   [manager.routes.services.tasks :as tasks]))
 
 (defn access-error [_ _]
   (unauthorized {:error "unauthorized"}))
@@ -37,19 +38,30 @@
 
     ;;; PROJECTS
 
+    ; LIST
     (GET "/projects" []
+         :return [projects/Project]
          :summary "list available projects"
          (projects/get-all-projects))
 
+    ; CREATE
+    (POST "/projects" []
+          :body-params [title       :- s/Str
+                        description :- s/Str]
+          :return [{:project-id s/Int}]
+          :summary "create a new project"
+          (projects/create-project!
+           {:title title
+            :description description}))
+
+    ; READ
     (GET "/projects/:id" []
          :path-params [id :- s/Int]
+         :return projects/Project
          :summary "get project by id"
          (projects/get-project {:project-id id}))
 
-    (POST "/projects" req
-          :summary "create a new project"
-          (projects/create-project! (:params req)))
-
+    ; UPDATE
     (PUT "/projects" []
          :body-params [project-id  :- s/Int
                        title       :- s/Str
@@ -61,15 +73,67 @@
            :title title
            :description description}))
 
+    ; DELETE
     (DELETE "/projects" []
             :body-params [project-id :- s/Int]
             :return s/Int
             :summary "delete project by id"
             (projects/delete-project! {:project-id project-id}))
 
+
     ;;; FEATURES
 
-    (GET "/features/by-project/:project-id" []
+    ; LIST
+    (GET "/projects/:project-id/features" []
          :path-params [project-id :- s/Int]
+         :return [features/Feature]
          :summary "get features by project-id"
-         (features/get-features-by-project {:project-id project-id}))))
+         (features/get-features-by-project {:project-id project-id}))
+
+    ; CREATE
+    (POST "/projects/:project-id/features" []
+          :path-params [project-id  :- s/Int]
+          :body-params [title       :- s/Str
+                        description :- s/Str]
+          :return [{:feature-id s/Int}]
+          :summary "create a new feature for project-id"
+          (features/create-feature!
+           {:project-id project-id
+            :title title
+            :description description}))
+
+    ; READ
+    (GET "/features/:feature-id" []
+         :path-params [feature-id :- s/Int]
+         :return features/Feature
+         :summary "get features by project-id"
+         (features/get-feature {:feature-id feature-id}))
+
+    ; UPDATE
+    (PUT "/features" []
+         :body-params [feature-id :- s/Int
+                       title :- s/Str
+                       description :- s/Str]
+         :return s/Int
+         :summary "update feature by feature-id"
+         (features/update-feature!
+          {:feature-id feature-id
+           :title title
+           :description description}))
+
+    ; DELETE
+    (DELETE "/features" []
+            :body-params [feature-id :- s/Int]
+            :return s/Int
+            :summary "delete feature by feature-id"
+            (features/delete-feature!
+             {:feature-id feature-id}))
+
+    ;;; TASKS
+
+    ; LIST
+    (GET "/features/:feature-id/tasks" []
+         :path-params [feature-id :- s/Int]
+         :summary "get tasks by feature-id"
+         (tasks/get-tasks
+          {:feature-id feature-id}))))

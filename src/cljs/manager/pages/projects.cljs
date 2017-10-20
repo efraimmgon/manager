@@ -27,9 +27,14 @@
                doc (atom {})]
     (reset! doc @project)
     [base
-     [breadcrumbs
-      {:title (or (:title @project) "New project")
-       :active? true}]
+     (if @project
+       [breadcrumbs
+        {:title (:title @project),
+         :href (str "/projects/" (:project-id @project))}
+        {:title "Edit", :active? true}]
+       [breadcrumbs
+        {:title "New project"
+         :active? true}])
      [:div.panel.panel-default
       [:div.panel-heading
        (if @project

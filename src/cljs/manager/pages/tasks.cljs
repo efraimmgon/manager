@@ -91,13 +91,23 @@
                              (assoc :project-id (:project-id @project))
                              (assoc :feature-id (:feature-id @feature))))]
     [base
-     [breadcrumbs
-      {:href (str "/projects/" (:id @project))
-       :title (:title @project)}
-      {:href (str "/projects/" (:id @project) "/features/" (:feature-id @feature))
-       :title (:title @feature)}
-      {:title (or (:task @task) "New task")
-       :active? true}]
+     (if @task
+       [breadcrumbs
+        {:href (str "/projects/" (:id @project))
+         :title (:title @project)}
+        {:href (str "/projects/" (:id @project) "/features/" (:feature-id @feature))
+         :title (:title @feature)}
+        {:title (:task @task)
+         :href (str "/projects/" (:id @project)
+                    "/features/" (:feature-id @feature)
+                    (:task-id @task))}
+        {:title "Edit", :active? true}]
+       [breadcrumbs
+        {:href (str "/projects/" (:id @project))
+         :title (:title @project)}
+        {:href (str "/projects/" (:id @project) "/features/" (:feature-id @feature))
+         :title (:title @feature)}
+        {:title "New task", :active? true}])
      [:div.panel.panel-default
       [:div.panel-heading
        (if @task
@@ -191,6 +201,10 @@
       [:div.panel-heading
        [:h2 (:title @feature)
         [:div.pull-right
+         [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
+                                      "/features/" (:feature-id @feature) "/edit")}
+          [:i.glyphicon.glyphicon-edit]
+          " Edit"]
          [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
                                       "/features/" (:feature-id @feature)
                                       "/tasks/new")}

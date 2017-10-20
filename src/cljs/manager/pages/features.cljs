@@ -20,19 +20,24 @@
     [:input.form-control
      {:field :text, :id :description}])])
 
-; edit: dispatch fn
-; create: dispatch fn
 (defn edit-feature-page []
   (r/with-let [project (rf/subscribe [:project])
                feature (rf/subscribe [:feature])
                doc (atom {})]
     (reset! doc @feature)
     [base
-     [breadcrumbs
-      {:href (str "/projects/" (:project-id @project))
-       :title (:title @project)}
-      {:title (or (:title @feature) "New feature")
-       :active? true}]
+     (if @feature
+       [breadcrumbs
+        {:href (str "/projects/" (:project-id @project))
+         :title (:title @project)}
+        {:title (or (:title @feature))
+         :href (str "/projects/" (:project-id @project)
+                    "/features/" (:feature-id @feature))}
+        {:title "Edit", :active? true}]
+       [breadcrumbs
+        {:href (str "/projects/" (:project-id @project))
+         :title (:title @project)}
+        {:title "New feature", :active? true}])
 
      [:div.panel.panel-default
       [:div.panel-heading
@@ -63,6 +68,9 @@
       [:div.panel-heading
        [:h2 (:title @project)
         [:div.pull-right
+         [:a.btn.btn-link {:href (str "/projects/" (:project-id @project) "/edit")}
+          [:i.glyphicon.glyphicon-edit]
+          " Edit"]
          [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
                                       "/features/new")}
           [:i.glyphicon.glyphicon-plus]

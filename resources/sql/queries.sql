@@ -89,10 +89,26 @@ DELETE FROM features
 WHERE feature_id = :feature-id;
 
 -- -----------------------------------------------------------------------------
--- Features
+-- Tasks
 -- -----------------------------------------------------------------------------
 
 -- :name get-tasks :? :raw
 -- :doc get all tasks by :feature-id
 SELECT * FROM tasks
 WHERE feature_id = :feature-id
+
+-- -----------------------------------------------------------------------------
+-- Status
+-- -----------------------------------------------------------------------------
+
+-- :name get-all-status :? :*
+-- :doc get all available status
+SELECT * FROM status;
+
+-- -----------------------------------------------------------------------------
+-- Priorities
+-- -----------------------------------------------------------------------------
+
+-- :name get-priorities :? :*
+-- :doc get all available priorities
+SELECT * FROM priorities;

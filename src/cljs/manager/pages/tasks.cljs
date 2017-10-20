@@ -45,10 +45,6 @@
      [:input.form-control
       {:field :text, :id :id, :disabled true}])
    (form-group
-     "Feature"
-     [:input.form-control
-      {:field :text, :id :feature}])
-   (form-group
      "Orig est"
      [:input.form-control
       {:field :numeric, :id :orig-est}])
@@ -87,9 +83,9 @@
   (r/with-let [project (rf/subscribe [:project])
                feature (rf/subscribe [:feature])
                task (rf/subscribe [:task])
-               doc (atom (-> @task
-                             (assoc :project-id (:project-id @project))
-                             (assoc :feature-id (:feature-id @feature))))]
+               doc (atom {})]
+    (reset! doc (assoc @task :feature-id (:feature-id @feature)))
+
     [base
      (if @task
        [breadcrumbs

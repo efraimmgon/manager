@@ -75,6 +75,8 @@
   (rf/dispatch-sync [:close-task])
   (run-events [[:load-project (js/parseInt project-id)]
                [:load-feature (js/parseInt feature-id)]
+               [:load-priorities]
+               [:load-status]
                [:set-active-page :edit-task]]))
 
 ;; read

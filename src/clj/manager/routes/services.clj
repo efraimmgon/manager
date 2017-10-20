@@ -6,9 +6,12 @@
    [compojure.api.meta :refer [restructure-param]]
    [buddy.auth.accessrules :refer [restrict]]
    [buddy.auth :refer [authenticated?]]
+   [manager.routes.services.priorities :as priorities]
    [manager.routes.services.projects :as projects]
    [manager.routes.services.features :as features]
+   [manager.routes.services.status :as status]
    [manager.routes.services.tasks :as tasks]))
+
 
 (defn access-error [_ _]
   (unauthorized {:error "unauthorized"}))
@@ -131,9 +134,49 @@
 
     ;;; TASKS
 
+    ; CREATE
+
+    (POST "/features/:feature-id/tasks" []
+          :body-params [feature-id  :- s/Int
+                        title       :- s/Str
+                        description :- s/Str
+                        orig-est    :- s/Int
+                        curr-est    :- s/Int
+                        elapsed     :- s/Int
+                        remain      :- s/Int
+                        priority-id :- s/Int
+                        status-id   :- s/Int]
+          :return [{:task-id s/Int}]
+          :summary "create a task for feature-id"
+          (tasks/create-task!
+           {:feature-id feature-id
+            :title title
+            :description description
+            :orig-est orig-est
+            :curr-est curr-est
+            :elapsed elapsed
+            :remain remain
+            :priority-id priority-id
+            :status-id status-id}))
+
     ; LIST
     (GET "/features/:feature-id/tasks" []
          :path-params [feature-id :- s/Int]
+         :return [tasks/Task]
          :summary "get tasks by feature-id"
          (tasks/get-tasks
-          {:feature-id feature-id}))))
+          {:feature-id feature-id}))
+
+    ;;; Status
+
+    (GET "/status" []
+         :return [status/Status]
+         :summary "get all available status"
+         (status/get-all-status))
+
+    ;;; Priorities
+
+    (GET "/priorities" []
+         :return [priorities/Priority]
+         :summary "get all available priorities"
+         (priorities/get-priorities))))

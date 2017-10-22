@@ -75,9 +75,7 @@
   (rf/dispatch-sync [:close-task])
   (run-events [[:load-project (js/parseInt project-id)]
                [:load-feature (js/parseInt feature-id)]
-               [:load-priorities]
-               [:load-status]
-               [:set-active-page :edit-task]]))
+               [:set-active-page :new-task]]))
 
 ;; read
 (secretary/defroute "/projects/:project-id/features/:feature-id/tasks/:task-id"

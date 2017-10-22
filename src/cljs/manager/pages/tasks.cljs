@@ -38,12 +38,20 @@
        "Status"]]
     [tbody-editable]]])
 
-(def form-template
+(defn form-template [priorities status]
   [:div.form-horizontal
    (form-group
      "Task id"
      [:input.form-control
-      {:field :text, :id :id, :disabled true}])
+      {:field :numeric, :id :task-id, :disabled true}])
+   (form-group
+    "Title"
+    [:input.form-control
+     {:field :text, :id :title}])
+   (form-group
+    "Description"
+    [:textarea.form-control
+     {:field :textarea, :id :description}])
    (form-group
      "Orig est"
      [:input.form-control
@@ -52,18 +60,13 @@
      "Curr est"
      [:input.form-control
       {:field :numeric, :id :curr-est}])
-   ;; TODO: fetch options from DB
    (form-group
      "Priority"
      [:select.form-control
-      {:field :list, :id :priority}
-      [:option {:key 1} "1 - urgent"]
-      [:option {:key 2} "2 - high"]
-      [:option {:key 3} "3 - important"]
-      [:option {:key 4} "4 - medium"]
-      [:option {:key 5} "5 - moderate"]
-      [:option {:key 6} "6 - low"]
-      [:option {:key 7} "7 - don’t fix"]])
+      {:field :list, :id :priority-id}
+      (for [priority @priorities]
+        [:option {:key (:priority-id priority)}
+         (:name priority)])])
    (form-group
      "Elapsed"
      [:input.form-control
@@ -74,53 +77,66 @@
       {:field :numeric, :id :remain}])
    (form-group
      "Status"
-     [:div.btn-group {:field :single-select :id :status}
-      [:button.btn.btn-default {:key "-"} "-"]
-      [:button.btn.btn-default {:key "on progress"} "on progress"]
-      [:button.btn.btn-default {:key "done"} "done"]])])
+     [:div.btn-group {:field :single-select :id :status-id}
+      (for [sts @status]
+        [:button.btn.btn-default {:key (:status-id sts)}
+         (:name sts)])])])
+
+(defn new-task-page []
+  (r/with-let [project (rf/subscribe [:project])
+               feature (rf/subscribe [:feature])
+               task (rf/subscribe [:task])
+               priorities (rf/subscribe [:priorities])
+               status (rf/subscribe [:status])
+               doc (atom @task)]
+    [base
+     [breadcrumbs
+      {:href (str "/projects/" (:project-id @project))
+       :title (:title @project)}
+      {:href (str "/projects/" (:project-id @project) "/features/" (:feature-id @feature))
+       :title (:title @feature)}
+      {:title "New task", :active? true}]
+     [:div.panel.panel-default
+      [:div.panel-heading
+       [:h2 "Create task"]]
+      [:div.panel-body
+       [bind-fields
+        (form-template priorities status)
+        doc]
+       [:div.col-sm-offset-2.col-sm-10
+        [:button.btn.btn-primary
+         {:on-click #(rf/dispatch [:create-task (:project-id @project) (:feature-id @feature) @doc])}
+         "Create"]]]]]))
 
 (defn edit-task-page []
   (r/with-let [project (rf/subscribe [:project])
                feature (rf/subscribe [:feature])
                task (rf/subscribe [:task])
-               doc (atom {})]
-    (reset! doc (assoc @task :feature-id (:feature-id @feature)))
-
+               priorities (rf/subscribe [:priorities])
+               status (rf/subscribe [:status])
+               doc (atom (assoc @task :feature-id (:feature-id @feature)))]
     [base
-     (if @task
-       [breadcrumbs
-        {:href (str "/projects/" (:id @project))
-         :title (:title @project)}
-        {:href (str "/projects/" (:id @project) "/features/" (:feature-id @feature))
-         :title (:title @feature)}
-        {:title (:task @task)
-         :href (str "/projects/" (:id @project)
-                    "/features/" (:feature-id @feature)
-                    (:task-id @task))}
-        {:title "Edit", :active? true}]
-       [breadcrumbs
-        {:href (str "/projects/" (:id @project))
-         :title (:title @project)}
-        {:href (str "/projects/" (:id @project) "/features/" (:feature-id @feature))
-         :title (:title @feature)}
-        {:title "New task", :active? true}])
+     [breadcrumbs
+      {:href (str "/projects/" (:project-id @project))
+       :title (:title @project)}
+      {:href (str "/projects/" (:project-id @project) "/features/" (:feature-id @feature))
+       :title (:title @feature)}
+      {:title (:title @task)
+       :href (str "/projects/" (:project-id @project)
+                  "/features/" (:feature-id @feature)
+                  "/tasks/" (:task-id @task))}
+      {:title "Edit", :active? true}]
      [:div.panel.panel-default
       [:div.panel-heading
-       (if @task
-         [:h2 "Edit task"]
-         [:h2 "Create task"])]
+       [:h2 "Edit task"]]
       [:div.panel-body
        [bind-fields
-        form-template
+        (form-template priorities status)
         doc]
        [:div.col-sm-offset-2.col-sm-10
-        (if @task
-          [:button.btn.btn-primary
-           {:on-click #(rf/dispatch [:edit-task @doc])}
-           "Save"]
-          [:button.btn.btn-primary
-           {:on-click #(rf/dispatch [:create-task @doc])}
-           "Create"])]]]]))
+        [:button.btn.btn-primary
+         {:on-click #(rf/dispatch [:edit-task (:project-id @project) @doc])}
+         "Update"]]]]]))
 
 (defn task-page []
   (r/with-let [project (rf/subscribe [:project])

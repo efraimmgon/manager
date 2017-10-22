@@ -6,10 +6,13 @@
    [manager.handlers.tasks]
    [manager.handlers.features]
    [manager.handlers.projects]
-   [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub]]))
+   [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub subscribe]]))
 
 (defn query [db [event-id]]
   (event-id db))
+
+(defn <sub [query-v]
+  (deref (subscribe query-v)))
 
 ; ------------------------------------------------------------------------------
 ; Events
@@ -26,12 +29,14 @@
 (reg-event-db
   :initialize-db
   (fn [_ _]
+    (dispatch [:load-priorities])
+    (dispatch [:load-status])
     db/default-db))
 
 (reg-event-fx
  :load-priorities
  (fn [_ _]
-   (ajax/GET "/api/priorities/"
+   (ajax/GET "/api/priorities"
              {:handler #(dispatch [:set-priorities %])
               :error-handler #(dispatch [:ajax-error %])
               :response-format :json
@@ -73,19 +78,24 @@
  (fn [db [_ status]]
    (assoc db :status status)))
 
+(reg-event-db
+ :update-state
+ (fn [db [_ k keys value]]
+   (update db k assoc-in keys value)))
+
 ; ------------------------------------------------------------------------------
 ; Subs
 ; ------------------------------------------------------------------------------
 
-(reg-sub
-  :page
-  query)
+(reg-sub :page query)
 
-(reg-sub
-  :docs
-  query)
+(reg-sub :docs query)
 
 (reg-sub
  :db
  (fn [db _]
    db))
+
+(reg-sub :priorities query)
+
+(reg-sub :status query)

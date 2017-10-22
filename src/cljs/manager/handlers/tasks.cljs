@@ -8,18 +8,6 @@
 (defn query [db [event-id]]
   (event-id db))
 
-(defn gen-tasks [n]
-  (for [i (range 1 (inc n))]
-    {:task-id i
-     :title (str "task " i)
-     :description (str "task-description " i)
-     :orig-est (rand-int 17)
-     :curr-est (rand-int 17)
-     :priority (inc (rand-int 8))
-     :elapsed 0
-     :remain 0
-     :status "-"}))
-
 ; ------------------------------------------------------------------------------
 ; Subs
 ; ------------------------------------------------------------------------------
@@ -39,11 +27,13 @@
 
 (reg-event-fx
  :create-task
- (fn [{:keys [db]} [_ task]]
-   ; POST task params from DB
-   ; after the key is returned from the DB:
-   (navigate! (str "/projects/" (:project-id task)
-                   "/features/" (:feature-id task)))))
+ (fn [{:keys [db]} [_ project-id feature-id task]]
+   (ajax/POST (str "/api/features/" feature-id "/tasks")
+              {:params (assoc task :feature-id feature-id)
+               :handler #(navigate! (str "/projects/" project-id
+                                         "/features/" feature-id))
+               :error-handler #(dispatch [:ajax-error %])})
+   nil))
 
 (reg-event-fx
  :delete-task
@@ -54,16 +44,23 @@
 
 (reg-event-fx
  :edit-task
- (fn [{:keys [db]} [_ task]]
-   ; PUT task params to server, then:
-   (navigate! (str "/projects/" (get-in db [:project :project-id])
-                   "/features/" (get-in db [:feature :feature-id])))))
+ (fn [{:keys [db]} [_ project-id task]]
+   (ajax/PUT "/api/tasks"
+             {:params (dissoc task :created-at :updated-at :velocity)
+              :handler #(navigate! (str "/projects/" project-id
+                                        "/features/" (:feature-id task)))
+              :error-handler #(dispatch [:ajax-error %])})
+   nil))
 
 (reg-event-fx
  :load-task
  (fn [{:keys [db]} [_ task-id]]
-   ; GET task by id
-   {:db (assoc db :task (first (gen-tasks 1)))}))
+   (ajax/GET (str "/api/tasks/" task-id)
+             {:handler #(dispatch [:set-task %])
+              :error-handler #(dispatch [:ajax-error %])
+              :response-format :json
+              :keywords? true})
+   nil))
 
 (reg-event-fx
  :load-tasks-for
@@ -74,6 +71,11 @@
               :response-format :json
               :keywords? true})
    nil))
+
+(reg-event-db
+ :set-task
+ (fn [db [_ task]]
+   (assoc db :task task)))
 
 (reg-event-db
  :set-tasks

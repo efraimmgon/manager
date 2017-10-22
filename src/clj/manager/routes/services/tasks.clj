@@ -2,7 +2,8 @@
   (:require
    [manager.db.core :as db]
    [ring.util.http-response :refer :all]
-   [schema.core :as s])
+   [schema.core :as s]
+   [schema.coerce :as coerce])
   (:import
    [org.joda.time]))
 
@@ -21,8 +22,26 @@
    :created-at org.joda.time.DateTime
    :updated-at org.joda.time.DateTime})
 
+(def TaskRequest (dissoc Task :task-id :created-at :updated-at :velocity))
+
+(def parse-task-request
+  (coerce/coercer TaskRequest coerce/json-coercion-matcher))
+
+
+; (parse-task-request task-request)
+
+(defn get-task [params]
+  (ok (db/get-task params)))
+
 (defn get-tasks [params]
   (ok (db/get-tasks params)))
 
 (defn create-task! [params]
-  "todo")
+  (ok
+   (db/create-task<!
+    (assoc params :velocity nil))))
+
+(defn update-task! [params]
+  (ok
+   (db/update-task!
+    (assoc params :velocity nil))))

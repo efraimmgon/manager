@@ -38,7 +38,7 @@
   (context
     "/api" []
     :tags ["private"]
-
+    ;:coercion :schema
     ;;; PROJECTS
 
     ; LIST
@@ -166,6 +166,39 @@
          :summary "get tasks by feature-id"
          (tasks/get-tasks
           {:feature-id feature-id}))
+
+    ; READ
+    (GET "/tasks/:task-id" []
+         :path-params [task-id :- s/Int]
+         :return tasks/Task
+         :summary "get task by task-id"
+         (tasks/get-task {:task-id task-id}))
+
+    ; UPDATE
+    (PUT "/tasks" []
+         :body-params [task-id     :- s/Int
+                       feature-id  :- s/Int
+                       title       :- s/Str
+                       description :- s/Str
+                       orig-est    :- s/Int
+                       curr-est    :- s/Int
+                       elapsed     :- s/Int
+                       remain      :- s/Int
+                       priority-id :- s/Int
+                       status-id   :- s/Int]
+         :return s/Int
+         :summary "update task by task-id"
+         (tasks/update-task!
+          {:task-id task-id
+           :feature-id feature-id
+           :title title
+           :description description
+           :orig-est orig-est
+           :curr-est curr-est
+           :elapsed elapsed
+           :remain remain
+           :priority-id priority-id
+           :status-id status-id}))
 
     ;;; Status
 

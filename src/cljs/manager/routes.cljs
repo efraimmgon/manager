@@ -30,7 +30,7 @@
 ;; create
 (secretary/defroute "/projects/new" []
   (rf/dispatch-sync [:close-project])
-  (run-events [[:set-active-page :edit-project]]))
+  (run-events [[:set-active-page :new-project]]))
 
 ;; read
 (secretary/defroute "/projects/:id" [id]
@@ -50,7 +50,7 @@
 (secretary/defroute "/projects/:project-id/features/new" [project-id]
   (rf/dispatch-sync [:close-feature])
   (run-events [[:load-project (js/parseInt project-id)]
-               [:set-active-page :edit-feature]]))
+               [:set-active-page :new-feature]]))
 
 ;; read
 (secretary/defroute "/projects/:project-id/features/:feature-id"

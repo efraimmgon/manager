@@ -46,8 +46,10 @@
 
 (def pages
   {:home #'projects/projects-page
+   :new-project #'projects/new-project-page
    :edit-project #'projects/edit-project-page
    :project #'features/project-features-page
+   :new-feature #'features/new-feature-page
    :edit-feature #'features/edit-feature-page
    :feature-tasks #'tasks/feature-tasks-page
    :task #'tasks/task-page

@@ -1,61 +1,86 @@
 (ns manager.pages.features
   (:require
-   [manager.components :as c :refer [base breadcrumbs form-group thead tbody]]
+   [manager.components :as c :refer [base breadcrumbs form-group input thead tbody]]
    [reagent.core :as r :refer [atom]]
-   [reagent-forms.core :refer [bind-fields]]
    [re-frame.core :as rf]))
 
-(def feature-form-template
+(defn form-template [doc]
   [:div.form-horizontal
-   (form-group
+   [form-group
     "Feature id"
-    [:input.form-control
-     {:field :text, :id :feature-id, :disabled true}])
-   (form-group
+    [input {:class "form-control"
+            :name :feature-id
+            :type :text
+            :disabled true}
+     doc]]
+   [form-group
     "Title"
-    [:input.form-control
-     {:field :text, :id :title}])
-   (form-group
+    [input {:class "form-control"
+            :name :title
+            :type :text}
+     doc]]
+   [form-group
     "Description"
-    [:input.form-control
-     {:field :text, :id :description}])])
+    [input {:class "form-control"
+            :name :description
+            :type :text}
+     doc]]
+   [form-group
+    "Created at"
+    [input {:class "form-control"
+            :name :created-at
+            :type :date
+            :disabled true}
+      doc]]
+   [form-group
+    "Updated at"
+    [input {:class "form-control"
+            :name :updated-at
+            :type :date
+            :disabled true}
+     doc]]])
 
 (defn edit-feature-page []
   (r/with-let [project (rf/subscribe [:project])
                feature (rf/subscribe [:feature])
-               doc (atom {})]
+               doc (atom nil)]
     (reset! doc @feature)
     [base
-     (if @feature
-       [breadcrumbs
-        {:href (str "/projects/" (:project-id @project))
-         :title (:title @project)}
-        {:title (or (:title @feature))
-         :href (str "/projects/" (:project-id @project)
-                    "/features/" (:feature-id @feature))}
-        {:title "Edit", :active? true}]
-       [breadcrumbs
-        {:href (str "/projects/" (:project-id @project))
-         :title (:title @project)}
-        {:title "New feature", :active? true}])
-
+     [breadcrumbs
+      {:href (str "/projects/" (:project-id @project))
+       :title (:title @project)}
+      {:title (:title @feature)
+       :href (str "/projects/" (:project-id @project)
+                  "/features/" (:feature-id @feature))}
+      {:title "Edit", :active? true}]
      [:div.panel.panel-default
       [:div.panel-heading
-       (if @feature
-         [:h2 "Edit feature"]
-         [:h2 "Create feature"])]
+       [:h2 "Edit feature"]]
       [:div.panel-body
-       [bind-fields
-        feature-form-template
-        doc]
+       [form-template doc]
        [:div.col-sm-offset-2.col-sm-10
-        (if @feature
-          [:button.btn.btn-primary
-           {:on-click #(rf/dispatch [:edit-feature doc])}
-           "Save"]
-          [:button.btn.btn-primary
-           {:on-click #(rf/dispatch [:create-feature doc])}
-           "Create"])]]]]))
+        [:button.btn.btn-primary
+         {:on-click #(rf/dispatch [:edit-feature doc])}
+         "Update"]]]]]))
+
+(defn new-feature-page []
+  (r/with-let [project (rf/subscribe [:project])
+               doc (atom {})]
+    [base
+     [breadcrumbs
+      {:href (str "/projects/" (:project-id @project))
+       :title (:title @project)}
+      {:title "New feature", :active? true}]
+     [:div.panel.panel-default
+      [:div.panel-heading
+       [:h2 "Create feature"]]
+      [:div.panel-body
+       [c/pretty-display "doc" doc]
+       [form-template doc]
+       [:div.col-sm-offset-2.col-sm-10
+        [:button.btn.btn-primary
+         {:on-click #(rf/dispatch [:create-feature (:project-id @project) doc])}
+         "Create"]]]]]))
 
 (defn project-features-page []
   (r/with-let [project (rf/subscribe [:project])

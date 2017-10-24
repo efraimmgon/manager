@@ -1,8 +1,9 @@
 (ns manager.pages.tasks
   (:require
-   [manager.components :as c :refer [base breadcrumbs form-group tbody thead-editable]]
+   [manager.components :as c :refer
+    [base breadcrumbs form-group input select textarea tbody thead-editable]]
+   [manager.events :refer [<sub]]
    [reagent.core :as r :refer [atom]]
-   [reagent-forms.core :refer [bind-fields]]
    [re-frame.core :as rf]))
 
 (defn tbody-editable
@@ -38,57 +39,89 @@
        "Status"]]
     [tbody-editable]]])
 
-(defn form-template [priorities status]
+(defn form-template [doc]
   [:div.form-horizontal
-   (form-group
-     "Task id"
-     [:input.form-control
-      {:field :numeric, :id :task-id, :disabled true}])
-   (form-group
+   [form-group
+    "Task id"
+    [input {:class "form-control"
+            :name :task-id
+            :type :number
+            :disabled true}
+     doc]]
+   [form-group
     "Title"
-    [:input.form-control
-     {:field :text, :id :title}])
-   (form-group
+    [input {:class "form-control"
+            :name :title
+            :type :text}
+     doc]]
+   [form-group
     "Description"
-    [:textarea.form-control
-     {:field :textarea, :id :description}])
-   (form-group
-     "Orig est"
-     [:input.form-control
-      {:field :numeric, :id :orig-est}])
-   (form-group
-     "Curr est"
-     [:input.form-control
-      {:field :numeric, :id :curr-est}])
-   (form-group
-     "Priority"
-     [:select.form-control
-      {:field :list, :id :priority-id}
-      (for [priority @priorities]
-        [:option {:key (:priority-id priority)}
-         (:name priority)])])
-   (form-group
-     "Elapsed"
-     [:input.form-control
-      {:field :numeric, :id :elapsed}])
-   (form-group
-     "Remain"
-     [:input.form-control
-      {:field :numeric, :id :remain}])
-   (form-group
-     "Status"
-     [:div.btn-group {:field :single-select :id :status-id}
-      (for [sts @status]
-        [:button.btn.btn-default {:key (:status-id sts)}
-         (:name sts)])])])
+    [textarea {:class "form-control"
+               :name :description}
+     doc]]
+   [form-group
+    "Orig est"
+    [input {:class "form-control"
+            :name :orig-est
+            :type :number}
+     doc]]
+   [form-group
+    "Curr est"
+    [input {:class "form-control"
+            :name :curr-est
+            :type :number}
+     doc]]
+   [form-group
+    "Priority"
+    [select {:class "form-control"
+             :name :priority-id}
+     doc
+     (for [priority (<sub [:priorities])]
+       ^{:key (:priority-id priority)}
+       [:option {:value (:priority-id priority)}
+        (:name priority)])]]
+   [form-group
+    "Elapsed"
+    [input {:class "form-control"
+            :name :elapsed
+            :type :number}
+     doc]]
+   [form-group
+    "Remain"
+    [input {:class "form-control"
+            :name :remain
+            :type :number}
+     doc]]
+   [form-group
+    "Created at"
+    [input {:class "form-control"
+            :name :created-at
+            :type :date
+            :disabled true}
+     doc]]
+   [form-group
+    "Updated at"
+    [input {:class "form-control"
+            :name :updated-at
+            :type :date
+            :disabled true}
+     doc]]
+   [form-group
+    "Status"
+    [:div
+     (for [status (<sub [:status])]
+       ^{:key (:status-id status)}
+       [:label.checkbox-inline
+        [input {:name :status-id
+                :type :radio
+                :value (:status-id status)}
+         doc]
+        " " (:name status)])]]])
 
 (defn new-task-page []
   (r/with-let [project (rf/subscribe [:project])
                feature (rf/subscribe [:feature])
-               task (rf/subscribe [:task])
-               priorities (rf/subscribe [:priorities])
-               status (rf/subscribe [:status])
-               doc (atom @task)]
+               doc (atom {})]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
@@ -100,21 +133,19 @@
       [:div.panel-heading
        [:h2 "Create task"]]
       [:div.panel-body
-       [bind-fields
-        (form-template priorities status)
-        doc]
+       [c/pretty-display "doc" doc]
+       [form-template doc]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:create-task (:project-id @project) (:feature-id @feature) @doc])}
+         {:on-click #(rf/dispatch [:create-task (:project-id @project) (:feature-id @feature) doc])}
          "Create"]]]]]))
 
 (defn edit-task-page []
   (r/with-let [project (rf/subscribe [:project])
                feature (rf/subscribe [:feature])
                task (rf/subscribe [:task])
-               priorities (rf/subscribe [:priorities])
-               status (rf/subscribe [:status])
-               doc (atom (assoc @task :feature-id (:feature-id @feature)))]
+               doc (atom nil)]
+    (reset! doc (assoc @task :feature-id (:feature-id @feature)))
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
@@ -130,9 +161,8 @@
       [:div.panel-heading
        [:h2 "Edit task"]]
       [:div.panel-body
-       [bind-fields
-        (form-template priorities status)
-        doc]
+       [c/pretty-display "doc" doc]
+       [form-template doc]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
          {:on-click #(rf/dispatch [:edit-task (:project-id @project) @doc])}

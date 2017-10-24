@@ -1,4 +1,5 @@
-(ns manager.components)
+(ns manager.components
+  (:require [cljs.reader :as reader]))
 
 ; --------------------------------------------------------------------
 ; Debugging
@@ -11,9 +12,34 @@
     (with-out-str
      (cljs.pprint/pprint @data))]])
 
-; --------------------------------------------------------------------
-; MISC
-; --------------------------------------------------------------------
+; ------------------------------------------------------------------------------
+; Forms
+; ------------------------------------------------------------------------------
+
+; Helpers ----------------------------------------------------------------------
+
+(defn- default-attrs [attrs fields]
+  {:on-change #(swap! fields assoc (:name attrs) (-> % .-target .-value))
+   :value ((:name attrs) @fields)})
+
+(defn- date-input [attrs fields]
+  (let [date ((:name attrs) @fields)]
+    [:input
+     (if date
+       (assoc attrs :value (-> ((:name attrs) @fields)
+                               (.split "T")
+                               (first)))
+       attrs)]))
+
+(defn- radio-input [attrs fields]
+  (let [attrs (-> (default-attrs attrs fields)
+                  ;; `(-> % .-target .-value)` returns strings no matter what
+                  ;; we're trying to do go around that
+                  (assoc :on-change #(swap! fields assoc (:name attrs) (-> % .-target .-value reader/read-string)))
+                  (merge attrs))]
+    [:input attrs]))
+
+; Core -------------------------------------------------------------------------
 
 (defn form-group [label & input]
   [:div.form-group
@@ -21,6 +47,46 @@
    (into
     [:div.col-sm-10]
     input)])
+
+(defn input [attrs fields]
+  (let [attrs (merge (default-attrs attrs fields) attrs)]
+    (condp = (:type attrs)
+           :date [date-input attrs fields]
+           :radio [radio-input attrs fields]
+
+           ;; default
+           [:input attrs])))
+
+(defn textarea [attrs fields]
+  (let [attrs (merge (default-attrs attrs fields) attrs)]
+    [:textarea attrs]))
+
+(defn option-value [options val]
+  (some #(and (= (:value %) val)
+              val)
+        (map second options)))
+
+;;; with the current implementation it does not support options with
+;;; strings as values.
+(defn select [attrs fields & options]
+  (let [attrs (-> (default-attrs attrs fields)
+                  ;; `(-> % .-target .-value)` returns strings no matter what
+                  ;; we're trying to do go around that
+                  (assoc :on-change #(swap! fields assoc (:name attrs) (-> % .-target .-value reader/read-string)))
+                  (merge attrs))
+        default-val (-> options ffirst second :value)]
+    ;; set fields' default value
+    (when-not ((:name attrs) @fields)
+      (swap! fields assoc (:name attrs) default-val))
+    (into
+     [:select
+      ;; set select value
+      (assoc attrs :value ((:name attrs) @fields))]
+     options)))
+
+; --------------------------------------------------------------------
+; MISC
+; --------------------------------------------------------------------
 
 (defn breadcrumbs [& items]
   (into

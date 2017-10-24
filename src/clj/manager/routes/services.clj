@@ -200,6 +200,13 @@
            :priority-id priority-id
            :status-id status-id}))
 
+    ; DELETE
+    (DELETE "/tasks" []
+            :body-params [task-id :- s/Int]
+            :return s/Int
+            :summary "delete task by task-id"
+            (tasks/delete-task! {:task-id task-id}))
+
     ;;; Status
 
     (GET "/status" []

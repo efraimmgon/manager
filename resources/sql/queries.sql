@@ -127,6 +127,11 @@ SET feature_id = :feature-id,
     updated_at = (now() AT TIME ZONE 'utc')
 WHERE task_id = :task-id;
 
+-- :name delete-task! :! :n
+-- :doc delete task by task-id
+DELETE FROM tasks
+WHERE task_id = :task-id;
+
 -- -----------------------------------------------------------------------------
 -- Status
 -- -----------------------------------------------------------------------------

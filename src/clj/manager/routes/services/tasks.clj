@@ -30,6 +30,9 @@
 
 ; (parse-task-request task-request)
 
+(defn delete-task! [params]
+  (ok (db/delete-task! params)))
+
 (defn get-task [params]
   (ok (db/get-task params)))
 

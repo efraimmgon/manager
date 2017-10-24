@@ -38,9 +38,13 @@
 (reg-event-fx
  :delete-task
  (fn [{:keys [db]} [_ task-id]]
-   ; DELETE task key from DB, then:
-   (navigate! (str "/projects/" (get-in db [:project :project-id])
-                   "/features/" (get-in db [:feature :feature-id])))))
+   (ajax/DELETE "/api/tasks"
+                {:params {:task-id task-id}
+                 :handler #(navigate! (str "/projects/" (get-in db [:project :project-id])
+                                           "/features/" (get-in db [:feature :feature-id])))
+                 :error-handler #(dispatch [:ajax-error %])})
+   nil))
+
 
 (reg-event-fx
  :edit-task

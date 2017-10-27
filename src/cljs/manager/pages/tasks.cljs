@@ -50,10 +50,12 @@
      doc]]
    [form-group
     "Title"
-    [input {:class "form-control"
-            :name :title
-            :type :text}
-     doc]]
+    [:div.input-group
+     [input {:class "form-control"
+             :name :title
+             :type :text}
+      doc]
+     [:div.input-group-addon "*"]]]
    [form-group
     "Description"
     [textarea {:class "form-control"
@@ -61,37 +63,47 @@
      doc]]
    [form-group
     "Orig est"
-    [input {:class "form-control"
-            :name :orig-est
-            :type :number}
-     doc]]
+    [:div.input-group
+     [input {:class "form-control"
+             :name :orig-est
+             :type :number}
+      doc]
+     [:div.input-group-addon "*"]]]
    [form-group
     "Curr est"
-    [input {:class "form-control"
-            :name :curr-est
-            :type :number}
-     doc]]
+    [:div.input-group
+     [input {:class "form-control"
+             :name :curr-est
+             :type :number}
+      doc]
+     [:div.input-group-addon "defaults to: orig est"]]]
    [form-group
     "Priority"
-    [select {:class "form-control"
-             :name :priority-id}
-     doc
-     (for [priority (<sub [:priorities])]
-       ^{:key (:priority-id priority)}
-       [:option {:value (:priority-id priority)}
-        (:name priority)])]]
+    [:div.input-group
+     [select {:class "form-control"
+              :name :priority-id}
+      doc
+      (for [priority (<sub [:priorities])]
+        ^{:key (:priority-id priority)}
+        [:option {:value (:priority-id priority)}
+         (:name priority)])]
+     [:div.input-group-addon "*"]]]
    [form-group
     "Elapsed"
-    [input {:class "form-control"
-            :name :elapsed
-            :type :number}
-     doc]]
+    [:div.input-group
+     [input {:class "form-control"
+             :name :elapsed
+             :type :number}
+      doc]
+     [:div.input-group-addon "defaults to: 0"]]]
    [form-group
     "Remain"
-    [input {:class "form-control"
-            :name :remain
-            :type :number}
-     doc]]
+    [:din.input-group
+     [input {:class "form-control"
+             :name :remain
+             :type :number}
+      doc]
+     [:div.input-group-addon "defaults to: curr est - elapsed"]]]
    [form-group
     "Created at"
     [input {:class "form-control"

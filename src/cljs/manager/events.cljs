@@ -22,9 +22,9 @@
 
 (reg-event-fx
  :ajax-error
- (fn [_ [_ error]]
-   (js/console.log error)
-   nil))
+ (fn [_ [_ response]]
+   (js/console.log response)
+   (dispatch [:set-error (-> response :response :errors)])))
 
 (reg-event-db
   :initialize-db
@@ -69,6 +69,11 @@
     (assoc db :docs docs)))
 
 (reg-event-db
+ :set-error
+ (fn [db [_ error]]
+   (assoc db :error error)))
+
+(reg-event-db
  :set-priorities
  (fn [db [_ priorities]]
    (assoc db :priorities priorities)))
@@ -99,3 +104,5 @@
 (reg-sub :priorities query)
 
 (reg-sub :status query)
+
+(reg-sub :error query)

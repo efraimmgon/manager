@@ -25,11 +25,18 @@
  (fn [db _]
    (dissoc db :task)))
 
+(defn task-defaults [task]
+  (-> task
+      (update :description #(or % ""))
+      (update :curr-est #(or % (:orig-est task)))
+      (update :elapsed #(or % 0))
+      (update :remain #(or % (- (:curr-est task) (:elapsed task))))))
+
 (reg-event-fx
  :create-task
  (fn [{:keys [db]} [_ project-id feature-id task]]
    (ajax/POST (str "/api/features/" feature-id "/tasks")
-              {:params (assoc @task :feature-id feature-id)
+              {:params (assoc (task-defaults @task) :feature-id feature-id)
                :handler #(navigate! (str "/projects/" project-id
                                          "/features/" feature-id))
                :error-handler #(dispatch [:ajax-error %])})

@@ -15,10 +15,12 @@
      doc]]
    [form-group
     "Title"
-    [input {:class "form-control"
-            :name :title
-            :type :text}
-     doc]]
+    [:div.input-group
+     [input {:class "form-control"
+             :name :title
+             :type :text}
+      doc]
+     [:div.input-group-addon "*"]]]
    [form-group
     "Description"
     [input {:class "form-control"
@@ -65,7 +67,7 @@
 
 (defn new-feature-page []
   (r/with-let [project (rf/subscribe [:project])
-               doc (atom {})]
+               doc (atom (-> {} (update :description #(or % ""))))]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
@@ -75,7 +77,6 @@
       [:div.panel-heading
        [:h2 "Create feature"]]
       [:div.panel-body
-       [c/pretty-display "doc" doc]
        [form-template doc]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary

@@ -58,7 +58,7 @@
     input)])
 
 (defn input [attrs fields]
-  (r/with-let [attrs- (merge (default-attrs attrs fields) attrs)]
+  (let [attrs- (merge (default-attrs attrs fields) attrs)]
     (condp = (:type attrs)
            :date [date-input attrs- fields]
            :radio [radio-input attrs fields]

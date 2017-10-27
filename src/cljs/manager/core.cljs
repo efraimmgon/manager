@@ -3,7 +3,7 @@
    [reagent.core :as r :refer [atom]]
    [re-frame.core :as rf]
    [manager.ajax :refer [load-interceptors!]]
-   [manager.events]
+   [manager.events :refer [<sub]]
    [manager.routes :refer [hook-browser-navigation!]]
    ;;; Views
    [manager.components :refer [base breadcrumbs thead tbody]]
@@ -56,8 +56,33 @@
    :new-task #'tasks/new-task-page
    :edit-task #'tasks/edit-task-page})
 
+(defn modal [header body footer]
+  [:div
+   [:div.modal-dialog
+    [:div.modal-content
+     [:div.modal-header [:h3 header]]
+     [:div.modal-body body]
+     [:div.modal-footer
+      [:div.bootstrap-dialog-footer
+       footer]]]]
+   [:div.modal-backdrop.fade.in]])
+
+(defn error-modal []
+  (when-let [error (<sub [:error])]
+    [modal
+     "An error has occured"
+     [:div.alert.bg-danger
+      [:ul
+       (for [err error]
+         [:li (str err)])]]
+     [:div
+      [:button.btn.btn-sm.btn-danger
+       {:on-click #(rf/dispatch [:set-error nil])}
+       "OK"]]]))
+
 (defn page []
   [:div
+   [error-modal]
    [navbar]
    [(pages @(rf/subscribe [:page]))]])
 

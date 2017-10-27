@@ -15,10 +15,13 @@
      doc]]
    [form-group
     "Title"
-    [input {:class "form-control"
+    [:div.input-group
+     [input {:class "form-control"
              :name :title
-             :type :text}
-     doc]]
+             :type :text
+             :required true}
+      doc]
+     [:div.input-group-addon "*"]]]
    [form-group
     "Description"
     [input {:class "form-control"
@@ -44,7 +47,8 @@
   "Template to CREATE a project"
   []
   (r/with-let [project (rf/subscribe [:project])
-               doc (atom {})]
+               doc (atom (-> {}
+                             (update :description #(or % ""))))]
     [base
      [breadcrumbs
       {:title "New project"

@@ -19,6 +19,8 @@
    :feature-id s/Int
    :priority-id s/Int
    :status-id s/Int
+   (s/optional-key :status-name) s/Str
+   (s/optional-key :priority-name) s/Str
    :created-at org.joda.time.DateTime
    :updated-at org.joda.time.DateTime})
 

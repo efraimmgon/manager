@@ -161,7 +161,6 @@
       [:div.panel-heading
        [:h2 "Edit task"]]
       [:div.panel-body
-       [c/pretty-display "doc" doc]
        [form-template doc]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
@@ -187,44 +186,44 @@
       [:ul.list-group
        [:li.list-group-item
         [:div.row
-         [:div.col-md-2 "id"]
+         [:div.col-md-2 [:h4 "id"]]
          [:div.col-md-10
           (:task-id @task)]]]
        [:li.list-group-item
         [:div.row
-         [:div.col-md-2 "Description"]
+         [:div.col-md-2 [:h4 "Description"]]
          [:div.col-md-10
           (:description @task)]]]
        [:li.list-group-item
         [:div.row
-         [:div.col-md-2 "Orig est"]
+         [:div.col-md-2 [:h4 "Orig est"]]
          [:div.col-md-10
           (:orig-est @task)]]]
        [:li.list-group-item
         [:div.row
-         [:div.col-md-2 "Curr est"]
+         [:div.col-md-2 [:h4 "Curr est"]]
          [:div.col-md-10
           (:curr-est @task)]]]
        [:li.list-group-item
         [:div.row
-         [:div.col-md-2 "Priority"]
+         [:div.col-md-2 [:h4 "Priority"]]
          [:div.col-md-10
-          (:priority @task)]]]
+          (:priority-name @task)]]]
        [:li.list-group-item
         [:div.row
-         [:div.col-md-2 "Elapsed"]
+         [:div.col-md-2 [:h4 "Elapsed"]]
          [:div.col-md-10
           (:elapsed @task)]]]
        [:li.list-group-item
         [:div.row
-         [:div.col-md-2 "Remain"]
+         [:div.col-md-2 [:h4 "Remain"]]
          [:div.col-md-10
           (:remain @task)]]]
        [:li.list-group-item
         [:div.row
-         [:div.col-md-2 "Status"]
+         [:div.col-md-2 [:h4 "Status"]]
          [:div.col-md-10
-          (:status @task)]]]]]]))
+          (:status-name @task)]]]]]]))
 
 (defn feature-tasks-page
   "Template listing all the feature's tasks"

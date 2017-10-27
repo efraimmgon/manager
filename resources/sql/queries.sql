@@ -94,8 +94,13 @@ WHERE feature_id = :feature-id;
 
 -- :name get-task :? :1
 -- :doc get task by task-id
-SELECT * FROM tasks
-WHERE task_id = :task-id;
+SELECT t.*,
+       p.name AS priority_name,
+       s.name AS status_name
+FROM tasks t
+JOIN priorities p ON t.priority_id = p.priority_id
+JOIN status s ON t.status_id = s.status_id
+WHERE t.task_id = :task-id;
 
 -- :name get-tasks :? :raw
 -- :doc get all tasks by feature-id

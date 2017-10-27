@@ -1,5 +1,7 @@
 (ns manager.components
-  (:require [cljs.reader :as reader]))
+  (:require
+   [cljs.reader :as reader]
+   [reagent.core :as r :refer [atom]]))
 
 ; --------------------------------------------------------------------
 ; Debugging
@@ -32,12 +34,19 @@
        attrs)]))
 
 (defn- radio-input [attrs fields]
-  (let [attrs (-> (default-attrs attrs fields)
-                  ;; `(-> % .-target .-value)` returns strings no matter what
-                  ;; we're trying to do go around that
-                  (assoc :on-change #(swap! fields assoc (:name attrs) (-> % .-target .-value reader/read-string)))
-                  (merge attrs))]
-    [:input attrs]))
+  (r/with-let [attrs- (-> attrs
+                          (assoc :on-change #(swap! fields assoc (:name attrs) (:value attrs))))]
+    (if (= (:value attrs-) ((:name attrs-) @fields))
+      [:input (assoc attrs- :checked true)]
+      [:input (assoc attrs- :checked false)])))
+
+(defn- number-input [attrs fields]
+  (r/with-let [attrs- (-> attrs
+                          (assoc :on-change
+                                 #(swap! fields assoc (:name attrs)
+                                         (-> % .-target .-value reader/read-string))))]
+    [:input attrs-]))
+
 
 ; Core -------------------------------------------------------------------------
 
@@ -49,13 +58,14 @@
     input)])
 
 (defn input [attrs fields]
-  (let [attrs (merge (default-attrs attrs fields) attrs)]
+  (r/with-let [attrs- (merge (default-attrs attrs fields) attrs)]
     (condp = (:type attrs)
-           :date [date-input attrs fields]
+           :date [date-input attrs- fields]
            :radio [radio-input attrs fields]
+           :number [number-input attrs- fields]
 
            ;; default
-           [:input attrs])))
+           [:input attrs-])))
 
 (defn textarea [attrs fields]
   (let [attrs (merge (default-attrs attrs fields) attrs)]
@@ -69,12 +79,12 @@
 ;;; with the current implementation it does not support options with
 ;;; strings as values.
 (defn select [attrs fields & options]
-  (let [attrs (-> (default-attrs attrs fields)
-                  ;; `(-> % .-target .-value)` returns strings no matter what
-                  ;; we're trying to do go around that
-                  (assoc :on-change #(swap! fields assoc (:name attrs) (-> % .-target .-value reader/read-string)))
-                  (merge attrs))
-        default-val (-> options ffirst second :value)]
+  (r/with-let [attrs (-> (default-attrs attrs fields)
+                         ;; `(-> % .-target .-value)` returns strings no matter what
+                         ;; we're trying to do go around that
+                         (assoc :on-change #(swap! fields assoc (:name attrs) (-> % .-target .-value reader/read-string)))
+                         (merge attrs))
+               default-val (-> options ffirst second :value)]
     ;; set fields' default value
     (when-not ((:name attrs) @fields)
       (swap! fields assoc (:name attrs) default-val))

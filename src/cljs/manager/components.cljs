@@ -20,10 +20,6 @@
 
 ; Helpers ----------------------------------------------------------------------
 
-(defn- default-attrs [attrs fields]
-  {:on-change #(swap! fields assoc (:name attrs) (-> % .-target .-value))
-   :value ((:name attrs) @fields)})
-
 (defn- date-input [attrs fields]
   (let [date ((:name attrs) @fields)]
     [:input
@@ -41,10 +37,10 @@
       [:input (assoc attrs- :checked false)])))
 
 (defn- number-input [attrs fields]
-  (r/with-let [attrs- (-> attrs
-                          (assoc :on-change
-                                 #(swap! fields assoc (:name attrs)
-                                         (-> % .-target .-value reader/read-string))))]
+  (let [attrs- (-> attrs
+                   (assoc :on-change
+                          #(swap! fields assoc (:name attrs)
+                                  (-> % .-target .-value reader/read-string))))]
     [:input attrs-]))
 
 
@@ -58,28 +54,29 @@
     input)])
 
 (defn input [attrs fields]
-  (let [attrs- (merge (default-attrs attrs fields) attrs)]
+  (let [attrs-defaults
+        (-> attrs
+            (update :on-change #(or % (fn [elt] (swap! fields assoc (:name attrs) (-> elt .-target .-value)))))
+            (update :value #(or % ((:name attrs) @fields))))]
     (condp = (:type attrs)
-           :date [date-input attrs- fields]
-           :radio [radio-input attrs fields]
-           :number [number-input attrs- fields]
+           :date [date-input attrs-defaults fields]
+           :radio [radio-input attrs-defaults fields]
+           :number [number-input attrs-defaults fields]
 
            ;; default
-           [:input attrs-])))
+           [:input attrs-defaults])))
 
 (defn textarea [attrs fields]
-  (let [attrs (merge (default-attrs attrs fields) attrs)]
-    [:textarea attrs]))
-
-(defn option-value [options val]
-  (some #(and (= (:value %) val)
-              val)
-        (map second options)))
+  (let [attrs-defaults
+        (-> attrs
+            (update :on-change #(or % (fn [elt] (swap! fields assoc (:name attrs) (-> elt .-target .-value)))))
+            (update :value #(or % ((:name attrs) @fields))))]
+    [:textarea attrs-defaults]))
 
 ;;; with the current implementation it does not support options with
 ;;; strings as values.
 (defn select [attrs fields & options]
-  (r/with-let [attrs (-> (default-attrs attrs fields)
+  (r/with-let [attrs (-> attrs
                          ;; `(-> % .-target .-value)` returns strings no matter what
                          ;; we're trying to do go around that
                          (assoc :on-change #(swap! fields assoc (:name attrs) (-> % .-target .-value reader/read-string)))

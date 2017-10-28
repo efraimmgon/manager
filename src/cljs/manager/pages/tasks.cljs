@@ -6,48 +6,22 @@
    [reagent.core :as r :refer [atom]]
    [re-frame.core :as rf]))
 
-(defn tbody-editable
-  "Conjs the edit and remove buttons to the row of items.
-   Assumes the first item in the row is the id."
-  []
-  (r/with-let [project (rf/subscribe [:project])
-               tasks (rf/subscribe [:tasks])]
-    [tbody
-     (map (fn [row]
-            (conj row
-                  [:a.btn.btn-default
-                   {:href (str "/projects/" (:id @project) "/tasks/" (first row) "/edit")}
-                   [:i.glyphicon.glyphicon-pencil]]
-                  [:button.btn.btn-default
-                   {:on-click #(rf/dispatch [:delete-task (:id @project) (first row)])}
-                   [:i.glyphicon.glyphicon-remove]]))
-          (map (juxt :id :feature :task :orig-est :curr-est :priority :elapsed :remain :status)
-               @tasks))]))
-
-(defn tasks [project]
-  [:div
-   [:table.table.table-striped.table-hover.table-bordered
-    [thead-editable
-      ["task-id"
-       "Feature"
-       "Task"
-       "Orig est"
-       "Curr est"
-       "Priority"
-       "Elapsed"
-       "Remain"
-       "Status"]]
-    [tbody-editable]]])
+(defn calc-velocity [doc]
+  (and ;(= 2 (:status-id @doc))
+       (:curr-est @doc)
+       (pos? (:curr-est @doc))
+       (/ (:orig-est @doc) (:curr-est @doc))))
 
 (defn form-template [doc]
   [:div.form-horizontal
-   [form-group
-    "Task id"
-    [input {:class "form-control"
-            :name :task-id
-            :type :number
-            :disabled true}
-     doc]]
+   (when (:task-id @doc)
+     [form-group
+      "Task id"
+      [input {:class "form-control"
+              :name :task-id
+              :type :number
+              :disabled true}
+       doc]])
    [form-group
     "Title"
     [:div.input-group
@@ -62,21 +36,31 @@
                :name :description}
      doc]]
    [form-group
-    "Orig est"
+    "Original estimate"
     [:div.input-group
      [input {:class "form-control"
              :name :orig-est
              :type :number}
       doc]
      [:div.input-group-addon "*"]]]
-   [form-group
-    "Curr est"
-    [:div.input-group
-     [input {:class "form-control"
-             :name :curr-est
-             :type :number}
-      doc]
-     [:div.input-group-addon "defaults to: orig est"]]]
+   (when (:task-id @doc)
+     [form-group
+      "Current estimate"
+      [input {:class "form-control"
+              :name :curr-est
+              :type :number
+              :placeholder "Defaults to: original estimate"}
+       doc]])
+   (when (:task-id @doc)
+     [form-group
+      "Velocity"
+      [input {:class "form-control"
+              :value (calc-velocity doc)
+              :name :velocity
+              :type :number
+              :placeholder "Velocity = original estimate / current estimate."
+              :disabled true}
+       doc]])
    [form-group
     "Priority"
     [:div.input-group
@@ -89,35 +73,37 @@
          (:name priority)])]
      [:div.input-group-addon "*"]]]
    [form-group
-    "Elapsed"
-    [:div.input-group
-     [input {:class "form-control"
-             :name :elapsed
-             :type :number}
-      doc]
-     [:div.input-group-addon "defaults to: 0"]]]
-   [form-group
-    "Remain"
-    [:din.input-group
-     [input {:class "form-control"
-             :name :remain
-             :type :number}
-      doc]
-     [:div.input-group-addon "defaults to: curr est - elapsed"]]]
-   [form-group
-    "Created at"
+    "Time Elapsed"
     [input {:class "form-control"
-            :name :created-at
-            :type :date
-            :disabled true}
+            :name :elapsed
+            :type :number
+            :placeholder "Defaults to: 0"}
      doc]]
-   [form-group
-    "Updated at"
-    [input {:class "form-control"
-            :name :updated-at
-            :type :date
-            :disabled true}
-     doc]]
+   (when (:task-id @doc)
+     [form-group
+      "Time Remaining"
+      [input {:class "form-control"
+              :name :remain
+              :type :number
+              :placeholder "Defaults to: current estimate - time elapsed"
+              :disabled true}
+       doc]])
+   (when (:task-id @doc)
+     [form-group
+      "Created at"
+      [input {:class "form-control"
+              :name :created-at
+              :type :date
+              :disabled true}
+       doc]])
+   (when (:task-id @doc)
+     [form-group
+      "Updated at"
+      [input {:class "form-control"
+              :name :updated-at
+              :type :date
+              :disabled true}
+       doc]])
    [form-group
     "Status"
     [:div
@@ -145,7 +131,6 @@
       [:div.panel-heading
        [:h2 "Create task"]]
       [:div.panel-body
-       [c/pretty-display "doc" doc]
        [form-template doc]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
@@ -173,10 +158,11 @@
       [:div.panel-heading
        [:h2 "Edit task"]]
       [:div.panel-body
+       [c/pretty-display "doc" doc]
        [form-template doc]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:edit-task (:project-id @project) @doc])}
+         {:on-click #(rf/dispatch [:edit-task (:project-id @project) doc])}
          "Update"]]]]]))
 
 (defn task-page []

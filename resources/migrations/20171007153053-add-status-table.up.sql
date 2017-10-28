@@ -6,3 +6,5 @@ CREATE TABLE status (
 INSERT INTO status (name) VALUES ('on progress');
 --;;
 INSERT INTO status (name) VALUES ('done');
+--;;
+INSERT INTO status (name) VALUES ('pending');

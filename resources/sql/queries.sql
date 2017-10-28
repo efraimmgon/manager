@@ -145,6 +145,11 @@ WHERE task_id = :task-id;
 -- :doc get all available status
 SELECT * FROM status;
 
+-- :name get-status :? :1
+-- :doc get status by status-id
+SELECT * FROM status
+WHERE status_id = :status-id;
+
 -- -----------------------------------------------------------------------------
 -- Priorities
 -- -----------------------------------------------------------------------------

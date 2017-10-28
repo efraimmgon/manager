@@ -6,13 +6,14 @@
 
 (defn form-template [doc]
   [:div.form-horizontal
-   [form-group
-    "Project id"
-    [input {:class "form-control"
-            :name :project-id
-            :type :text
-            :disabled true}
-     doc]]
+   (when (:project-id @doc)
+     [form-group
+      "Project id"
+      [input {:class "form-control"
+              :name :project-id
+              :type :text
+              :disabled true}
+       doc]])
    [form-group
     "Title"
     [:div.input-group
@@ -28,20 +29,22 @@
             :name :description
             :type :text}
      doc]]
-   [form-group
-    "Created at"
-    [input {:class "form-control"
-            :name :created-at
-            :type :date
-            :disabled true}
-     doc]]
-   [form-group
-    "Updated at"
-    [input {:class "form-control"
-            :name :updated-at
-            :type :date
-            :disabled true}
-     doc]]])
+   (when (:created-at @doc)
+     [form-group
+      "Created at"
+      [input {:class "form-control"
+              :name :created-at
+              :type :date
+              :disabled true}
+       doc]])
+   (when (:updated-at @doc)
+     [form-group
+      "Updated at"
+      [input {:class "form-control"
+              :name :updated-at
+              :type :date
+              :disabled true}
+       doc]])])
 
 (defn new-project-page
   "Template to CREATE a project"

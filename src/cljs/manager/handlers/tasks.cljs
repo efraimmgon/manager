@@ -27,10 +27,11 @@
 
 (defn task-defaults [task]
   (-> task
+      (dissoc :priority-name :status-name :created-at :updated-at :velocity)
       (update :description #(or % ""))
       (update :curr-est #(or % (:orig-est task)))
       (update :elapsed #(or % 0))
-      (update :remain #(or % (- (:curr-est task) (:elapsed task))))))
+      (update :remain #(- (:curr-est task) (:elapsed task)))))
 
 (reg-event-fx
  :create-task
@@ -57,9 +58,9 @@
  :edit-task
  (fn [{:keys [db]} [_ project-id task]]
    (ajax/PUT "/api/tasks"
-             {:params (dissoc task :created-at :updated-at :velocity)
+             {:params (task-defaults @task)
               :handler #(navigate! (str "/projects/" project-id
-                                        "/features/" (:feature-id task)))
+                                        "/features/" (:feature-id @task)))
               :error-handler #(dispatch [:ajax-error %])})
    nil))
 

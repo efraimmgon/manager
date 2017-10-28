@@ -6,13 +6,14 @@
 
 (defn form-template [doc]
   [:div.form-horizontal
-   [form-group
-    "Feature id"
-    [input {:class "form-control"
-            :name :feature-id
-            :type :text
-            :disabled true}
-     doc]]
+   (when (:feature-id @doc)
+     [form-group
+      "Feature id"
+      [input {:class "form-control"
+              :name :feature-id
+              :type :text
+              :disabled true}
+       doc]])
    [form-group
     "Title"
     [:div.input-group
@@ -27,20 +28,22 @@
             :name :description
             :type :text}
      doc]]
-   [form-group
-    "Created at"
-    [input {:class "form-control"
-            :name :created-at
-            :type :date
-            :disabled true}
-      doc]]
-   [form-group
-    "Updated at"
-    [input {:class "form-control"
-            :name :updated-at
-            :type :date
-            :disabled true}
-     doc]]])
+   (when (:created-at @doc)
+     [form-group
+      "Created at"
+      [input {:class "form-control"
+              :name :created-at
+              :type :date
+              :disabled true}
+        doc]])
+   (when (:updated-at @doc)
+     [form-group
+      "Updated at"
+      [input {:class "form-control"
+              :name :updated-at
+              :type :date
+              :disabled true}
+       doc]])])
 
 (defn edit-feature-page []
   (r/with-let [project (rf/subscribe [:project])

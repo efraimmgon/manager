@@ -27,7 +27,7 @@
            (.split "."))))
 
 (defn- radio-input [attrs]
-  (let [[ks (extract-ns-and-name (:name attrs))]
+  (let [ks (extract-ns-and-name (:name attrs))
         attrs-defaults
         (-> attrs
             (assoc :on-change

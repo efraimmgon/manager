@@ -261,7 +261,7 @@
                              "/tasks/" (:task-id task) "/edit")}
               (:title task)]
              [:div.pull-right
-              (:priority task)
+              (:priority-id task)
               [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
                                            "/features/" (:feature-id @feature)
                                            "/tasks/" (:task-id task) "/edit")}

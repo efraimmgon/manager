@@ -8,6 +8,7 @@
   (:import goog.History))
 
 (defn run-events [events]
+  (rf/dispatch [:update-history (-> js/window .-location .-pathname)])
   (doseq [event events]
     (rf/dispatch event)))
 

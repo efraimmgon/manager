@@ -74,6 +74,11 @@
    (assoc db :error error)))
 
 (reg-event-db
+ :update-history
+ (fn [db [_ pathname]]
+   (update db :history conj pathname)))
+
+(reg-event-db
  :set-priorities
  (fn [db [_ priorities]]
    (assoc db :priorities priorities)))
@@ -95,6 +100,11 @@
 (reg-sub :page query)
 
 (reg-sub :docs query)
+
+(reg-sub
+ :previous-page
+ (fn [db _]
+   (second (:history db))))
 
 (reg-sub
  :db

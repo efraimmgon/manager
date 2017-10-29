@@ -8,6 +8,10 @@
 (defn query [db [event-id]]
   (event-id db))
 
+(defn feature-defaults [feature]
+  (-> feature
+      (update :description #(or % ""))))
+
 ; ------------------------------------------------------------------------------
 ; Subs
 ; ------------------------------------------------------------------------------
@@ -29,7 +33,7 @@
  :create-feature
  (fn [{:keys [db]} [_ project-id feature]]
    (ajax/POST (str "/api/projects/" project-id "/features")
-              {:params @feature
+              {:params (feature-defaults feature)
                :handler #(navigate! (str "/projects/" project-id
                                          "/features/" (:feature-id (first %))))
                :error-handler #(dispatch [:ajax-error %])})
@@ -48,9 +52,9 @@
  :edit-feature
  (fn [{:keys [db]} [_ feature]]
    (ajax/PUT "/api/features"
-             {:params (select-keys @feature [:feature-id :title :description])
+             {:params (select-keys feature [:feature-id :title :description])
               :handler #(navigate! (str "/projects/" (get-in db [:project :project-id])
-                                        "/features/" (:feature-id @feature)))
+                                        "/features/" (:feature-id feature)))
               :error-handler #(dispatch [:ajax-error %])})
    nil))
 

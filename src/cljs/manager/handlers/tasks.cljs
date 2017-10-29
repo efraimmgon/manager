@@ -37,7 +37,7 @@
  :create-task
  (fn [{:keys [db]} [_ project-id feature-id task]]
    (ajax/POST (str "/api/features/" feature-id "/tasks")
-              {:params (assoc (task-defaults @task) :feature-id feature-id)
+              {:params (assoc (task-defaults task) :feature-id feature-id)
                :handler #(navigate! (str "/projects/" project-id
                                          "/features/" feature-id))
                :error-handler #(dispatch [:ajax-error %])})
@@ -58,9 +58,9 @@
  :edit-task
  (fn [{:keys [db]} [_ project-id task]]
    (ajax/PUT "/api/tasks"
-             {:params (task-defaults @task)
+             {:params (task-defaults task)
               :handler #(navigate! (str "/projects/" project-id
-                                        "/features/" (:feature-id @task)))
+                                        "/features/" (:feature-id task)))
               :error-handler #(dispatch [:ajax-error %])})
    nil))
 

@@ -1,76 +1,75 @@
 (ns manager.pages.features
   (:require
    [manager.components :as c :refer [base breadcrumbs form-group input thead tbody]]
+   [manager.events :refer [<sub]]
    [reagent.core :as r :refer [atom]]
    [re-frame.core :as rf]))
 
-(defn form-template [doc]
-  [:div.form-horizontal
-   (when (:feature-id @doc)
+(defn form-template []
+  (r/with-let [feature (rf/subscribe [:feature])]
+    [:div.form-horizontal
+     (when (:feature-id @feature)
+       [form-group
+        "Feature id"
+        [input {:class "form-control"
+                :name :feature.feature-id
+                :type :text
+                :value (:feature-id @feature)
+                :disabled true}]])
      [form-group
-      "Feature id"
+      "Title"
+      [:div.input-group
+       [input {:class "form-control"
+               :name :feature.title
+               :type :text
+               :value (:title @feature)}]
+       [:div.input-group-addon "*"]]]
+     [form-group
+      "Description"
       [input {:class "form-control"
-              :name :feature-id
+              :name :feature.description
               :type :text
-              :disabled true}
-       doc]])
-   [form-group
-    "Title"
-    [:div.input-group
-     [input {:class "form-control"
-             :name :title
-             :type :text}
-      doc]
-     [:div.input-group-addon "*"]]]
-   [form-group
-    "Description"
-    [input {:class "form-control"
-            :name :description
-            :type :text}
-     doc]]
-   (when (:created-at @doc)
-     [form-group
-      "Created at"
-      [input {:class "form-control"
-              :name :created-at
-              :type :date
-              :disabled true}
-        doc]])
-   (when (:updated-at @doc)
-     [form-group
-      "Updated at"
-      [input {:class "form-control"
-              :name :updated-at
-              :type :date
-              :disabled true}
-       doc]])])
+              :value (:description @feature)}]]
+     (when (:created-at @feature)
+       [form-group
+        "Created at"
+        [input {:class "form-control"
+                :name :feature.created-at
+                :type :date
+                :value (-> (:created-at @feature) (.split "T") first)
+                :disabled true}]])
+     (when (:updated-at @feature)
+       [form-group
+        "Updated at"
+        [input {:class "form-control"
+                :name :feature.updated-at
+                :type :date
+                :value (-> (:updated-at @feature) (.split "T") first)
+                :disabled true}]])]))
 
 (defn edit-feature-page []
   (r/with-let [project (rf/subscribe [:project])
-               feature (rf/subscribe [:feature])
-               doc (atom nil)]
-    (reset! doc @feature)
+               feature (rf/subscribe [:feature])]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
        :title (:title @project)}
       {:title (:title @feature)
        :href (str "/projects/" (:project-id @project)
-                  "/features/" (:feature-id @feature))}
-      {:title "Edit", :active? true}]
+                  "/features/" (:feature-id @feature))
+       :active? true}]
      [:div.panel.panel-default
       [:div.panel-heading
        [:h2 "Edit feature"]]
       [:div.panel-body
-       [form-template doc]
+       [form-template]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:edit-feature doc])}
+         {:on-click #(rf/dispatch [:edit-feature @feature])}
          "Update"]]]]]))
 
 (defn new-feature-page []
-  (r/with-let [project (rf/subscribe [:project])
-               doc (atom (-> {} (update :description #(or % ""))))]
+  (r/with-let [project (rf/subscribe [:project])]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
@@ -80,10 +79,10 @@
       [:div.panel-heading
        [:h2 "Create feature"]]
       [:div.panel-body
-       [form-template doc]
+       [form-template]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:create-feature (:project-id @project) doc])}
+         {:on-click #(rf/dispatch [:create-feature (:project-id @project) (<sub [:feature])])}
          "Create"]]]]]))
 
 (defn project-features-page []

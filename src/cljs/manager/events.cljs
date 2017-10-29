@@ -85,8 +85,8 @@
 
 (reg-event-db
  :update-state
- (fn [db [_ k keys value]]
-   (update db k assoc-in keys value)))
+ (fn [db [_ ks val]]
+   (assoc-in db ks val)))
 
 ; ------------------------------------------------------------------------------
 ; Subs

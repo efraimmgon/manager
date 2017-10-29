@@ -12,114 +12,115 @@
        (pos? (:curr-est @doc))
        (/ (:orig-est @doc) (:curr-est @doc))))
 
-(defn form-template [doc]
-  [:div.form-horizontal
-   (when (:task-id @doc)
+(defn form-template []
+  (r/with-let [task (rf/subscribe [:task])]
+    [:div.form-horizontal
+     (when (:task-id @task)
+       [form-group
+        "Task id"
+        [input {:class "form-control"
+                :name :task.task-id
+                :type :number
+                :value (:task-id @task)
+                :disabled true}]])
      [form-group
-      "Task id"
+      "Title"
+      [:div.input-group
+       [input {:class "form-control"
+               :name :task.title
+               :type :text
+               :value (:title @task)}]
+       [:div.input-group-addon "*"]]]
+     [form-group
+      "Description"
+      [textarea {:class "form-control"
+                 :name :task.description
+                 :value (:description @task)}]]
+     [form-group
+      "Original estimate"
+      [:div.input-group
+       [input {:class "form-control"
+               :name :task.orig-est
+               :type :number
+               :value (:orig-est @task)}]
+       [:div.input-group-addon "*"]]]
+     (when (:task-id @task)
+       [form-group
+        "Current estimate"
+        [input {:class "form-control"
+                :name :task.curr-est
+                :type :number
+                :value (:curr-est @task)
+                :placeholder "Defaults to: original estimate"}]])
+     (when (:task-id @task)
+       [form-group
+        "Velocity"
+        [input {:class "form-control"
+                :value (calc-velocity task)
+                :name :task.velocity
+                :type :number
+                :placeholder "Velocity = original estimate / current estimate."
+                :disabled true}]])
+     [form-group
+      "Priority"
+      [:div.input-group
+       [select {:class "form-control"
+                :name :task.priority-id
+                :value (:priority-id @task)}
+        (for [priority (<sub [:priorities])]
+          ^{:key (:priority-id priority)}
+          [:option {:value (:priority-id priority)}
+           (:name priority)])]
+       [:div.input-group-addon "*"]]]
+     [form-group
+      "Time Elapsed"
       [input {:class "form-control"
-              :name :task-id
+              :name :task.elapsed
               :type :number
-              :disabled true}
-       doc]])
-   [form-group
-    "Title"
-    [:div.input-group
-     [input {:class "form-control"
-             :name :title
-             :type :text}
-      doc]
-     [:div.input-group-addon "*"]]]
-   [form-group
-    "Description"
-    [textarea {:class "form-control"
-               :name :description}
-     doc]]
-   [form-group
-    "Original estimate"
-    [:div.input-group
-     [input {:class "form-control"
-             :name :orig-est
-             :type :number}
-      doc]
-     [:div.input-group-addon "*"]]]
-   (when (:task-id @doc)
+              :value (:elapsed @task)
+              :placeholder "Defaults to: 0"}]]
+     (when (:task-id @task)
+       [form-group
+        "Time Remaining"
+        [input {:class "form-control"
+                :name :task.remain
+                :type :number
+                :value (:remain @task)
+                :placeholder "Defaults to: current estimate - time elapsed"
+                :disabled true}]])
+     (when (:task-id @task)
+       [form-group
+        "Created at"
+        [input {:class "form-control"
+                :name :task.created-at
+                :type :date
+                :value (-> (:created-at @task) (.split "T") first)
+                :disabled true}]])
+     (when (:task-id @task)
+       [form-group
+        "Updated at"
+        [input {:class "form-control"
+                :name :task.updated-at
+                :type :date
+                :value (-> (:updated-at @task) (.split "T") first)
+                :disabled true}]])
      [form-group
-      "Current estimate"
-      [input {:class "form-control"
-              :name :curr-est
-              :type :number
-              :placeholder "Defaults to: original estimate"}
-       doc]])
-   (when (:task-id @doc)
-     [form-group
-      "Velocity"
-      [input {:class "form-control"
-              :value (calc-velocity doc)
-              :name :velocity
-              :type :number
-              :placeholder "Velocity = original estimate / current estimate."
-              :disabled true}
-       doc]])
-   [form-group
-    "Priority"
-    [:div.input-group
-     [select {:class "form-control"
-              :name :priority-id}
-      doc
-      (for [priority (<sub [:priorities])]
-        ^{:key (:priority-id priority)}
-        [:option {:value (:priority-id priority)}
-         (:name priority)])]
-     [:div.input-group-addon "*"]]]
-   [form-group
-    "Time Elapsed"
-    [input {:class "form-control"
-            :name :elapsed
-            :type :number
-            :placeholder "Defaults to: 0"}
-     doc]]
-   (when (:task-id @doc)
-     [form-group
-      "Time Remaining"
-      [input {:class "form-control"
-              :name :remain
-              :type :number
-              :placeholder "Defaults to: current estimate - time elapsed"
-              :disabled true}
-       doc]])
-   (when (:task-id @doc)
-     [form-group
-      "Created at"
-      [input {:class "form-control"
-              :name :created-at
-              :type :date
-              :disabled true}
-       doc]])
-   (when (:task-id @doc)
-     [form-group
-      "Updated at"
-      [input {:class "form-control"
-              :name :updated-at
-              :type :date
-              :disabled true}
-       doc]])
-   [form-group
-    "Status"
-    [:div
-     (for [status (<sub [:status])]
-       ^{:key (:status-id status)}
-       [:label.checkbox-inline
-        [input {:name :status-id
-                :type :radio
-                :value (:status-id status)}
-         doc]
-        " " (:name status)])]]])
+      "Status"
+      [:div
+       (doall
+         (for [status (<sub [:status])]
+           ^{:key (:status-id status)}
+           [:label.checkbox-inline
+            [input {:name :task.status-id
+                    :type :radio
+                    :value (:status-id status)
+                    :checked (= (:status-id status) (:status-id @task))}]
+            " " (:name status)]))]]]))
 
 (defn new-task-page []
   (r/with-let [project (rf/subscribe [:project])
                feature (rf/subscribe [:feature])
-               doc (atom {})]
+               task (rf/subscribe [:task])]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
@@ -131,18 +132,16 @@
       [:div.panel-heading
        [:h2 "Create task"]]
       [:div.panel-body
-       [form-template doc]
+       [form-template]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:create-task (:project-id @project) (:feature-id @feature) doc])}
+         {:on-click #(rf/dispatch [:create-task (:project-id @project) (:feature-id @feature) @task])}
          "Create"]]]]]))
 
 (defn edit-task-page []
   (r/with-let [project (rf/subscribe [:project])
                feature (rf/subscribe [:feature])
-               task (rf/subscribe [:task])
-               doc (atom nil)]
-    (reset! doc (assoc @task :feature-id (:feature-id @feature)))
+               task (rf/subscribe [:task])]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
@@ -152,17 +151,16 @@
       {:title (:title @task)
        :href (str "/projects/" (:project-id @project)
                   "/features/" (:feature-id @feature)
-                  "/tasks/" (:task-id @task))}
-      {:title "Edit", :active? true}]
+                  "/tasks/" (:task-id @task))
+       :active? true}]
      [:div.panel.panel-default
       [:div.panel-heading
        [:h2 "Edit task"]]
       [:div.panel-body
-       [c/pretty-display "doc" doc]
-       [form-template doc]
+       [form-template]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:edit-task (:project-id @project) doc])}
+         {:on-click #(rf/dispatch [:edit-task (:project-id @project) (assoc @task :feature-id (:feature-id @feature))])}
          "Update"]]]]]))
 
 (defn task-page []
@@ -260,7 +258,7 @@
             [:h3
              [:a {:href (str "/projects/" (:project-id @project)
                              "/features/" (:feature-id @feature)
-                             "/tasks/" (:task-id task))}
+                             "/tasks/" (:task-id task) "/edit")}
               (:title task)]
              [:div.pull-right
               (:priority task)

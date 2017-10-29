@@ -8,6 +8,9 @@
 (defn query [db [event-id]]
   (event-id db))
 
+(defn project-defaults [project]
+  (-> project
+      (update :description #(or % ""))))
 ; ------------------------------------------------------------------------------
 ; Subs
 ; ------------------------------------------------------------------------------
@@ -29,7 +32,7 @@
  :create-project
  (fn [{:keys [db]} [_ project]]
    (ajax/POST "/api/projects"
-              {:params @project
+              {:params (project-defaults project)
                :handler #(navigate! (str "/projects/" (:project-id (first %))))
                :error-handler #(dispatch [:ajax-error %])})
    nil))
@@ -47,8 +50,8 @@
  :edit-project
  (fn [{:keys [db]} [_ project]]
    (ajax/PUT "/api/projects"
-             {:params (select-keys @project [:project-id :title :description])
-              :handler #(navigate! (str "/projects/" (:project-id @project)))
+             {:params (select-keys project [:project-id :title :description])
+              :handler #(navigate! (str "/projects/" (:project-id project)))
               :error-handler #(dispatch [:ajax-error %])})
    nil))
 

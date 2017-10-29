@@ -1,7 +1,8 @@
 (ns manager.components
   (:require
    [cljs.reader :as reader]
-   [reagent.core :as r :refer [atom]]))
+   [reagent.core :as r :refer [atom]]
+   [re-frame.core :as rf]))
 
 ; --------------------------------------------------------------------
 ; Debugging
@@ -19,32 +20,36 @@
 ; ------------------------------------------------------------------------------
 
 ; Helpers ----------------------------------------------------------------------
+(defn extract-ns-and-name [k]
+  (map keyword
+       (-> k
+           name
+           (.split "."))))
 
-(defn- date-input [attrs fields]
-  (let [date ((:name attrs) @fields)]
-    [:input
-     (if date
-       (assoc attrs :value (-> ((:name attrs) @fields)
-                               (.split "T")
-                               (first)))
-       attrs)]))
+(defn- radio-input [attrs]
+  (let [[ks (extract-ns-and-name (:name attrs))]
+        attrs-defaults
+        (-> attrs
+            (assoc :on-change
+                   (fn [comp]
+                     (rf/dispatch [:update-state ks (:value attrs)]))))]
+    [:input attrs-defaults]))
 
-(defn- radio-input [attrs fields]
-  (r/with-let [attrs- (-> attrs
-                          (assoc :on-change #(swap! fields assoc (:name attrs) (:value attrs))))]
-    (if (= (:value attrs-) ((:name attrs-) @fields))
-      [:input (assoc attrs- :checked true)]
-      [:input (assoc attrs- :checked false)])))
-
-(defn- number-input [attrs fields]
-  (let [attrs- (-> attrs
-                   (assoc :on-change
-                          #(swap! fields assoc (:name attrs)
-                                  (-> % .-target .-value reader/read-string))))]
-    [:input attrs-]))
-
+(defn- number-input [attrs]
+  (let [ks (extract-ns-and-name (:name attrs))
+        attrs-defaults
+        (-> attrs
+            (assoc :on-change
+                   (fn [comp]
+                     (rf/dispatch [:update-state ks (-> comp .-target .-value reader/read-string)]))))]
+    [:input attrs-defaults]))
 
 ; Core -------------------------------------------------------------------------
+
+(defn form [& body]
+  (into
+   [:div]
+   body))
 
 (defn form-group [label & input]
   [:div.form-group
@@ -53,42 +58,46 @@
     [:div.col-sm-10]
     input)])
 
-(defn input [attrs fields]
-  (let [attrs-defaults
+(defn input [attrs]
+  (let [ks (extract-ns-and-name (:name attrs))
+        attrs-defaults
         (-> attrs
-            (update :on-change #(or % (fn [elt] (swap! fields assoc (:name attrs) (-> elt .-target .-value)))))
-            (update :value #(or % ((:name attrs) @fields))))]
+            (update :on-change
+                    #(or % (fn [comp] (rf/dispatch [:update-state ks (-> comp .-target .-value)])))))]
     (condp = (:type attrs)
-           :date [date-input attrs-defaults fields]
-           :radio [radio-input attrs-defaults fields]
-           :number [number-input attrs-defaults fields]
+           :radio [radio-input attrs-defaults]
+           :number [number-input attrs-defaults]
 
            ;; default
            [:input attrs-defaults])))
 
-(defn textarea [attrs fields]
-  (let [attrs-defaults
+(defn textarea [attrs]
+  (let [ks (extract-ns-and-name (:name attrs))
+        attrs-defaults
         (-> attrs
-            (update :on-change #(or % (fn [elt] (swap! fields assoc (:name attrs) (-> elt .-target .-value)))))
-            (update :value #(or % ((:name attrs) @fields))))]
+            (update :on-change
+                    #(or % (fn [comp] (rf/dispatch [:update-state ks (-> comp .-target .-value)])))))]
     [:textarea attrs-defaults]))
 
 ;;; with the current implementation it does not support options with
 ;;; strings as values.
-(defn select [attrs fields & options]
-  (r/with-let [attrs (-> attrs
-                         ;; `(-> % .-target .-value)` returns strings no matter what
-                         ;; we're trying to do go around that
-                         (assoc :on-change #(swap! fields assoc (:name attrs) (-> % .-target .-value reader/read-string)))
-                         (merge attrs))
-               default-val (-> options ffirst second :value)]
-    ;; set fields' default value
-    (when-not ((:name attrs) @fields)
-      (swap! fields assoc (:name attrs) default-val))
+(defn select [attrs & options]
+  (let [ks (extract-ns-and-name (:name attrs))
+        default-val (-> options ffirst second :value)
+        attrs-defaults
+        (-> attrs
+            ;; `(-> % .-target .-value)` returns strings no matter what
+            ;; we're trying to do go around that
+            (update :on-change
+                    #(or %
+                         (fn [comp]
+                           (rf/dispatch [:update-state ks (-> comp .-target .-value reader/read-string)]))))
+            (update :value
+                    #(or %
+                         (do (rf/dispatch [:update-state ks default-val])
+                             default-val))))]
     (into
-     [:select
-      ;; set select value
-      (assoc attrs :value ((:name attrs) @fields))]
+     [:select attrs-defaults]
      options)))
 
 ; --------------------------------------------------------------------

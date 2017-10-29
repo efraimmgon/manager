@@ -1,57 +1,56 @@
 (ns manager.pages.projects
   (:require
    [manager.components :as c :refer [base breadcrumbs form-group input]]
+   [manager.events :refer [<sub]]
    [reagent.core :as r :refer [atom]]
    [re-frame.core :as rf]))
 
-(defn form-template [doc]
-  [:div.form-horizontal
-   (when (:project-id @doc)
+(defn form-template []
+  (r/with-let [project (rf/subscribe [:project])]
+    [:div.form-horizontal
+     (when (:project-id @project)
+       [form-group
+        "Project id"
+        [input {:class "form-control"
+                :name :project.project-id
+                :type :text
+                :value (:project-id @project)
+                :disabled true}]])
      [form-group
-      "Project id"
+      "Title"
+      [:div.input-group
+       [input {:class "form-control"
+               :name :project.title
+               :type :text
+               :value (:title @project)}]
+       [:div.input-group-addon "*"]]]
+     [form-group
+      "Description"
       [input {:class "form-control"
-              :name :project-id
+              :name :project.description
               :type :text
-              :disabled true}
-       doc]])
-   [form-group
-    "Title"
-    [:div.input-group
-     [input {:class "form-control"
-             :name :title
-             :type :text
-             :required true}
-      doc]
-     [:div.input-group-addon "*"]]]
-   [form-group
-    "Description"
-    [input {:class "form-control"
-            :name :description
-            :type :text}
-     doc]]
-   (when (:created-at @doc)
-     [form-group
-      "Created at"
-      [input {:class "form-control"
-              :name :created-at
-              :type :date
-              :disabled true}
-       doc]])
-   (when (:updated-at @doc)
-     [form-group
-      "Updated at"
-      [input {:class "form-control"
-              :name :updated-at
-              :type :date
-              :disabled true}
-       doc]])])
+              :value (:description @project)}]]
+     (when (:created-at @project)
+       [form-group
+        "Created at"
+        [input {:class "form-control"
+                :name :project.created-at
+                :type :date
+                :value (-> (:updated-at @project) (.split "T") first)
+                :disabled true}]])
+     (when (:updated-at @project)
+       [form-group
+        "Updated at"
+        [input {:class "form-control"
+                :name :project.updated-at
+                :type :date
+                :value (-> (:updated-at @project) (.split "T") first)
+                :disabled true}]])]))
 
 (defn new-project-page
   "Template to CREATE a project"
   []
-  (r/with-let [project (rf/subscribe [:project])
-               doc (atom (-> {}
-                             (update :description #(or % ""))))]
+  (r/with-let [project (rf/subscribe [:project])]
     [base
      [breadcrumbs
       {:title "New project"
@@ -60,18 +59,16 @@
       [:div.panel-heading
        [:h2 "Create project"]]
       [:div.panel-body
-       [form-template doc]
+       [form-template]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:create-project doc])}
+         {:on-click #(rf/dispatch [:create-project @project])}
          "Create"]]]]]))
 
 (defn edit-project-page
   "Template to EDIT a project"
   []
-  (r/with-let [project (rf/subscribe [:project])
-               doc (atom nil)]
-    (reset! doc @project)
+  (r/with-let [project (rf/subscribe [:project])]
     [base
      [breadcrumbs
       {:title (:title @project),
@@ -81,10 +78,10 @@
       [:div.panel-heading
        [:h2 "Edit project"]]
       [:div.panel-body
-       [form-template doc]
+       [form-template]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:edit-project doc])}
+         {:on-click #(rf/dispatch [:edit-project @project])}
          "Update"]]]]]))
 
 (defn projects-page

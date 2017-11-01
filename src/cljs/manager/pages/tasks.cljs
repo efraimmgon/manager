@@ -3,6 +3,7 @@
    [manager.components :as c :refer
     [base breadcrumbs form-group input select textarea tbody thead-editable]]
    [manager.events :refer [<sub]]
+   [manager.pages.components :refer [edit-project-button]]
    [reagent.core :as r :refer [atom]]
    [re-frame.core :as rf]))
 
@@ -163,63 +164,59 @@
          {:on-click #(rf/dispatch [:edit-task (:project-id @project) (assoc @task :feature-id (:feature-id @feature))])}
          "Update"]]]]]))
 
-(defn task-page []
+(defn edit-feature-button [project feature]
+  [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
+                               "/features/" (:feature-id @feature) "/edit")}
+   [:i.glyphicon.glyphicon-edit]
+   " Edit"])
+
+(defn new-task-button [project feature]
+  [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
+                               "/features/" (:feature-id @feature)
+                               "/tasks/new")}
+   [:i.glyphicon.glyphicon-plus]
+   " New task"])
+
+(defn list-tasks [project tasks]
+  [:ul.list-group
+   (when-not (seq @tasks)
+     [:li.list-group-item
+      "No tasks yet."])
+   (doall
+     (for [task @tasks]
+       ^{:key (:task-id task)}
+       [:li.list-group-item
+        [:h3
+         [:a {:href (str "/projects/" (:project-id @project)
+                         "/features/" (:feature-id task)
+                         "/tasks/" (:task-id task) "/edit")}
+          (:title task)]
+         [:div.pull-right
+          (:priority-id task)
+          [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
+                                       "/features/" (:feature-id task)
+                                       "/tasks/" (:task-id task) "/edit")}
+           [:i.glyphicon.glyphicon-edit]]
+          [:button.btn.btn-link {:on-click #(rf/dispatch [:delete-task (:task-id task)])}
+           [:i.glyphicon.glyphicon-remove]]]]
+        [:p (:description task)]]))])
+
+(defn project-tasks-page
+  "Template listing all project's tasks"
+  []
   (r/with-let [project (rf/subscribe [:project])
-               feature (rf/subscribe [:feature])
-               task (rf/subscribe [:task])]
+               tasks (rf/subscribe [:tasks])]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
        :title (:title @project)}
-      {:href (str "/projects/" (:project-id @project)
-                  "/features/" (:feature-id @feature))
-       :title (:title @feature)}
-      {:title (:title @task)
+      {:title "tasks"
        :active? true}]
      [:div.panel.panel-default
-      [:div.panel-heading>h2
-       (:title @task)]
-      [:ul.list-group
-       [:li.list-group-item
-        [:div.row
-         [:div.col-md-2 [:h4 "id"]]
-         [:div.col-md-10
-          (:task-id @task)]]]
-       [:li.list-group-item
-        [:div.row
-         [:div.col-md-2 [:h4 "Description"]]
-         [:div.col-md-10
-          (:description @task)]]]
-       [:li.list-group-item
-        [:div.row
-         [:div.col-md-2 [:h4 "Orig est"]]
-         [:div.col-md-10
-          (:orig-est @task)]]]
-       [:li.list-group-item
-        [:div.row
-         [:div.col-md-2 [:h4 "Curr est"]]
-         [:div.col-md-10
-          (:curr-est @task)]]]
-       [:li.list-group-item
-        [:div.row
-         [:div.col-md-2 [:h4 "Priority"]]
-         [:div.col-md-10
-          (:priority-name @task)]]]
-       [:li.list-group-item
-        [:div.row
-         [:div.col-md-2 [:h4 "Elapsed"]]
-         [:div.col-md-10
-          (:elapsed @task)]]]
-       [:li.list-group-item
-        [:div.row
-         [:div.col-md-2 [:h4 "Remain"]]
-         [:div.col-md-10
-          (:remain @task)]]]
-       [:li.list-group-item
-        [:div.row
-         [:div.col-md-2 [:h4 "Status"]]
-         [:div.col-md-10
-          (:status-name @task)]]]]]]))
+      [:div.panel-heading
+       [:h2 (:title @project)
+        [edit-project-button project]]]
+      [list-tasks project tasks]]]))
 
 (defn feature-tasks-page
   "Template listing all the feature's tasks"
@@ -237,35 +234,7 @@
      [:div.panel.panel-default
       [:div.panel-heading
        [:h2 (:title @feature)
+        [edit-feature-button project feature]
         [:div.pull-right
-         [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
-                                      "/features/" (:feature-id @feature) "/edit")}
-          [:i.glyphicon.glyphicon-edit]
-          " Edit"]
-         [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
-                                      "/features/" (:feature-id @feature)
-                                      "/tasks/new")}
-          [:i.glyphicon.glyphicon-plus]
-          " New task"]]]]
-      [:ul.list-group
-       (when-not (seq @tasks)
-         [:li.list-group-item
-          "No tasks yet."])
-       (doall
-         (for [task @tasks]
-           ^{:key (:task-id task)}
-           [:li.list-group-item
-            [:h3
-             [:a {:href (str "/projects/" (:project-id @project)
-                             "/features/" (:feature-id @feature)
-                             "/tasks/" (:task-id task) "/edit")}
-              (:title task)]
-             [:div.pull-right
-              (:priority-id task)
-              [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
-                                           "/features/" (:feature-id @feature)
-                                           "/tasks/" (:task-id task) "/edit")}
-               [:i.glyphicon.glyphicon-edit]]
-              [:button.btn.btn-link {:on-click #(rf/dispatch [:delete-task (:task-id task)])}
-               [:i.glyphicon.glyphicon-remove]]]]
-            [:p (:description task)]]))]]]))
+         [new-task-button project feature]]]]
+      [list-tasks project tasks]]]))

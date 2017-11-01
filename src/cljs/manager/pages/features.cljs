@@ -2,6 +2,7 @@
   (:require
    [manager.components :as c :refer [base breadcrumbs form-group input thead tbody textarea]]
    [manager.events :refer [<sub]]
+   [manager.pages.components :refer [edit-project-button]]
    [reagent.core :as r :refer [atom]]
    [re-frame.core :as rf]))
 
@@ -55,8 +56,8 @@
        :title (:title @project)}
       {:title (:title @feature)
        :href (str "/projects/" (:project-id @project)
-                  "/features/" (:feature-id @feature))
-       :active? true}]
+                  "/features/" (:feature-id @feature))}
+      {:title "Edit" :active? true}]
      [:div.panel.panel-default
       [:div.panel-heading
        [:h2 "Edit feature"]]
@@ -84,6 +85,17 @@
          {:on-click #(rf/dispatch [:create-feature (:project-id @project) (<sub [:feature])])}
          "Create"]]]]]))
 
+(defn list-undone-tasks-button [project]
+  [:a.btn.btn-link {:href (str "/projects/" (:project-id @project) "/tasks/unfineshed")}
+   [:i.glyphicon.glyphicon-th-list]
+   " List pending tasks"])
+
+(defn new-feature-button [project]
+  [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
+                               "/features/new")}
+   [:i.glyphicon.glyphicon-plus]
+   " New feature"])
+
 (defn project-features-page []
   (r/with-let [project (rf/subscribe [:project])
                features (rf/subscribe [:features])]
@@ -94,14 +106,10 @@
      [:div.panel.panel-default
       [:div.panel-heading
        [:h2 (:title @project)
+        [edit-project-button project]
         [:div.pull-right
-         [:a.btn.btn-link {:href (str "/projects/" (:project-id @project) "/edit")}
-          [:i.glyphicon.glyphicon-edit]
-          " Edit"]
-         [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
-                                      "/features/new")}
-          [:i.glyphicon.glyphicon-plus]
-          " New feature"]]]]
+         [list-undone-tasks-button project]
+         [new-feature-button project]]]]
       [:ul.list-group
        (when-not (seq @features)
          [:li.list-group-item "No features yet."])

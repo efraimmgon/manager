@@ -84,6 +84,16 @@
               :keywords? true})
    nil))
 
+(reg-event-fx
+ :load-project-tasks
+ (fn [_ [_ project-id]]
+   (ajax/GET (str "/api/projects/" project-id "/tasks/unfineshed")
+             {:handler #(dispatch [:set-tasks %])
+              :error-handler #(dispatch [:ajax-error %])
+              :response-format :json
+              :keywords? true})
+   nil))
+
 (reg-event-db
  :set-task
  (fn [db [_ task]]

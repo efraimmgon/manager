@@ -39,6 +39,11 @@
                [:load-features-for (js/parseInt id)]
                [:set-active-page :project]]))
 
+(secretary/defroute "/projects/:id/tasks/unfineshed" [id]
+  (run-events [[:load-project (js/parseInt id)]
+               [:load-project-tasks (js/parseInt id)]
+               [:set-active-page :project-tasks]]))
+
 ;; update
 (secretary/defroute "/projects/:id/edit" [id]
   (rf/dispatch-sync [:close-project])

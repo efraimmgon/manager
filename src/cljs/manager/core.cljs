@@ -49,10 +49,10 @@
    :new-project #'projects/new-project-page
    :edit-project #'projects/edit-project-page
    :project #'features/project-features-page
+   :project-tasks #'tasks/project-tasks-page
    :new-feature #'features/new-feature-page
    :edit-feature #'features/edit-feature-page
    :feature-tasks #'tasks/feature-tasks-page
-   :task #'tasks/task-page
    :new-task #'tasks/new-task-page
    :edit-task #'tasks/edit-task-page})
 

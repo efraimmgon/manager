@@ -40,21 +40,36 @@
            (float (/ orig-est curr-est))
            nil)))
 
-(defn delete-task! [params]
+(defn delete-task!
+  "delete task by task-id"
+  [params]
   (ok (db/delete-task! params)))
 
-(defn get-task [params]
+(defn get-task
+  "get tasks by task-id"
+  [params]
   (ok (db/get-task params)))
 
-(defn get-tasks [params]
+(defn get-tasks
+  "get tasks by feature-id"
+  [params]
   (ok (db/get-tasks params)))
 
-(defn create-task! [params]
+(defn get-unfineshed-tasks-by-project
+  "get tasks by project-id"
+  [params]
+  (ok (db/get-unfineshed-tasks-by-project params)))
+
+(defn create-task!
+  "create task with the given params"
+  [params]
   (ok
    (db/create-task<!
     (calculate-velocity params))))
 
-(defn update-task! [params]
+(defn update-task!
+  "update task with the given params. `updated-at` is updated at the db"
+  [params]
   (ok
    (db/update-task!
     (calculate-velocity params))))

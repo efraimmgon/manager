@@ -64,6 +64,12 @@
          :summary "get project by id"
          (projects/get-project {:project-id id}))
 
+    (GET "/projects/:id/tasks/unfineshed" []
+         :path-params [id :- s/Int]
+         :return [tasks/Task]
+         :summary "get tasks by project-id"
+         (tasks/get-unfineshed-tasks-by-project {:project-id id}))
+
     ; UPDATE
     (PUT "/projects" []
          :body-params [project-id  :- s/Int

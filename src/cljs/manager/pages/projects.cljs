@@ -1,6 +1,6 @@
 (ns manager.pages.projects
   (:require
-   [manager.components :as c :refer [base breadcrumbs form-group input]]
+   [manager.components :as c :refer [base breadcrumbs form-group input textarea]]
    [manager.events :refer [<sub]]
    [reagent.core :as r :refer [atom]]
    [re-frame.core :as rf]))
@@ -26,10 +26,9 @@
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"
-      [input {:class "form-control"
-              :name :project.description
-              :type :text
-              :value (:description @project)}]]
+      [textarea {:class "form-control"
+                 :name :project.description
+                 :value (:description @project)}]]
      (when (:created-at @project)
        [form-group
         "Created at"

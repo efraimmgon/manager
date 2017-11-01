@@ -76,7 +76,8 @@
         attrs-defaults
         (-> attrs
             (update :on-change
-                    #(or % (fn [comp] (rf/dispatch [:update-state ks (-> comp .-target .-value)])))))]
+                    #(or % (fn [comp] (rf/dispatch [:update-state ks (-> comp .-target .-value)]))))
+            (update :rows #(or % 5)))]
     [:textarea attrs-defaults]))
 
 ;;; with the current implementation it does not support options with

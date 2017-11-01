@@ -1,6 +1,6 @@
 (ns manager.pages.features
   (:require
-   [manager.components :as c :refer [base breadcrumbs form-group input thead tbody]]
+   [manager.components :as c :refer [base breadcrumbs form-group input thead tbody textarea]]
    [manager.events :refer [<sub]]
    [reagent.core :as r :refer [atom]]
    [re-frame.core :as rf]))
@@ -26,10 +26,9 @@
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"
-      [input {:class "form-control"
-              :name :feature.description
-              :type :text
-              :value (:description @feature)}]]
+      [textarea {:class "form-control"
+                 :name :feature.description
+                 :value (:description @feature)}]]
      (when (:created-at @feature)
        [form-group
         "Created at"

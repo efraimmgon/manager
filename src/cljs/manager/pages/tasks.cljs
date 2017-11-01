@@ -112,6 +112,9 @@
          (for [status (<sub [:status])]
            ^{:key (:status-id status)}
            [:label.checkbox-inline
+            (when-not (:status-id @task)
+              (when (= (:name status) "pending")
+                (rf/dispatch [:update-state [:task :status-id] (:status-id status)])))
             [input {:name :task.status-id
                     :type :radio
                     :value (:status-id status)

@@ -30,7 +30,8 @@
        [input {:class "form-control"
                :name :task.title
                :type :text
-               :value (:title @task)}]
+               :value (:title @task)
+               :auto-focus (when-not (:task-id @task) true)}]
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"

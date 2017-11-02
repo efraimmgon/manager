@@ -23,7 +23,8 @@
        [input {:class "form-control"
                :name :feature.title
                :type :text
-               :value (:title @feature)}]
+               :value (:title @feature)
+               :auto-focus (when-not (:feature-id @feature) true)}]
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"

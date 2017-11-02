@@ -22,7 +22,8 @@
        [input {:class "form-control"
                :name :project.title
                :type :text
-               :value (:title @project)}]
+               :value (:title @project)
+               :auto-focus true}]
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"

@@ -189,6 +189,7 @@
      (for [task @tasks]
        ^{:key (:task-id task)}
        [:li.list-group-item
+        {:class (when (= (:status-id task) 2) "list-group-item-success")}
         [:h3
          [:a {:href (str "/projects/" (:project-id @project)
                          "/features/" (:feature-id task)
@@ -236,7 +237,7 @@
        :active? true}]
      [:div.panel.panel-default
       [:div.panel-heading
-       [:h2 (:title @feature)
+       [:h2 (:title @feature) " (" (count (<sub [:uncompleted-tasks])) ")"
         [edit-feature-button project feature]
         [:div.pull-right
          [new-task-button project feature]]]]

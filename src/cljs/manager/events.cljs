@@ -116,3 +116,10 @@
 (reg-sub :status query)
 
 (reg-sub :error query)
+
+(reg-sub
+ :uncompleted-tasks
+ :<- [:tasks]
+ (fn [tasks _]
+   (filter #(not= 2 (:status-id %)) tasks)))
+ 

@@ -12,7 +12,8 @@
    :title s/Str
    :description s/Str
    :created-at org.joda.time.DateTime
-   :updated-at org.joda.time.DateTime})
+   :updated-at org.joda.time.DateTime
+   (s/optional-key :pending-task-count) (s/maybe s/Int)})
 
 (defn get-features-by-project [{:keys [project-id] :as params}]
   (ok (db/get-features-by-project params)))

@@ -114,7 +114,10 @@
            [:li.list-group-item
             [:h3
              [:a {:href (str "/projects/" (:project-id @project) "/features/" (:feature-id feature))}
-              (:title feature)]
+              (:title feature)
+              (if-let [len (:pending-task-count feature)]
+                (str " (" len ")")
+                (str " (" 0 ")"))]
              [:div.pull-right
               [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
                                            "/features/" (:feature-id feature) "/edit")}

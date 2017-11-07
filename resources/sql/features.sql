@@ -1,6 +1,14 @@
 -- :name get-features-by-project :? :raw
 -- :doc get all features by project-id
-SELECT * FROM features f
+SELECT f.*, t.pending_task_count FROM features f
+LEFT OUTER JOIN (
+  SELECT t.feature_id, COUNT(t.*) AS pending_task_count FROM tasks t
+  JOIN status s ON t.status_id = s.status_id
+  JOIN features f ON t.feature_id = f.feature_id
+  WHERE f.project_id = :project-id
+    AND s.name != 'done'
+  GROUP BY t.feature_id
+) AS t ON t.feature_id = f.feature_id
 WHERE f.project_id = :project-id;
 
 -- :name get-feature :? :1

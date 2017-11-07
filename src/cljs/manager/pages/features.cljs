@@ -120,4 +120,5 @@
                                            "/features/" (:feature-id feature) "/edit")}
                [:i.glyphicon.glyphicon-edit]]
               [:button.btn.btn-link {:on-click #(rf/dispatch [:delete-feature (:feature-id feature)])}
-               [:i.glyphicon.glyphicon-remove]]]]]))]]]))
+               [:i.glyphicon.glyphicon-remove]]]]
+            [:p (:description feature)]]))]]]))

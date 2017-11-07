@@ -110,4 +110,5 @@
             [:a.btn.btn-link {:href (str "/projects/" (:project-id project) "/edit")}
              [:i.glyphicon.glyphicon-edit]]
             [:button.btn.btn-link {:on-click #(rf/dispatch [:delete-project (:project-id project)])}
-             [:i.glyphicon.glyphicon-remove]]]]])]]]))
+             [:i.glyphicon.glyphicon-remove]]]]
+          [:p (:description project)]])]]]))

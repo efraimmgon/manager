@@ -27,22 +27,29 @@
 ; ------------------------------------------------------------------------------
 
 (defn navbar []
-  [:nav.navbar.navbar-inverse
-   [:div.container-fluid
-    [:div.navbar-header
-     [:button.navbar-toggle.collapsed
-      {:aria-expanded "false",
-       :data-target "#bs-example-navbar-collapse-1",
-       :data-toggle "collapse",
-       :type "button"}
-      [:span.sr-only "Toggle navigation"]
-      [:span.icon-bar]
-      [:span.icon-bar]
-      [:span.icon-bar]]
-     [:a.navbar-brand {:href "/"} "Manager"]]
-    [:div#bs-example-navbar-collapse-1.collapse.navbar-collapse
-     [:ul.nav.navbar-nav.navbar-right
-      [:li [:a {:href "/projects/new"} "Create project"]]]]]])
+  (r/with-let [project (rf/subscribe [:project])]
+    [:nav.navbar.navbar-inverse
+     [:div.container-fluid
+      [:div.navbar-header
+       [:button.navbar-toggle.collapsed
+        {:aria-expanded "false",
+         :data-target "#bs-example-navbar-collapse-1",
+         :data-toggle "collapse",
+         :type "button"}
+        [:span.sr-only "Toggle navigation"]
+        [:span.icon-bar]
+        [:span.icon-bar]
+        [:span.icon-bar]]
+       [:a.navbar-brand {:href "/"} "Manager"]]
+      [:div#bs-example-navbar-collapse-1.collapse.navbar-collapse
+       [:ul.nav.navbar-nav.navbar-right
+        (when @project
+          [:li>a
+           {:href (str "/projects/" (:project-id @project) "/tasks/unfineshed")}
+           [:i.glyphicon.glyphicon-th-list]
+           " List pending tasks"])
+
+        [:li [:a {:href "/projects/new"} "Create project"]]]]]]))
 
 (def pages
   {:home #'projects/projects-page

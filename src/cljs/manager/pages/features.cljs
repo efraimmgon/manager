@@ -86,11 +86,6 @@
          {:on-click #(rf/dispatch [:create-feature (:project-id @project) (<sub [:feature])])}
          "Create"]]]]]))
 
-(defn list-undone-tasks-button [project]
-  [:a.btn.btn-link {:href (str "/projects/" (:project-id @project) "/tasks/unfineshed")}
-   [:i.glyphicon.glyphicon-th-list]
-   " List pending tasks"])
-
 (defn new-feature-button [project]
   [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
                                "/features/new")}
@@ -109,7 +104,6 @@
        [:h2 (:title @project)
         [edit-project-button project]
         [:div.pull-right
-         [list-undone-tasks-button project]
          [new-feature-button project]]]]
       [:ul.list-group
        (when-not (seq @features)

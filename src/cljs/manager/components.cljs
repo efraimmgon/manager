@@ -58,7 +58,8 @@
     [:div.col-sm-10]
     input)])
 
-(defn input [attrs]
+(defn input 
+  [attrs]
   (let [ks (extract-ns-and-name (:name attrs))
         attrs-defaults
         (-> attrs

@@ -23,6 +23,13 @@ WHERE f.project_id = :project-id
   AND s.name != 'done'
 ORDER BY t.priority_id;
 
+-- :name get-recently-updated-tasks-by-project :? :raw
+-- :doc get tasks by project-id ordered by update date desc
+SELECT t.* FROM tasks t
+JOIN features f ON t.feature_id = f.feature_id
+WHERE f.project_id = :project-id
+ORDER BY t.updated_at DESC;
+
 -- :name create-task<! :<!
 -- :doc create a task for feature-id, returning the :task-id
 INSERT INTO tasks

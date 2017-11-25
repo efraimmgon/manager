@@ -50,6 +50,12 @@
   (run-events [[:load-project (js/parseInt id)]
                [:set-active-page :edit-project]]))
 
+;; history
+(secretary/defroute "/projects/:id/history" [id]
+  (run-events [[:load-project (js/parseInt id)]
+               [:load-recently-updated-tasks-by-project (js/parseInt id)]
+               [:set-active-page :project-tasks]]))
+
 ; features ---------------------------------------------------------------------
 
 ;; create

@@ -55,6 +55,10 @@
   [params]
   (ok (db/get-tasks params)))
 
+(defn get-recently-updated-tasks-by-project
+  [params]
+  (ok (db/get-recently-updated-tasks-by-project params)))
+
 (defn get-unfineshed-tasks-by-project
   "get tasks by project-id"
   [params]

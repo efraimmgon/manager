@@ -94,6 +94,16 @@
               :keywords? true})
    nil))
 
+(reg-event-fx
+ :load-recently-updated-tasks-by-project
+ (fn [_ [_ project-id]]
+   (ajax/GET (str "/api/projects/" project-id "/tasks/recently-updated")
+             {:handler #(dispatch [:set-tasks %])
+              :error-handler #(dispatch [:ajax-error %])
+              :response-format :json
+              :keywords? true})
+   nil))
+
 (reg-event-db
  :set-task
  (fn [db [_ task]]

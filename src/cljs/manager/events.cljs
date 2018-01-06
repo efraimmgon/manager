@@ -6,13 +6,8 @@
    [manager.handlers.tasks]
    [manager.handlers.features]
    [manager.handlers.projects]
-   [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub subscribe]]))
-
-(defn query [db [event-id]]
-  (event-id db))
-
-(defn <sub [query-v]
-  (deref (subscribe query-v)))
+   [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub subscribe]]
+   [stand-lib.re-frame.utils :refer [query]]))
 
 ; ------------------------------------------------------------------------------
 ; Events
@@ -88,11 +83,6 @@
  (fn [db [_ status]]
    (assoc db :status status)))
 
-(reg-event-db
- :update-state
- (fn [db [_ ks val]]
-   (assoc-in db ks val)))
-
 ; ------------------------------------------------------------------------------
 ; Subs
 ; ------------------------------------------------------------------------------
@@ -122,4 +112,3 @@
  :<- [:tasks]
  (fn [tasks _]
    (filter #(not= 2 (:status-id %)) tasks)))
- 

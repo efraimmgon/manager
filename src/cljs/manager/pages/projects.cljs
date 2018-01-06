@@ -1,9 +1,10 @@
 (ns manager.pages.projects
   (:require
-   [manager.components :as c :refer [base breadcrumbs form-group input textarea]]
-   [manager.events :refer [<sub]]
+   [manager.components :refer [base breadcrumbs form-group]]
    [reagent.core :as r :refer [atom]]
-   [re-frame.core :as rf]))
+   [re-frame.core :as rf]
+   [stand-lib.components :refer [input textarea]]
+   [stand-lib.re-frame.utils :refer [<sub]]))
 
 (defn form-template []
   (r/with-let [project (rf/subscribe [:project])]

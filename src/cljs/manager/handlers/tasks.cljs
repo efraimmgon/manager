@@ -3,10 +3,8 @@
    [ajax.core :as ajax]
    [manager.db :as db]
    [manager.routes :refer [navigate!]]
-   [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub]]))
-
-(defn query [db [event-id]]
-  (event-id db))
+   [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub]]
+   [stand-lib.re-frame.utils :refer [query]]))
 
 ; ------------------------------------------------------------------------------
 ; Subs

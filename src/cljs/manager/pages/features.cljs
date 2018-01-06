@@ -1,10 +1,11 @@
 (ns manager.pages.features
   (:require
-   [manager.components :as c :refer [base breadcrumbs form-group input thead tbody textarea]]
-   [manager.events :refer [<sub]]
+   [manager.components :refer [base breadcrumbs form-group]]
    [manager.pages.components :refer [edit-project-button]]
-   [reagent.core :as r :refer [atom]]
-   [re-frame.core :as rf]))
+   [reagent.core :as r]
+   [re-frame.core :as rf]
+   [stand-lib.components :refer [input thead tbody textarea]]
+   [stand-lib.re-frame.utils :refer [<sub]]))
 
 (defn form-template []
   (r/with-let [feature (rf/subscribe [:feature])]
@@ -69,8 +70,22 @@
          {:on-click #(rf/dispatch [:edit-feature @feature])}
          "Update"]]]]]))
 
+(defn task-item [i]
+  (r/with-let [tasks (rf/subscribe [:feature/tasks])]
+    [:tr
+     [:td [input {:class "form-control"
+                      :name (keyword (str "feature.tasks." i ".title"))
+                      :type :text
+                      :value (get-in @tasks [i :title])}]]
+     [:td [input {:class "form-control"
+                      :name (keyword (str "feature.tasks." i ".orig-est)"))
+                      :type :number
+                      :value (get-in @tasks [i :title])}]]]))
+
 (defn new-feature-page []
-  (r/with-let [project (rf/subscribe [:project])]
+  (r/with-let [project (rf/subscribe [:project])
+               n (r/atom 0)
+               indexes (r/atom [])]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
@@ -81,6 +96,21 @@
        [:h2 "Create feature"]]
       [:div.panel-body
        [form-template]
+       [:h3 "Tasks"]
+       (when (seq @indexes)
+         [:table.table.table-striped
+          [:thead>tr
+           [:th "Title"]
+           [:th "Original estimate"]]
+          (for [idx @indexes]
+            ^{:key idx}
+             [:tbody
+              [task-item idx]])])
+       [:button.btn.btn-default
+        {:on-click #(do (swap! n inc)
+                        (swap! indexes conj @n))}
+        [:i.glyphicon.glyphicon-plus]
+        " Add task"]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
          {:on-click #(rf/dispatch [:create-feature (:project-id @project) (<sub [:feature])])}
@@ -90,7 +120,7 @@
   [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
                                "/features/new")}
    [:i.glyphicon.glyphicon-plus]
-   " New feature"])
+   " Create feature"])
 
 (defn project-features-page []
   (r/with-let [project (rf/subscribe [:project])

@@ -3,10 +3,9 @@
    [ajax.core :as ajax]
    [manager.db :as db]
    [manager.routes :refer [navigate!]]
-   [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub]]))
+   [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub]]
+   [stand-lib.re-frame.utils :refer [query]]))
 
-(defn query [db [event-id]]
-  (event-id db))
 
 (defn feature-defaults [feature]
   (-> feature
@@ -19,6 +18,9 @@
 (reg-sub :feature query)
 
 (reg-sub :features query)
+
+(reg-sub :feature/tasks query)
+
 
 ; ------------------------------------------------------------------------------
 ; Events

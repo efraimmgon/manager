@@ -2,11 +2,12 @@
   (:require
    [reagent.core :as r :refer [atom]]
    [re-frame.core :as rf]
-   [manager.components :refer [base breadcrumbs thead tbody]]
-   [manager.events :refer [<sub]]
+   [manager.components :refer [base breadcrumbs]]
    [manager.pages.features :as features]
    [manager.pages.projects :as projects]
-   [manager.pages.tasks :as tasks]))
+   [manager.pages.tasks :as tasks]
+   [stand-lib.components :refer [thead tbody]]
+   [stand-lib.re-frame.utils :refer [<sub]]))
 
 (defn navbar []
   (r/with-let [project (rf/subscribe [:project])]
@@ -37,11 +38,13 @@
            {:href (str "/projects/" (:project-id @project) "/tasks/unfineshed")}
            [:i.glyphicon.glyphicon-th-list]
            " List pending tasks"])
-
         [:li>a
          {:href "/projects/new"}
          [:i.glyphicon.glyphicon-plus]
-         " Create project"]]]]]))
+         " Create project"]
+        (when @project
+          [:li
+           [features/new-feature-button project]])]]]]))
 
 (def pages
   {:home #'projects/projects-page

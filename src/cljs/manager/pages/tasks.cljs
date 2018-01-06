@@ -1,11 +1,11 @@
 (ns manager.pages.tasks
   (:require
-   [manager.components :as c :refer
-    [base breadcrumbs form-group input select textarea tbody thead-editable]]
-   [manager.events :refer [<sub]]
+   [manager.components :refer [base breadcrumbs form-group]]
    [manager.pages.components :refer [edit-project-button]]
    [reagent.core :as r :refer [atom]]
-   [re-frame.core :as rf]))
+   [re-frame.core :as rf]
+   [stand-lib.components :refer [input select textarea tbody]]
+   [stand-lib.re-frame.utils :refer [<sub]]))
 
 (defn calc-velocity [doc]
   (and ;(= 2 (:status-id @doc))

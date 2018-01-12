@@ -48,6 +48,12 @@
               :keywords? true})
    nil))
 
+(reg-event-fx
+ :navigate
+ (fn [db [_ url]]
+   (navigate! url)
+   nil))
+
 (reg-event-db
   :set-active-page
   (fn [db [_ page]]

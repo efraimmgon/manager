@@ -3,6 +3,7 @@
    [reagent.core :as r :refer [atom]]
    [re-frame.core :as rf]
    [manager.components :refer [base breadcrumbs]]
+   [manager.events]
    [manager.pages.features :as features]
    [manager.pages.projects :as projects]
    [manager.pages.tasks :as tasks]
@@ -54,7 +55,8 @@
    :project-tasks #'tasks/project-tasks-page
    :new-feature #'features/new-feature-page
    :edit-feature #'features/edit-feature-page
-   :feature-tasks #'tasks/feature-tasks-page
+   ; :feature-tasks #'tasks/feature-tasks-page
+   :feature-tasks #'features/edit-feature-page
    :new-task #'tasks/new-task-page
    :edit-task #'tasks/edit-task-page})
 

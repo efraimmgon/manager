@@ -36,7 +36,7 @@
 ;; read
 (secretary/defroute "/projects/:id" [id]
   (run-events [[:load-project (js/parseInt id)]
-               [:load-features-for (js/parseInt id)]
+               [:features/load-features-for (js/parseInt id)]
                [:set-active-page :project]]))
 
 (secretary/defroute "/projects/:id/tasks/unfineshed" [id]
@@ -60,7 +60,7 @@
 
 ;; create
 (secretary/defroute "/projects/:project-id/features/new" [project-id]
-  (rf/dispatch-sync [:close-feature])
+  (rf/dispatch-sync [:features/close-feature])
   (run-events [[:load-project (js/parseInt project-id)]
                [:set-active-page :new-feature]]))
 
@@ -68,15 +68,15 @@
 (secretary/defroute "/projects/:project-id/features/:feature-id"
   [project-id feature-id]
   (run-events [[:load-project (js/parseInt project-id)]
-               [:load-feature (js/parseInt feature-id)]
-               [:load-tasks-for (js/parseInt feature-id)]
+               [:features/load-feature (js/parseInt feature-id)]
+               [:tasks/load-tasks-for (js/parseInt feature-id)]
                [:set-active-page :feature-tasks]]))
 
 ;; update
 (secretary/defroute "/projects/:project-id/features/:feature-id/edit"
   [project-id feature-id]
   (run-events [[:load-project (js/parseInt project-id)]
-               [:load-feature (js/parseInt feature-id)]
+               [:features/load-feature (js/parseInt feature-id)]
                [:set-active-page :edit-feature]]))
 
 ; tasks ------------------------------------------------------------------------
@@ -86,14 +86,14 @@
   [project-id feature-id task-id]
   (rf/dispatch-sync [:close-task])
   (run-events [[:load-project (js/parseInt project-id)]
-               [:load-feature (js/parseInt feature-id)]
+               [:features/load-feature (js/parseInt feature-id)]
                [:set-active-page :new-task]]))
 
 ;; read
 (secretary/defroute "/projects/:project-id/features/:feature-id/tasks/:task-id"
   [project-id feature-id task-id]
   (run-events [[:load-project (js/parseInt project-id)]
-               [:load-feature (js/parseInt feature-id)]
+               [:features/load-feature (js/parseInt feature-id)]
                [:load-task (js/parseInt task-id)]
                [:set-active-page :task]]))
 
@@ -101,7 +101,7 @@
 (secretary/defroute "/projects/:project-id/features/:feature-id/tasks/:task-id/edit"
   [project-id feature-id task-id]
   (run-events [[:load-project (js/parseInt project-id)]
-               [:load-feature (js/parseInt feature-id)]
+               [:features/load-feature (js/parseInt feature-id)]
                [:load-task (js/parseInt task-id)]
                [:set-active-page :edit-task]]))
 

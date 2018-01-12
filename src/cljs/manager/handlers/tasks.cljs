@@ -4,7 +4,19 @@
    [manager.db :as db]
    [manager.routes :refer [navigate!]]
    [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub]]
+   [stand-lib.local-store :as ls]
    [stand-lib.re-frame.utils :refer [query]]))
+
+(def task-model
+  {:task-id :int
+   :feature-id :int
+   :status-id :int
+   :title :str
+   :orig-est :float
+   :curr-est :float
+   :velocity :float
+   :created-at :timestamp
+   :update-at :timestamp})
 
 ; ------------------------------------------------------------------------------
 ; Subs
@@ -73,14 +85,15 @@
    nil))
 
 (reg-event-fx
- :load-tasks-for
+ :tasks/load-tasks-for
  (fn [{:keys [db]} [_ feature-id]]
-   (ajax/GET (str "/api/features/" feature-id "/tasks")
-             {:handler #(dispatch [:set-tasks %])
-              :error-handler #(dispatch [:ajax-error %])
-              :response-format :json
-              :keywords? true})
-   nil))
+   (let [;; we want the tasks as a map with the id as key
+         tasks
+         (reduce (fn [acc task]
+                   (assoc acc (:task-id task) task))
+                 {} (ls/select {:from (:ls/tasks db)
+                                :where #(= (:feature-id %) feature-id)}))]
+     {:dispatch [:tasks/set-tasks tasks]})))
 
 (reg-event-fx
  :load-project-tasks
@@ -108,6 +121,6 @@
    (assoc db :task task)))
 
 (reg-event-db
- :set-tasks
+ :tasks/set-tasks
  (fn [db [_ tasks]]
-   (assoc db :tasks tasks)))
+   (assoc-in db [:features :feature :tasks] tasks)))

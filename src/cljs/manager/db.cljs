@@ -1,4 +1,7 @@
 (ns manager.db)
 
 (def default-db
-  {:page :home})
+  {:page :home
+   ;; dev only:
+   :ls/features :manager/features
+   :ls/tasks :manager/tasks})

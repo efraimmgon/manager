@@ -4,39 +4,50 @@
    [manager.pages.components :refer [edit-project-button]]
    [reagent.core :as r]
    [re-frame.core :as rf]
-   [stand-lib.components :refer [input thead tbody textarea]]
+   [stand-lib.components :refer [input pretty-display thead tbody textarea select]]
    [stand-lib.re-frame.utils :refer [<sub]]))
 
 (defn form-template []
-  (r/with-let [feature (rf/subscribe [:feature])]
+  (r/with-let [feature (rf/subscribe [:features/feature])]
     [:div.form-horizontal
      (when (:feature-id @feature)
        [form-group
         "Feature id"
         [input {:class "form-control"
-                :name :feature.feature-id
+                :name :features.feature.feature-id
                 :type :text
-                :value (:feature-id @feature)
+                :value (:features.feature-id @feature)
                 :disabled true}]])
      [form-group
       "Title"
       [:div.input-group
        [input {:class "form-control"
-               :name :feature.title
+               :name :features.feature.title
                :type :text
                :value (:title @feature)
-               :auto-focus (when-not (:feature-id @feature) true)}]
+               :auto-focus (when-not (:features.feature-id @feature) true)}]
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"
       [textarea {:class "form-control"
-                 :name :feature.description
+                 :name :features.feature.description
                  :value (:description @feature)}]]
+     [form-group
+      "Priority"
+      [:div.input-group
+       [select {:class "form-control"
+                :name :features.feature/priority-id
+                :value (:priority-id @feature)}
+        (for [priority (<sub [:priorities])]
+          ^{:key (:priority-id priority)}
+          [:option {:value (:priority-id priority)}
+           (:name priority)])]
+       [:div.input-group-addon "*"]]]
      (when (:created-at @feature)
        [form-group
         "Created at"
         [input {:class "form-control"
-                :name :feature.created-at
+                :name :features.feature.created-at
                 :type :date
                 :value (-> (:created-at @feature) (.split "T") first)
                 :disabled true}]])
@@ -44,14 +55,49 @@
        [form-group
         "Updated at"
         [input {:class "form-control"
-                :name :feature.updated-at
+                :name :features.feature.updated-at
                 :type :date
                 :value (-> (:updated-at @feature) (.split "T") first)
                 :disabled true}]])]))
 
+(defn task-items []
+  (r/with-let [tasks (rf/subscribe [:features.feature/tasks])]
+    (when (seq @tasks)
+      [:table.table.table-striped
+       [:thead>tr
+        [:th "Title"]
+        [:th "Original estimate"]
+        [:th "Current estimate"]
+        [:th "Delete"]]
+       [:tbody
+        (for [task @tasks]
+          (let [task-id (:task-id task)]
+            ^{:key (:task-id task)}
+            [:tr
+             [:td [input {:class "form-control"
+                          :name [:features :feature :tasks task-id :title]
+                          :type :text
+                          :value (:title task)}]]
+             [:td [input {:class "form-control"
+                          :name [:features :feature :tasks task-id :orig-est]
+                          :type :number
+                          :value (:orig-est task)}]]
+             [:td [input {:class "form-control"
+                          :name [:features :feature :tasks task-id :curr-est]
+                          :type :number
+                          ;; by default curr-est == orig-est
+                          :value (or (:curr-est task) (:orig-est task))}]]
+             [:td [:button.btn.btn-danger
+                   {:on-click #(rf/dispatch [:features/cancel-task task-id])}
+                   "Del"]]]))]])))
+
+; Load feature with tasks
+; When clicked on "update" tasks with no feature-id are saved, while tasks
+; with an id are updated
+; Optionally I can use the on-blur event to persist changes
 (defn edit-feature-page []
   (r/with-let [project (rf/subscribe [:project])
-               feature (rf/subscribe [:feature])]
+               feature (rf/subscribe [:features/feature])]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
@@ -65,27 +111,22 @@
        [:h2 "Edit feature"]]
       [:div.panel-body
        [form-template]
+       [pretty-display feature]
+       [:h3 "Tasks"]
+       [task-items]
+       [:button.btn.btn-default
+        ; TODO
+        {:on-click #(rf/dispatch [:features/feature-tasks-tick])}
+        [:i.glyphicon.glyphicon-plus]
+        " Add task"]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
          {:on-click #(rf/dispatch [:edit-feature @feature])}
          "Update"]]]]]))
 
-(defn task-item [i]
-  (r/with-let [tasks (rf/subscribe [:feature/tasks])]
-    [:tr
-     [:td [input {:class "form-control"
-                      :name (keyword (str "feature.tasks." i ".title"))
-                      :type :text
-                      :value (get-in @tasks [i :title])}]]
-     [:td [input {:class "form-control"
-                      :name (keyword (str "feature.tasks." i ".orig-est)"))
-                      :type :number
-                      :value (get-in @tasks [i :title])}]]]))
-
 (defn new-feature-page []
   (r/with-let [project (rf/subscribe [:project])
-               n (r/atom 0)
-               indexes (r/atom [])]
+               feature (rf/subscribe [:features/feature])]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
@@ -96,24 +137,16 @@
        [:h2 "Create feature"]]
       [:div.panel-body
        [form-template]
+       [pretty-display feature]
        [:h3 "Tasks"]
-       (when (seq @indexes)
-         [:table.table.table-striped
-          [:thead>tr
-           [:th "Title"]
-           [:th "Original estimate"]]
-          (for [idx @indexes]
-            ^{:key idx}
-             [:tbody
-              [task-item idx]])])
+       [task-items]
        [:button.btn.btn-default
-        {:on-click #(do (swap! n inc)
-                        (swap! indexes conj @n))}
+        {:on-click #(rf/dispatch [:features/feature-tasks-tick])}
         [:i.glyphicon.glyphicon-plus]
         " Add task"]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:create-feature (:project-id @project) (<sub [:feature])])}
+         {:on-click #(rf/dispatch [:features/create-feature (:project-id @project) @feature])}
          "Create"]]]]]))
 
 (defn new-feature-button [project]
@@ -124,7 +157,7 @@
 
 (defn project-features-page []
   (r/with-let [project (rf/subscribe [:project])
-               features (rf/subscribe [:features])]
+               features (rf/subscribe [:features/features])]
     [base
      [breadcrumbs
       {:title (:title @project)
@@ -152,6 +185,6 @@
               [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
                                            "/features/" (:feature-id feature) "/edit")}
                [:i.glyphicon.glyphicon-edit]]
-              [:button.btn.btn-link {:on-click #(rf/dispatch [:delete-feature (:feature-id feature)])}
+              [:button.btn.btn-link {:on-click #(rf/dispatch [:features/delete-feature (:project-id @project) (:feature-id feature)])}
                [:i.glyphicon.glyphicon-remove]]]]
             [:p (:description feature)]]))]]]))

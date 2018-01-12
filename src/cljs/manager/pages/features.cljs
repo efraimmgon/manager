@@ -88,7 +88,7 @@
                           ;; by default curr-est == orig-est
                           :value (or (:curr-est task) (:orig-est task))}]]
              [:td [:button.btn.btn-danger
-                   {:on-click #(rf/dispatch [:features/cancel-task task-id])}
+                   {:on-click #(rf/dispatch [:tasks/delete-task task-id])}
                    "Del"]]]))]])))
 
 ; Load feature with tasks

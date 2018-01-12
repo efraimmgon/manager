@@ -3,6 +3,7 @@
    [ajax.core :as ajax]
    [manager.db :as db]
    [manager.routes :refer [navigate!]]
+   [manager.utils :refer [temp-id?]]
    [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub]]
    [stand-lib.local-store :as ls]
    [stand-lib.re-frame.utils :refer [query]]))
@@ -65,15 +66,14 @@
    nil))
 
 (reg-event-fx
- :delete-task
+ :tasks/delete-task
  (fn [{:keys [db]} [_ task-id]]
-   (ajax/DELETE "/api/tasks"
-                {:params {:task-id task-id}
-                 :handler #(navigate! (str "/projects/" (get-in db [:project :project-id])
-                                           "/features/" (get-in db [:feature :feature-id])))
-                 :error-handler #(dispatch [:ajax-error %])})
-   nil))
-
+   ;; check if it isn't a temp-id
+   (when-not (temp-id? task-id)
+     (ls/delete!
+      {:from (:ls/tasks db)
+       :where #(= (:task-id %) task-id)}))
+   {:db (update-in db [:features :feature :tasks] dissoc task-id)}))
 
 (reg-event-fx
  :edit-task

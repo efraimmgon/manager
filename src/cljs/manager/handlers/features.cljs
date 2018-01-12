@@ -4,6 +4,7 @@
    [manager.db :as db]
    [manager.handlers.tasks :refer [create-task! update-task!]]
    [manager.routes :refer [navigate!]]
+   [manager.utils :refer [temp-id?]]
    [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub]]
    [stand-lib.local-store :as ls]
    [stand-lib.re-frame.utils :refer [query]]))
@@ -117,21 +118,12 @@
                {:set (dissoc (assoc feature :update-at (js/Date.))
                              :tasks)
                 :where #(= (:feature-id %) (:feature-id feature))})
-   (let [old-tasks (filter (comp number? :task-id) (vals (:tasks feature)))
-         new-tasks (filter (comp keyword? :task-id) (vals (:tasks feature)))]
-     (println "old")
-     (cljs.pprint/pprint old-tasks)
-     (println "new")
-     (cljs.pprint/pprint new-tasks)
+   (let [old-tasks (filter (comp not temp-id? :task-id) (vals (:tasks feature)))
+         new-tasks (filter (comp temp-id? :task-id) (vals (:tasks feature)))]
      (doseq [task new-tasks]
        (create-task! (:ls/tasks db) (:feature-id feature) task))
-     (println "state")
-     (cljs.pprint/pprint (ls/load :manager/tasks))
      (doseq [task old-tasks]
-       (update-task! (:ls/tasks db) task))
-     (println "state")
-     (cljs.pprint/pprint (ls/load :manager/tasks)))
-
+       (update-task! (:ls/tasks db) task)))
    {:dispatch [:navigate (str "/projects/" (:project-id feature))]}))
 
 (reg-event-fx

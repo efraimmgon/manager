@@ -2,6 +2,7 @@
   (:require
    [ajax.core :as ajax]
    [manager.db :as db]
+   [manager.handlers.tasks :refer [create-task! update-task!]]
    [manager.routes :refer [navigate!]]
    [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub]]
    [stand-lib.local-store :as ls]
@@ -26,11 +27,6 @@
       (update :created-at #(or % (js/Date.)))
       (update :updated-at #(or % (js/Date.)))))
 
-(defn task-defaults [task feature-id]
-  (-> task
-      (assoc :feature-id feature-id)
-      (update :created-at #(or % (js/Date.)))
-      (update :updated-at #(or % (js/Date.)))))
 
 ; ------------------------------------------------------------------------------
 ; Subs
@@ -96,12 +92,8 @@
            :keyvals (select-keys (feature-defaults feature project-id)
                                  [:title :description :priority-id :project-id])})]
      (doseq [task (vals (:tasks feature))]
-       (ls/insert!
-        {:into (:ls/tasks db)
-         :id :task-id
-         ;; update task with default fields
-         ;; assign the feature-id to the task
-         :keyvals (task-defaults task (:feature-id newfeature))}))
+       (create-task!
+        (:ls/tasks db) (:feature-id newfeature) task))
      {:dispatch [:navigate (str "/projects/" project-id)]})))
 
 ;;; Delete features and their tasks
@@ -116,15 +108,31 @@
      :where #(= (:feature-id %) feature-id)})
    {:dispatch [:navigate (str "/projects/" project-id)]}))
 
+;;; Update feature and already existent tasks
+;;; Create new tasks
 (reg-event-fx
- :edit-feature
+ :features/update-feature
  (fn [{:keys [db]} [_ feature]]
-   (ajax/PUT "/api/features"
-             {:params (select-keys feature [:feature-id :title :description])
-              :handler #(navigate! (str "/projects/" (get-in db [:project :project-id])
-                                        "/features/" (:feature-id feature)))
-              :error-handler #(dispatch [:ajax-error %])})
-   nil))
+   (ls/update! (:ls/features db)
+               {:set (dissoc (assoc feature :update-at (js/Date.))
+                             :tasks)
+                :where #(= (:feature-id %) (:feature-id feature))})
+   (let [old-tasks (filter (comp number? :task-id) (vals (:tasks feature)))
+         new-tasks (filter (comp keyword? :task-id) (vals (:tasks feature)))]
+     (println "old")
+     (cljs.pprint/pprint old-tasks)
+     (println "new")
+     (cljs.pprint/pprint new-tasks)
+     (doseq [task new-tasks]
+       (create-task! (:ls/tasks db) (:feature-id feature) task))
+     (println "state")
+     (cljs.pprint/pprint (ls/load :manager/tasks))
+     (doseq [task old-tasks]
+       (update-task! (:ls/tasks db) task))
+     (println "state")
+     (cljs.pprint/pprint (ls/load :manager/tasks)))
+
+   {:dispatch [:navigate (str "/projects/" (:project-id feature))]}))
 
 (reg-event-fx
  :features/load-feature

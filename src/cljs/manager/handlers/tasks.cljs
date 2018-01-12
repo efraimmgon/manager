@@ -18,6 +18,25 @@
    :created-at :timestamp
    :update-at :timestamp})
 
+(defn task-defaults [task feature-id]
+  (-> task
+      (update :feature-id #(or % feature-id))
+      (update :created-at #(or % (js/Date.)))
+      (assoc :updated-at (js/Date.))))
+
+(defn create-task! [ls-key feature-id task]
+  (ls/insert!
+   {:into ls-key
+    :id :task-id
+    ;; update task with default fields
+    ;; assign the feature-id to the task
+    :keyvals (task-defaults task feature-id)}))
+
+(defn update-task! [ls-key task]
+  (ls/update!
+   ls-key
+   {:set (task-defaults task nil)
+    :where #(= (:task-id %) (:task-id task))}))
 ; ------------------------------------------------------------------------------
 ; Subs
 ; ------------------------------------------------------------------------------
@@ -35,19 +54,11 @@
  (fn [db _]
    (dissoc db :task)))
 
-(defn task-defaults [task]
-  (-> task
-      (dissoc :priority-name :status-name :created-at :updated-at :velocity)
-      (update :description #(or % ""))
-      (update :curr-est #(or % (:orig-est task)))
-      (update :elapsed #(or % 0))
-      (update :remain #(- (:curr-est task) (:elapsed task)))))
-
 (reg-event-fx
  :create-task
  (fn [{:keys [db]} [_ project-id feature-id task]]
    (ajax/POST (str "/api/features/" feature-id "/tasks")
-              {:params (assoc (task-defaults task) :feature-id feature-id)
+              {:params (assoc (task-defaults task feature-id) :feature-id feature-id)
                :handler #(navigate! (str "/projects/" project-id
                                          "/features/" feature-id))
                :error-handler #(dispatch [:ajax-error %])})
@@ -68,7 +79,7 @@
  :edit-task
  (fn [{:keys [db]} [_ project-id task]]
    (ajax/PUT "/api/tasks"
-             {:params (task-defaults task)
+             {:params task
               :handler #(navigate! (str "/projects/" project-id
                                         "/features/" (:feature-id task)))
               :error-handler #(dispatch [:ajax-error %])})

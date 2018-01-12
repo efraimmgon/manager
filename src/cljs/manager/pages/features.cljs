@@ -16,7 +16,7 @@
         [input {:class "form-control"
                 :name :features.feature.feature-id
                 :type :text
-                :value (:features.feature-id @feature)
+                :value (:feature-id @feature)
                 :disabled true}]])
      [form-group
       "Title"
@@ -121,7 +121,7 @@
         " Add task"]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:edit-feature @feature])}
+         {:on-click #(rf/dispatch [:features/update-feature @feature])}
          "Update"]]]]]))
 
 (defn new-feature-page []

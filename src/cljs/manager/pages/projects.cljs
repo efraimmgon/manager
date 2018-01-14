@@ -3,8 +3,9 @@
    [manager.components :refer [base breadcrumbs form-group]]
    [reagent.core :as r :refer [atom]]
    [re-frame.core :as rf]
-   [stand-lib.components :refer [input textarea]]
-   [stand-lib.re-frame.utils :refer [<sub]]))
+   [stand-lib.re-frame.utils :refer [<sub]]
+   [stand-lib.utils.forms :refer
+    [handle-change-at]]))
 
 (defn form-template []
   (r/with-let [project (rf/subscribe [:project])]
@@ -12,41 +13,40 @@
      (when (:project-id @project)
        [form-group
         "Project id"
-        [input {:class "form-control"
-                :name :project.project-id
-                :type :text
-                :value (:project-id @project)
-                :disabled true}]])
+        [:input {:class "form-control"
+                 :type :text
+                 :value (:project-id @project)
+                 :disabled true}]])
      [form-group
       "Title"
       [:div.input-group
-       [input {:class "form-control"
-               :name :project.title
-               :type :text
-               :value (:title @project)
-               :auto-focus true}]
+       [:input {:class "form-control"
+                :on-change #(handle-change-at :project/title %)
+                :type :text
+                :value (:title @project)
+                :auto-focus true}]
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"
-      [textarea {:class "form-control"
-                 :name :project.description
-                 :value (:description @project)}]]
+      [:textarea {:class "form-control"
+                  :on-change #(handle-change-at :project/description %)
+                  :value (:description @project)}]]
      (when (:created-at @project)
        [form-group
         "Created at"
-        [input {:class "form-control"
-                :name :project.created-at
-                :type :date
-                :value (-> (:updated-at @project) (.split "T") first)
-                :disabled true}]])
+        [:input {:class "form-control"
+                 :on-change #(handle-change-at :project/created-at %)
+                 :type :text
+                 :value (:created-at @project)
+                 :disabled true}]])
      (when (:updated-at @project)
        [form-group
         "Updated at"
-        [input {:class "form-control"
-                :name :project.updated-at
-                :type :date
-                :value (-> (:updated-at @project) (.split "T") first)
-                :disabled true}]])]))
+        [:input {:class "form-control"
+                 :on-change #(handle-change-at :project/updated-at %)
+                 :type :text
+                 :value (:updated-at @project)
+                 :disabled true}]])]))
 
 (defn new-project-page
   "Template to CREATE a project"

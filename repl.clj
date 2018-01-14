@@ -12,13 +12,3 @@
 ;;; misc
 (start)
 (restart)
-
-(projects/create-project! {:title "new3" :description "project"})
-(-> (db/all-projects)
-    first
-    :created-at)
-
-(db/update-project!
- {:project-id 1
-  :title "new-title"
-  :description "new-description"})

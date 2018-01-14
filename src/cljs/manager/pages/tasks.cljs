@@ -4,8 +4,10 @@
    [manager.pages.components :refer [edit-project-button]]
    [reagent.core :as r :refer [atom]]
    [re-frame.core :as rf]
-   [stand-lib.components :refer [input select textarea tbody]]
+   [stand-lib.components :refer [tbody]]
    [stand-lib.re-frame.utils :refer [<sub]]))
+
+(declare input select textarea)
 
 (defn calc-velocity [doc]
   (and ;(= 2 (:status-id @doc))

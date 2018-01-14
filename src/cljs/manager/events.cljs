@@ -7,6 +7,7 @@
    [manager.handlers.features]
    [manager.handlers.projects]
    [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub subscribe]]
+   [stand-lib.handlers]
    [stand-lib.re-frame.utils :refer [query]]))
 
 ; ------------------------------------------------------------------------------
@@ -24,8 +25,8 @@
 (reg-event-db
   :initialize-db
   (fn [_ _]
-    (dispatch [:load-priorities])
-    (dispatch [:load-status])
+    ; (dispatch [:load-priorities])
+    ; (dispatch [:load-status])
     db/default-db))
 
 (reg-event-fx

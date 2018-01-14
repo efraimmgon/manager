@@ -21,12 +21,11 @@
    :created-at :timestamp
    :update-at :timestamp})
 
-(defn feature-defaults [feature project-id]
+(defn feature-defaults [feature]
   (-> feature
-      (assoc :project-id project-id)
       (update :description #(or % ""))
       (update :created-at #(or % (js/Date.)))
-      (update :updated-at #(or % (js/Date.)))))
+      (assoc :updated-at (js/Date.))))
 
 
 ; ------------------------------------------------------------------------------
@@ -51,8 +50,20 @@
 
 (reg-sub
  :features.feature/tasks
- (fn [db]
-   (vals (get-in db [:features :feature :tasks]))))
+ :<- [:features/feature]
+ (fn [feature]
+   (vals (:tasks feature))))
+
+; TODO
+; A features estimate is the sum of all it's *pending* tasks current estimate.
+(reg-sub
+ :features/feature-estimate
+ :<- [:features.feature/tasks]
+ (fn [tasks]
+   (->> tasks
+        (filter (comp #{:done} :status))
+        (map :curr-est)
+        (reduce +))))
 
 ; ------------------------------------------------------------------------------
 ; Events
@@ -90,8 +101,7 @@
            :id :feature-id
            ;; update feature with default fields
            ;; assign the project-id to the feature
-           :keyvals (select-keys (feature-defaults feature project-id)
-                                 [:title :description :priority-id :project-id])})]
+           :keyvals (dissoc (feature-defaults (assoc feature :project-id project-id)) :tasks)})]
      (doseq [task (vals (:tasks feature))]
        (create-task!
         (:ls/tasks db) (:feature-id newfeature) task))
@@ -115,7 +125,7 @@
  :features/update-feature
  (fn [{:keys [db]} [_ feature]]
    (ls/update! (:ls/features db)
-               {:set (dissoc (assoc feature :update-at (js/Date.))
+               {:set (dissoc (feature-defaults feature)
                              :tasks)
                 :where #(= (:feature-id %) (:feature-id feature))})
    (let [old-tasks (filter (comp not temp-id? :task-id) (vals (:tasks feature)))

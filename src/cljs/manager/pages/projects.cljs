@@ -4,6 +4,7 @@
    [reagent.core :as r :refer [atom]]
    [re-frame.core :as rf]
    [stand-lib.re-frame.utils :refer [<sub]]
+   [stand-lib.comps.forms :refer [text-input textarea]]
    [stand-lib.utils.forms :refer
     [handle-change-at]]))
 
@@ -20,22 +21,18 @@
      [form-group
       "Title"
       [:div.input-group
-       [:input {:class "form-control"
-                :on-change #(handle-change-at :project/title %)
-                :type :text
-                :value (:title @project)
-                :auto-focus true}]
+       [text-input {:class "form-control"
+                    :name :project/title
+                    :auto-focus true}]
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"
-      [:textarea {:class "form-control"
-                  :on-change #(handle-change-at :project/description %)
-                  :value (:description @project)}]]
+      [textarea {:class "form-control"
+                 :name :project/description}]]
      (when (:created-at @project)
        [form-group
         "Created at"
         [:input {:class "form-control"
-                 :on-change #(handle-change-at :project/created-at %)
                  :type :text
                  :value (:created-at @project)
                  :disabled true}]])
@@ -43,7 +40,6 @@
        [form-group
         "Updated at"
         [:input {:class "form-control"
-                 :on-change #(handle-change-at :project/updated-at %)
                  :type :text
                  :value (:updated-at @project)
                  :disabled true}]])]))

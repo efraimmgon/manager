@@ -5,12 +5,9 @@
    [reagent.core :as r]
    [re-frame.core :as rf]
    [stand-lib.components :refer [pretty-display thead tbody]]
-   [stand-lib.re-frame.utils :refer [<sub]]
-   [stand-lib.utils.forms :refer
-    [handle-change-at handle-n-change-at handle-mopt-change-at
-     handle-opt-change-at swap-val-at!]]))
-
-
+   [stand-lib.comps.forms :refer
+    [text-input textarea number-input checkbox-input radio-input select-input]]
+   [stand-lib.re-frame.utils :refer [<sub]]))
 
 (defn form-template []
   (r/with-let [feature (rf/subscribe [:features/feature])
@@ -19,24 +16,19 @@
      (when (:feature-id @feature)
        [form-group
         "Feature id"
-        [:input {:class "form-control"
-                 :type :text
-                 :value (:feature-id @feature)
-                 :disabled true}]])
+        [text-input {:class "form-control"
+                     :name :features.feature/feature-id}]])
      [form-group
       "Title"
       [:div.input-group
-       [:input {:class "form-control"
-                :on-change #(handle-change-at :features.feature/title %)
-                :type :text
-                :value (:title @feature)
-                :auto-focus (when-not (:features.feature-id @feature) true)}]
+       [text-input {:class "form-control"
+                    :name :features.feature/title
+                    :auto-focus (when-not (:features.feature-id @feature) true)}]
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"
-      [:textarea {:class "form-control"
-                  :on-change #(handle-change-at :features.feature/description %)
-                  :value (:description @feature)}]]
+      [textarea {:class "form-control"
+                 :name :features.feature/description}]]
      [form-group
       "Status"
       [:div
@@ -44,20 +36,17 @@
          (for [[k label checked?] (<sub [:status])]
            ^{:key k}
            [:label.radio-inline
-            [:input {:on-change #(handle-opt-change-at :features.feature/status %)
-                     :type :radio
-                     :value k
-                     :checked
-                     (cond
-                       (and (nil? (:status @feature)) checked?) (swap-val-at! [:features :feature :status] k)
-                       :else (= k (:status @feature)))}]
+            [radio-input {:name :features.feature/status
+                          :default-checked (and (nil? (:status @feature)) checked?)
+                          :value k}]
+
             " " label]))]]
      [form-group
       "Priority"
       [:div.input-group
-       [:select {:class "form-control"
-                 :on-change #(handle-opt-change-at :features.feature/priority %)
-                 :value (or (:priority @feature) (swap-val-at! [:features :feature :priority] (ffirst @priorities)))}
+       [select-input {:class "form-control"
+                      :name :features.feature/priority
+                      :default-value (ffirst @priorities)}
         (for [[k label] @priorities]
           ^{:key k}
           [:option {:value k}
@@ -66,20 +55,15 @@
      (when (:created-at @feature)
        [form-group
         "Created at"
-        [:input {:class "form-control"
-                 :on-change #(handle-change-at :features.feature/created-at %)
-                 :type :text
-                 :value (:created-at @feature)
-                 :disabled true}]])
+        [text-input {:class "form-control"
+                     :name :features.feature/created-at
+                     :disabled true}]])
      (when (:updated-at @feature)
        [form-group
         "Updated at"
-        [:input {:class "form-control"
-                 :on-change #(handle-change-at :features.feature/update-at %)
-                 :type :text
-                 :value (:updated-at @feature)
-                 :disabled true}]])]))
-
+        [text-input {:class "form-control"
+                     :name :features.feature/updated-at
+                     :disabled true}]])]))
 
 (defn task-items []
   (r/with-let [tasks (rf/subscribe [:features.feature/tasks])]
@@ -96,24 +80,16 @@
           (let [task-id (:task-id task)]
             ^{:key (:task-id task)}
             [:tr
-             [:td [:input {:class "form-control"
-                           :on-change #(handle-mopt-change-at [:features :feature :tasks task-id :status] %)
-                           :type :checkbox
-                           :value :done
-                           :checked (contains? (:status task) :done)}]]
-             [:td [:input {:class "form-control"
-                           :on-change #(handle-change-at [:features :feature :tasks task-id :title] %)
-                           :type :text
-                           :value (:title task)}]]
-             [:td [:input {:class "form-control"
-                           :on-change #(handle-n-change-at [:features :feature :tasks task-id :orig-est] %)
-                           :type :number
-                           :value (:orig-est task)}]]
-             [:td [:input {:class "form-control"
-                           :on-change #(handle-n-change-at [:features :feature :tasks task-id :curr-est] %)
-                           :type :number
-                           ;; by default curr-est == orig-est
-                           :value (:curr-est task)}]]
+             [:td [checkbox-input {:class "form-control"
+                                   :name [:features :feature :tasks task-id :status]
+                                   :value :done}]]
+             [:td [text-input {:class "form-control"
+                               :name [:features :feature :tasks task-id :title]}]]
+             [:td [number-input {:class "form-control"
+                                 :name [:features :feature :tasks task-id :orig-est]}]]
+             [:td [number-input {:class "form-control"
+                                 :name [:features :feature :tasks task-id :curr-est]}]]
+
              [:td [:button.btn.btn-default
                    {:on-click #(rf/dispatch [:tasks/delete-task task-id])}
                    [:i.glyphicon.glyphicon-remove]]]]))]])))

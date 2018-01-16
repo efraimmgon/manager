@@ -2,11 +2,11 @@
   (:require
    [manager.components :refer [base breadcrumbs form-group]]
    [manager.pages.components :refer [edit-project-button]]
+   [manager.utils :refer [done?]]
    [reagent.core :as r]
    [re-frame.core :as rf]
    [stand-lib.components :refer [pretty-display thead tbody]]
-   [stand-lib.comps.forms :refer
-    [text-input textarea number-input checkbox-input radio-input select-input]]
+   [stand-lib.comps.forms :refer [input textarea select]]
    [stand-lib.re-frame.utils :refer [<sub]]))
 
 (defn form-template []
@@ -16,14 +16,16 @@
      (when (:feature-id @feature)
        [form-group
         "Feature id"
-        [text-input {:class "form-control"
-                     :name :features.feature/feature-id}]])
+        [input {:type :text
+                :class "form-control"
+                :name :features.feature/feature-id}]])
      [form-group
       "Title"
       [:div.input-group
-       [text-input {:class "form-control"
-                    :name :features.feature/title
-                    :auto-focus (when-not (:features.feature-id @feature) true)}]
+       [input {:type :text
+               :class "form-control"
+               :name :features.feature/title
+               :auto-focus (when-not (:features.feature-id @feature) true)}]
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"
@@ -36,17 +38,17 @@
          (for [[k label checked?] (<sub [:status])]
            ^{:key k}
            [:label.radio-inline
-            [radio-input {:name :features.feature/status
-                          :default-checked (and (nil? (:status @feature)) checked?)
-                          :value k}]
-
+            [input {:type :radio
+                    :name :features.feature/status
+                    :default-checked (and (nil? (:status @feature)) checked?)
+                    :value k}]
             " " label]))]]
      [form-group
       "Priority"
       [:div.input-group
-       [select-input {:class "form-control"
-                      :name :features.feature/priority
-                      :default-value (ffirst @priorities)}
+       [select {:class "form-control"
+                :name :features.feature/priority
+                :default-value (ffirst @priorities)}
         (for [[k label] @priorities]
           ^{:key k}
           [:option {:value k}
@@ -55,20 +57,23 @@
      (when (:created-at @feature)
        [form-group
         "Created at"
-        [text-input {:class "form-control"
-                     :name :features.feature/created-at
-                     :disabled true}]])
+        [input {:type :text
+                :class "form-control"
+                :name :features.feature/created-at
+                :disabled true}]])
      (when (:updated-at @feature)
        [form-group
         "Updated at"
-        [text-input {:class "form-control"
-                     :name :features.feature/updated-at
-                     :disabled true}]])]))
+
+        [input {:type :text
+                :class "form-control"
+                :name :features.feature/updated-at
+                :disabled true}]])]))
 
 (defn task-items []
   (r/with-let [tasks (rf/subscribe [:features.feature/tasks])]
     (when (seq @tasks)
-      [:table.table.table-striped
+      [:table.table
        [:thead>tr
         [:th "Done?"]
         [:th "Title"]
@@ -77,19 +82,22 @@
         [:th "Delete"]]
        [:tbody
         (for [task @tasks]
-          (let [task-id (:task-id task)]
+          (let [task-id (:task-id task)
+                input-class (if (done? task) "form-control task-input-done" "form-control")]
             ^{:key (:task-id task)}
-            [:tr
-             [:td [checkbox-input {:class "form-control"
-                                   :name [:features :feature :tasks task-id :status]
-                                   :value :done}]]
-             [:td [text-input {:class "form-control"
-                               :name [:features :feature :tasks task-id :title]}]]
-             [:td [number-input {:class "form-control"
-                                 :name [:features :feature :tasks task-id :orig-est]}]]
-             [:td [number-input {:class "form-control"
-                                 :name [:features :feature :tasks task-id :curr-est]}]]
-
+            [:tr {:class (when (done? task) "task-done")}
+             [:td [input {:type :checkbox
+                          :name [:features :feature :tasks task-id :status]
+                          :value :done}]]
+             [:td [input {:type :text
+                          :class input-class
+                          :name [:features :feature :tasks task-id :title]}]]
+             [:td [input {:type :number
+                          :class input-class
+                          :name [:features :feature :tasks task-id :orig-est]}]]
+             [:td [input {:type :number
+                          :class input-class
+                          :name [:features :feature :tasks task-id :curr-est]}]]
              [:td [:button.btn.btn-default
                    {:on-click #(rf/dispatch [:tasks/delete-task task-id])}
                    [:i.glyphicon.glyphicon-remove]]]]))]])))
@@ -176,6 +184,7 @@
          (for [feature @features]
            ^{:key (:feature-id feature)}
            [:li.list-group-item
+            {:class (when (done? feature) "list-group-item-success")}
             [:h3
              [:a {:href (str "/projects/" (:project-id @project) "/features/" (:feature-id feature))}
               (:title feature)]

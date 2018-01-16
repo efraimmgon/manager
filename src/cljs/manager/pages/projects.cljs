@@ -4,7 +4,7 @@
    [reagent.core :as r :refer [atom]]
    [re-frame.core :as rf]
    [stand-lib.re-frame.utils :refer [<sub]]
-   [stand-lib.comps.forms :refer [text-input textarea]]
+   [stand-lib.comps.forms :refer [input textarea]]
    [stand-lib.utils.forms :refer
     [handle-change-at]]))
 
@@ -21,9 +21,10 @@
      [form-group
       "Title"
       [:div.input-group
-       [text-input {:class "form-control"
-                    :name :project/title
-                    :auto-focus true}]
+       [input {:type :text
+               :class "form-control"
+               :name :project/title
+               :auto-focus true}]
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"

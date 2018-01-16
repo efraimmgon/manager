@@ -79,3 +79,14 @@ body {
 .modal-backdrop {
 	z-index: 1;
 }
+
+.task-done {
+	text-decoration: line-through;
+	background-color: #fafafa !important;
+}
+
+.task-input-done {
+	background-color: #fafafa !important;
+	color: #777 !important;
+	border: none;
+}

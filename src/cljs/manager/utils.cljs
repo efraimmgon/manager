@@ -4,7 +4,4 @@
   (keyword? x))
 
 (defn done? [x]
-  (let [status (:status x)]
-    (if (coll? status)
-      (contains? status :done)
-      (= :done status))))
+  (= :done (:status x)))

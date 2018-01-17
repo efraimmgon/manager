@@ -9,6 +9,23 @@
    [stand-lib.comps.forms :refer [input textarea select]]
    [stand-lib.re-frame.utils :refer [<sub]]))
 
+(defn checkbox-single-input
+  [attrs]
+  (let [field-value (rf/subscribe [:query (:name attrs)])
+        f (fn [acc] (if (nil? acc) (:value attrs) nil))
+        edited-attrs
+        (-> attrs
+            (assoc :type :checkbox)
+            (update :on-change #(or % (fn [e] (rf/dispatch [:update-state (:name attrs) f]))))
+            (assoc :checked (or (:default-checked attrs)
+                                (= (:value attrs) @field-value)))
+            (dissoc :default-checked))]
+    ;; persist value when it's the default
+    (when (and (:checked edited-attrs)
+               (not (= @field-value (:value attrs))))
+      (rf/dispatch [:update-state (:name attrs) f]))
+    [:input edited-attrs]))
+
 (defn form-template []
   (r/with-let [feature (rf/subscribe [:features/feature])
                priorities (rf/subscribe [:priorities])]
@@ -86,9 +103,9 @@
                 input-class (if (done? task) "form-control task-input-done" "form-control")]
             ^{:key (:task-id task)}
             [:tr {:class (when (done? task) "task-done")}
-             [:td [input {:type :checkbox
-                          :name [:features :feature :tasks task-id :status]
-                          :value :done}]]
+             [:td [checkbox-single-input
+                   {:name [:features :feature :tasks task-id :status]
+                    :value :done}]]
              [:td [input {:type :text
                           :class input-class
                           :name [:features :feature :tasks task-id :title]}]]
@@ -164,9 +181,28 @@
    [:i.glyphicon.glyphicon-plus]
    " Create feature"])
 
+(defn list-features [project features]
+  [:ul.list-group
+   (when-not (seq @features)
+     [:li.list-group-item "No features yet."])
+   (doall
+     (for [feature @features]
+       ^{:key (:feature-id feature)}
+       [:li.list-group-item
+        {:class (when (done? feature) "archived")}
+        [:h3
+         [:a {:href (str "/projects/" (:project-id @project) "/features/" (:feature-id feature))}
+          (:title feature)]
+         [:div.pull-right
+          [:button.btn.btn-link {:on-click #(rf/dispatch [:features/delete-feature (:project-id @project) (:feature-id feature)])}
+           [:i.glyphicon.glyphicon-remove]]]]
+        [:p (:description feature)]]))])
+
 (defn project-features-page []
   (r/with-let [project (rf/subscribe [:project])
-               features (rf/subscribe [:features/features])]
+               pending-features (rf/subscribe [:features/pending])
+               done-features (rf/subscribe [:features/done])
+               show-completed-features? (rf/subscribe [:features/show-completed?])]
     [base
      [breadcrumbs
       {:title (:title @project)
@@ -177,21 +213,11 @@
         [edit-project-button project]
         [:div.pull-right
          [new-feature-button project]]]]
-      [:ul.list-group
-       (when-not (seq @features)
-         [:li.list-group-item "No features yet."])
-       (doall
-         (for [feature @features]
-           ^{:key (:feature-id feature)}
-           [:li.list-group-item
-            {:class (when (done? feature) "list-group-item-success")}
-            [:h3
-             [:a {:href (str "/projects/" (:project-id @project) "/features/" (:feature-id feature))}
-              (:title feature)]
-             [:div.pull-right
-              [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
-                                           "/features/" (:feature-id feature) "/edit")}
-               [:i.glyphicon.glyphicon-edit]]
-              [:button.btn.btn-link {:on-click #(rf/dispatch [:features/delete-feature (:project-id @project) (:feature-id feature)])}
-               [:i.glyphicon.glyphicon-remove]]]]
-            [:p (:description feature)]]))]]]))
+      [list-features project pending-features]
+      [:button.btn.btn-default.btn-block
+       {:on-click #(rf/dispatch [:features/toggle-show-completed])}
+       (if @show-completed-features?
+         "Hide completed features"
+         "Show completed features")]
+      (when @show-completed-features?
+        [list-features project done-features])]]))

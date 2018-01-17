@@ -4,7 +4,7 @@
    [manager.db :as db]
    [manager.handlers.tasks :refer [create-task! update-task!]]
    [manager.routes :refer [navigate!]]
-   [manager.utils :refer [temp-id?]]
+   [manager.utils :refer [temp-id? done?]]
    [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub]]
    [stand-lib.local-store :as ls]
    [stand-lib.re-frame.utils :refer [query]]))
@@ -13,9 +13,7 @@
   {:feature-id :int
    :project-id :int
    :priority-id :int
-   ;; not sure how I should add an status field for feature. I'll leave it out
-   ;; for now, since it will be easy to update with local-store
-   ; :status-id :int
+   :status :keyword
    :title :str
    :description :str
    :created-at :timestamp
@@ -32,9 +30,15 @@
 ; Subs
 ; ------------------------------------------------------------------------------
 
+(reg-sub
+ :features/done
+ :<- [:features/all]
+ (fn [features]
+   (filter done? features)))
+
 (reg-sub :features/feature query)
 
-(reg-sub :features/features query)
+(reg-sub :features/all query)
 
 (reg-sub
  :features/feature-tasks-counter
@@ -48,12 +52,6 @@
    (or (get-in db [:features :feature-tasks-indexes])
        #{})))
 
-(reg-sub
- :features.feature/tasks
- :<- [:features/feature]
- (fn [feature]
-   (vals (:tasks feature))))
-
 ; TODO
 ; A features estimate is the sum of all it's *pending* tasks current estimate.
 (reg-sub
@@ -64,6 +62,20 @@
         (filter (comp #{:done} :status))
         (map :curr-est)
         (reduce +))))
+
+(reg-sub
+ :features/pending
+ :<- [:features/all]
+ (fn [features]
+   (filter (comp not done?) features)))
+
+(reg-sub :features/show-completed? query)
+
+(reg-sub
+ :features.feature/tasks
+ :<- [:features/feature]
+ (fn [feature]
+   (vals (:tasks feature))))
 
 ; ------------------------------------------------------------------------------
 ; Events
@@ -151,16 +163,16 @@
      {:dispatch [:features/set-features feats]})))
 
 (reg-event-db
- :set-active-feature
- (fn [db [_ feature-id]]
-   (assoc db :feature feature-id)))
-
-(reg-event-db
  :features/set-features
  (fn [db [_ features]]
-   (assoc-in db [:features :features] features)))
+   (assoc-in db [:features :all] features)))
 
 (reg-event-db
  :features/set-feature
  (fn [db [_ feature]]
    (assoc-in db [:features :feature] feature)))
+
+(reg-event-db
+ :features/toggle-show-completed
+ (fn [db _]
+   (update-in db [:features :show-completed?] not)))

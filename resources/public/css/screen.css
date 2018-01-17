@@ -85,6 +85,11 @@ body {
 	background-color: #fafafa !important;
 }
 
+.archived {
+	background-color: #fafafa !important;
+	color: #777 !important;
+}
+
 .task-input-done {
 	background-color: #fafafa !important;
 	color: #777 !important;

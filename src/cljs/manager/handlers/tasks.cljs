@@ -71,7 +71,7 @@
    ;; check if it isn't a temp-id
    (when-not (temp-id? task-id)
      (ls/delete!
-      {:from (:ls/tasks db)
+      {:from (:ls-tasks db)
        :where #(= (:task-id %) task-id)}))
    {:db (update-in db [:features :feature :tasks] dissoc task-id)}))
 
@@ -102,7 +102,7 @@
          tasks
          (reduce (fn [acc task]
                    (assoc acc (:task-id task) task))
-                 {} (ls/select {:from (:ls/tasks db)
+                 {} (ls/select {:from (:ls-tasks db)
                                 :where #(= (:feature-id %) feature-id)}))]
      {:dispatch [:tasks/set-tasks tasks]})))
 

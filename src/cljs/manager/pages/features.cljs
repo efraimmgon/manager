@@ -7,6 +7,7 @@
    [re-frame.core :as rf]
    [stand-lib.components :refer [pretty-display thead tbody]]
    [stand-lib.comps.forms :refer [input textarea select]]
+   [stand-lib.local-store :as ls]
    [stand-lib.re-frame.utils :refer [<sub]]))
 
 (defn checkbox-single-input
@@ -52,24 +53,24 @@
       "Status"
       [:div
        (doall
-         (for [[k label checked?] (<sub [:status])]
-           ^{:key k}
+         (for [{:keys [id name default?]} (<sub [:status])]
+           ^{:key id}
            [:label.radio-inline
             [input {:type :radio
                     :name :features.feature/status
-                    :default-checked (and (nil? (:status @feature)) checked?)
-                    :value k}]
-            " " label]))]]
+                    :default-checked (and (nil? (:status @feature)) default?)
+                    :value id}]
+            " " (clojure.string/capitalize name)]))]]
      [form-group
       "Priority"
       [:div.input-group
        [select {:class "form-control"
                 :name :features.feature/priority
-                :default-value (ffirst @priorities)}
-        (for [[k label] @priorities]
-          ^{:key k}
-          [:option {:value k}
-           label])]
+                :default-value (:idx (first @priorities))}
+        (for [{:keys [name idx]} @priorities]
+          ^{:key idx}
+          [:option {:value idx}
+           (clojure.string/capitalize name)])]
        [:div.input-group-addon "*"]]]
      (when (:created-at @feature)
        [form-group
@@ -81,7 +82,6 @@
      (when (:updated-at @feature)
        [form-group
         "Updated at"
-
         [input {:type :text
                 :class "form-control"
                 :name :features.feature/updated-at
@@ -192,7 +192,8 @@
         {:class (when (done? feature) "archived")}
         [:h3
          [:a {:href (str "/projects/" (:project-id @project) "/features/" (:feature-id feature))}
-          (:title feature)]
+          (:title feature) " "
+          (str "[" (:priority feature) "]")]
          [:div.pull-right
           [:button.btn.btn-link {:on-click #(rf/dispatch [:features/delete-feature (:project-id @project) (:feature-id feature)])}
            [:i.glyphicon.glyphicon-remove]]]]

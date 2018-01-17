@@ -108,6 +108,10 @@
  (fn [db _]
    db))
 
+(reg-sub :ls-features query)
+
+(reg-sub :ls-tasks query)
+
 (reg-sub :priorities query)
 
 (reg-sub :status query)

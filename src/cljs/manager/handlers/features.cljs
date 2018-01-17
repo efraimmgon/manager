@@ -109,14 +109,14 @@
    (let [tasks (:tasks feature)
          newfeature
          (ls/insert!
-          {:into (:ls/features db)
+          {:into (:ls-features db)
            :id :feature-id
            ;; update feature with default fields
            ;; assign the project-id to the feature
            :keyvals (dissoc (feature-defaults (assoc feature :project-id project-id)) :tasks)})]
      (doseq [task (vals (:tasks feature))]
        (create-task!
-        (:ls/tasks db) (:feature-id newfeature) task))
+        (:ls-tasks db) (:feature-id newfeature) task))
      {:dispatch [:navigate (str "/projects/" project-id)]})))
 
 ;;; Delete features and their tasks
@@ -124,10 +124,10 @@
  :features/delete-feature
  (fn [{:keys [db]} [_ project-id feature-id]]
    (ls/delete!
-    {:from (:ls/features db)
+    {:from (:ls-features db)
      :where #(= (:feature-id %) feature-id)})
    (ls/delete!
-    {:from (:ls/tasks db)
+    {:from (:ls-tasks db)
      :where #(= (:feature-id %) feature-id)})
    {:dispatch [:navigate (str "/projects/" project-id)]}))
 
@@ -136,16 +136,16 @@
 (reg-event-fx
  :features/update-feature
  (fn [{:keys [db]} [_ feature]]
-   (ls/update! (:ls/features db)
+   (ls/update! (:ls-features db)
                {:set (dissoc (feature-defaults feature)
                              :tasks)
                 :where #(= (:feature-id %) (:feature-id feature))})
    (let [old-tasks (filter (comp not temp-id? :task-id) (vals (:tasks feature)))
          new-tasks (filter (comp temp-id? :task-id) (vals (:tasks feature)))]
      (doseq [task new-tasks]
-       (create-task! (:ls/tasks db) (:feature-id feature) task))
+       (create-task! (:ls-tasks db) (:feature-id feature) task))
      (doseq [task old-tasks]
-       (update-task! (:ls/tasks db) task)))
+       (update-task! (:ls-tasks db) task)))
    {:dispatch [:navigate (str "/projects/" (:project-id feature))]}))
 
 (reg-event-fx
@@ -153,13 +153,14 @@
  (fn [{:keys [db]} [_ feature-id]]
    {:dispatch [:features/set-feature
                (first
-                 (ls/select {:from (:ls/features db)
+                 (ls/select {:from (:ls-features db)
                              :where #(= (:feature-id %) feature-id)}))]}))
 (reg-event-fx
  :features/load-features-for
  (fn [{:keys [db]} [_ project-id]]
-   (let [feats (ls/select {:from (:ls/features db)
-                           :where #(= (:project-id %) project-id)})]
+   (let [feats (ls/select {:from (:ls-features db)
+                           :where #(= (:project-id %) project-id)
+                           :order-by [:priority <]})]
      {:dispatch [:features/set-features feats]})))
 
 (reg-event-db

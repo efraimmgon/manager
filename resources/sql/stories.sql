@@ -3,7 +3,6 @@
 SELECT st.*, t.pending_task_count FROM stories st
 LEFT OUTER JOIN (
   SELECT t.story_id, COUNT(t.*) AS pending_task_count FROM tasks t
-  JOIN status s ON t.status_id = s.status_id
   JOIN stories st ON t.story_id = st.story_id
   WHERE st.project_id = :project-id
     AND s.name != 'done'

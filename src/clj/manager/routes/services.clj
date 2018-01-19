@@ -156,8 +156,8 @@
                         curr-est    :- s/Int
                         elapsed     :- s/Int
                         remain      :- s/Int
-                        priority-id :- s/Int
-                        status-id   :- s/Int]
+                        priority-idx :- s/Int
+                        status   :- s/Int]
           :return [{:task-id s/Int}]
           :summary "create a task for story-id"
           (tasks/create-task!
@@ -168,8 +168,8 @@
             :curr-est curr-est
             :elapsed elapsed
             :remain remain
-            :priority-id priority-id
-            :status-id status-id}))
+            :priority-idx priority-idx
+            :status status}))
 
     ; LIST
     (GET "/stories/:story-id/tasks" []
@@ -196,8 +196,8 @@
                        curr-est    :- s/Int
                        elapsed     :- s/Int
                        remain      :- s/Int
-                       priority-id :- s/Int
-                       status-id   :- s/Int]
+                       priority-idx :- s/Int
+                       status   :- s/Int]
          :return s/Int
          :summary "update task by task-id"
          (tasks/update-task!
@@ -209,8 +209,8 @@
            :curr-est curr-est
            :elapsed elapsed
            :remain remain
-           :priority-id priority-id
-           :status-id status-id}))
+           :priority-idx priority-idx
+           :status status}))
 
     ; DELETE
     (DELETE "/tasks" []

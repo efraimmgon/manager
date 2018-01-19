@@ -29,9 +29,9 @@ WHERE id = :id
 SELECT * FROM status;
 
 -- :name get-status :? :1
--- :doc get status by status-id
+-- :doc get status by status
 SELECT * FROM status
-WHERE status_id = :status-id;
+WHERE status = :status;
 
 -- -----------------------------------------------------------------------------
 -- Priorities

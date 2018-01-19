@@ -5,7 +5,7 @@
    [schema.core :as s]))
 
 (def Priority
-  {:priority-id s/Int
+  {:priority-idx s/Int
    :name s/Str})
 
 (defn get-priorities []

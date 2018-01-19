@@ -5,7 +5,7 @@
    [schema.core :as s]))
 
 (def Status
-  {:status-id s/Int
+  {:status s/Int
    :name s/Str})
 
 (defn get-all-status []

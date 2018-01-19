@@ -10,7 +10,7 @@
 (declare input select textarea)
 
 (defn calc-velocity [doc]
-  (and ;(= 2 (:status-id @doc))
+  (and ;(= 2 (:status @doc))
        (:curr-est @doc)
        (pos? (:curr-est @doc))
        (/ (:orig-est @doc) (:curr-est @doc))))
@@ -69,11 +69,11 @@
       "Priority"
       [:div.input-group
        [select {:class "form-control"
-                :name :task.priority-id
-                :value (:priority-id @task)}
+                :name :task.priority-idx
+                :value (:priority-idx @task)}
         (for [priority (<sub [:priorities])]
-          ^{:key (:priority-id priority)}
-          [:option {:value (:priority-id priority)}
+          ^{:key (:priority-idx priority)}
+          [:option {:value (:priority-idx priority)}
            (:name priority)])]
        [:div.input-group-addon "*"]]]
      [form-group
@@ -113,15 +113,15 @@
       [:div
        (doall
          (for [status (<sub [:status])]
-           ^{:key (:status-id status)}
+           ^{:key (:status status)}
            [:label.checkbox-inline
-            (when-not (:status-id @task)
+            (when-not (:status @task)
               (when (= (:name status) "pending")
-                (rf/dispatch [:update-state [:task :status-id] (:status-id status)])))
-            [input {:name :task.status-id
+                (rf/dispatch [:update-state [:task :status] (:status status)])))
+            [input {:name :task.status
                     :type :radio
-                    :value (:status-id status)
-                    :checked (= (:status-id status) (:status-id @task))}]
+                    :value (:status status)
+                    :checked (= (:status status) (:status @task))}]
             " " (:name status)]))]]]))
 
 (defn new-task-page []
@@ -192,14 +192,14 @@
      (for [task @tasks]
        ^{:key (:task-id task)}
        [:li.list-group-item
-        {:class (when (= (:status-id task) 2) "list-group-item-success")}
+        {:class (when (= (:status task) 2) "list-group-item-success")}
         [:h3
          [:a {:href (str "/projects/" (:project-id @project)
                          "/stories/" (:story-id task)
                          "/tasks/" (:task-id task) "/edit")}
           (:title task)]
          [:div.pull-right
-          (:priority-id task)
+          (:priority-idx task)
           [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
                                        "/stories/" (:story-id task)
                                        "/tasks/" (:task-id task) "/edit")}

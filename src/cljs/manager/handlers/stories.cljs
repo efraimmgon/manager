@@ -12,7 +12,7 @@
 (def story-model
   {:story-id :int
    :project-id :int
-   :priority-id :int
+   :priority-idx :int
    :status :int
    :title :str
    :type :int
@@ -60,7 +60,7 @@
  :<- [:stories.story/tasks]
  (fn [tasks]
    (->> tasks
-        (filter (comp #{:done} :status))
+        (filter (comp #{"done"} :status))
         (map :curr-est)
         (reduce +))))
 
@@ -161,7 +161,7 @@
  (fn [{:keys [db]} [_ project-id]]
    (let [feats (ls/select {:from (:ls-stories db)
                            :where #(= (:project-id %) project-id)
-                           :order-by [:priority <]})]
+                           :order-by [:priority-idx <]})]
      {:dispatch [:stories/set-stories feats]})))
 
 (reg-event-db

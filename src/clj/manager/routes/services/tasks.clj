@@ -17,10 +17,8 @@
    :remain s/Int
    :velocity (s/maybe s/Num)
    :story-id s/Int
-   :priority-id s/Int
-   :status-id s/Int
-   (s/optional-key :status-name) s/Str
-   (s/optional-key :priority-name) s/Str
+   :priority-idx s/Int
+   :status s/Int
    :created-at org.joda.time.DateTime
    :updated-at org.joda.time.DateTime})
 
@@ -34,9 +32,9 @@
 (defn calculate-velocity
   "If the status == done, we calculate velocity like => orig-est / curr-est.
    Otherwise it's nil."
-  [{:keys [status-id curr-est orig-est] :as params}]
+  [{:keys [status curr-est orig-est] :as params}]
   (assoc params :velocity
-         (if (= "done" (:name (db/get-status {:status-id status-id})))
+         (if (= "done" (:name (db/get-status {:status status})))
            (float (/ orig-est curr-est))
            nil)))
 

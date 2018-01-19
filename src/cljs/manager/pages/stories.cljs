@@ -29,7 +29,8 @@
 
 (defn form-template []
   (r/with-let [story (rf/subscribe [:stories/story])
-               priorities (rf/subscribe [:priorities])]
+               priorities (rf/subscribe [:priorities])
+               types (rf/subscribe [:types])]
     [:div.form-horizontal
      (when (:story-id @story)
        [form-group
@@ -62,10 +63,21 @@
                     :value id}]
             " " (clojure.string/capitalize name)]))]]
      [form-group
+      "Type"
+      [:div.input-group
+       [select {:class "form-control"
+                :name :stories.story/type
+                :default-value (:idx (first @types))}
+        (for [{:keys [name idx]} @types]
+          ^{:key idx}
+          [:option {:value idx}
+           (clojure.string/capitalize name)])]
+       [:div.input-group-addon "*"]]]
+     [form-group
       "Priority"
       [:div.input-group
        [select {:class "form-control"
-                :name :stories.story/priority
+                :name :stories.story/priority-idx
                 :default-value (:idx (first @priorities))}
         (for [{:keys [name idx]} @priorities]
           ^{:key idx}
@@ -105,7 +117,7 @@
             [:tr {:class (when (done? task) "task-done")}
              [:td [checkbox-single-input
                    {:name [:stories :story :tasks task-id :status]
-                    :value :done}]]
+                    :value "done"}]]
              [:td [input {:type :text
                           :class input-class
                           :name [:stories :story :tasks task-id :title]}]]
@@ -193,7 +205,7 @@
         [:h3
          [:a {:href (str "/projects/" (:project-id @project) "/stories/" (:story-id story))}
           (:title story) " "
-          (str "[" (:priority story) "]")]
+          (str "[" (:priority-idx story) "]")]
          [:div.pull-right
           [:button.btn.btn-link {:on-click #(rf/dispatch [:stories/delete-story (:project-id @project) (:story-id story)])}
            [:i.glyphicon.glyphicon-remove]]]]

@@ -11,7 +11,7 @@
 (def task-model
   {:task-id :int
    :story-id :int
-   :status :int
+   :status :str
    :title :str
    :orig-est :float
    :curr-est :float

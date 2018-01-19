@@ -1,4 +1,4 @@
-(ns manager.pages.features
+(ns manager.pages.stories
   (:require
    [manager.components :refer [base breadcrumbs form-group]]
    [manager.pages.components :refer [edit-project-button]]
@@ -28,27 +28,27 @@
     [:input edited-attrs]))
 
 (defn form-template []
-  (r/with-let [feature (rf/subscribe [:features/feature])
+  (r/with-let [story (rf/subscribe [:stories/story])
                priorities (rf/subscribe [:priorities])]
     [:div.form-horizontal
-     (when (:feature-id @feature)
+     (when (:story-id @story)
        [form-group
-        "Feature id"
+        "story id"
         [input {:type :text
                 :class "form-control"
-                :name :features.feature/feature-id}]])
+                :name :stories.story/story-id}]])
      [form-group
       "Title"
       [:div.input-group
        [input {:type :text
                :class "form-control"
-               :name :features.feature/title
-               :auto-focus (when-not (:features.feature-id @feature) true)}]
+               :name :stories.story/title
+               :auto-focus (when-not (:stories.story-id @story) true)}]
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"
       [textarea {:class "form-control"
-                 :name :features.feature/description}]]
+                 :name :stories.story/description}]]
      [form-group
       "Status"
       [:div
@@ -57,38 +57,38 @@
            ^{:key id}
            [:label.radio-inline
             [input {:type :radio
-                    :name :features.feature/status
-                    :default-checked (and (nil? (:status @feature)) default?)
+                    :name :stories.story/status
+                    :default-checked (and (nil? (:status @story)) default?)
                     :value id}]
             " " (clojure.string/capitalize name)]))]]
      [form-group
       "Priority"
       [:div.input-group
        [select {:class "form-control"
-                :name :features.feature/priority
+                :name :stories.story/priority
                 :default-value (:idx (first @priorities))}
         (for [{:keys [name idx]} @priorities]
           ^{:key idx}
           [:option {:value idx}
            (clojure.string/capitalize name)])]
        [:div.input-group-addon "*"]]]
-     (when (:created-at @feature)
+     (when (:created-at @story)
        [form-group
         "Created at"
         [input {:type :text
                 :class "form-control"
-                :name :features.feature/created-at
+                :name :stories.story/created-at
                 :disabled true}]])
-     (when (:updated-at @feature)
+     (when (:updated-at @story)
        [form-group
         "Updated at"
         [input {:type :text
                 :class "form-control"
-                :name :features.feature/updated-at
+                :name :stories.story/updated-at
                 :disabled true}]])]))
 
 (defn task-items []
-  (r/with-let [tasks (rf/subscribe [:features.feature/tasks])]
+  (r/with-let [tasks (rf/subscribe [:stories.story/tasks])]
     (when (seq @tasks)
       [:table.table
        [:thead>tr
@@ -104,106 +104,106 @@
             ^{:key (:task-id task)}
             [:tr {:class (when (done? task) "task-done")}
              [:td [checkbox-single-input
-                   {:name [:features :feature :tasks task-id :status]
+                   {:name [:stories :story :tasks task-id :status]
                     :value :done}]]
              [:td [input {:type :text
                           :class input-class
-                          :name [:features :feature :tasks task-id :title]}]]
+                          :name [:stories :story :tasks task-id :title]}]]
              [:td [input {:type :number
                           :class input-class
-                          :name [:features :feature :tasks task-id :orig-est]}]]
+                          :name [:stories :story :tasks task-id :orig-est]}]]
              [:td [input {:type :number
                           :class input-class
-                          :name [:features :feature :tasks task-id :curr-est]}]]
+                          :name [:stories :story :tasks task-id :curr-est]}]]
              [:td [:button.btn.btn-default
                    {:on-click #(rf/dispatch [:tasks/delete-task task-id])}
                    [:i.glyphicon.glyphicon-remove]]]]))]])))
 
-; Load feature with tasks
-; When clicked on "update" tasks with no feature-id are saved, while tasks
+; Load story with tasks
+; When clicked on "update" tasks with no story-id are saved, while tasks
 ; with an id are updated
 ; Optionally I can use the on-blur event to persist changes
-(defn edit-feature-page []
+(defn edit-story-page []
   (r/with-let [project (rf/subscribe [:project])
-               feature (rf/subscribe [:features/feature])]
+               story (rf/subscribe [:stories/story])]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
        :title (:title @project)}
-      {:title (:title @feature)
+      {:title (:title @story)
        :href (str "/projects/" (:project-id @project)
-                  "/features/" (:feature-id @feature))
+                  "/stories/" (:story-id @story))
        :active? true}]
      [:div.panel.panel-default
       [:div.panel-heading
-       [:h2 "Edit feature"]]
+       [:h2 "Edit story"]]
       [:div.panel-body
        [form-template]
        [:h3 "Tasks"]
        [task-items]
        [:button.btn.btn-default
         ; TODO
-        {:on-click #(rf/dispatch [:features/feature-tasks-tick])}
+        {:on-click #(rf/dispatch [:stories/story-tasks-tick])}
         [:i.glyphicon.glyphicon-plus]
         " Add task"]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:features/update-feature @feature])}
+         {:on-click #(rf/dispatch [:stories/update-story @story])}
          "Update"]]]]]))
 
-(defn new-feature-page []
+(defn new-story-page []
   (r/with-let [project (rf/subscribe [:project])
-               feature (rf/subscribe [:features/feature])]
+               story (rf/subscribe [:stories/story])]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
        :title (:title @project)}
-      {:title "New feature", :active? true}]
+      {:title "New story", :active? true}]
      [:div.panel.panel-default
       [:div.panel-heading
-       [:h2 "Create feature"]]
+       [:h2 "Create story"]]
       [:div.panel-body
        [form-template]
        [:h3 "Tasks"]
        [task-items]
        [:button.btn.btn-default
-        {:on-click #(rf/dispatch [:features/feature-tasks-tick])}
+        {:on-click #(rf/dispatch [:stories/story-tasks-tick])}
         [:i.glyphicon.glyphicon-plus]
         " Add task"]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:features/create-feature (:project-id @project) @feature])}
+         {:on-click #(rf/dispatch [:stories/create-story (:project-id @project) @story])}
          "Create"]]]]]))
 
-(defn new-feature-button [project]
+(defn new-story-button [project]
   [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
-                               "/features/new")}
+                               "/stories/new")}
    [:i.glyphicon.glyphicon-plus]
-   " Create feature"])
+   " Create story"])
 
-(defn list-features [project features]
+(defn list-stories [project stories]
   [:ul.list-group
-   (when-not (seq @features)
-     [:li.list-group-item "No features yet."])
+   (when-not (seq @stories)
+     [:li.list-group-item "No stories yet."])
    (doall
-     (for [feature @features]
-       ^{:key (:feature-id feature)}
+     (for [story @stories]
+       ^{:key (:story-id story)}
        [:li.list-group-item
-        {:class (when (done? feature) "archived")}
+        {:class (when (done? story) "archived")}
         [:h3
-         [:a {:href (str "/projects/" (:project-id @project) "/features/" (:feature-id feature))}
-          (:title feature) " "
-          (str "[" (:priority feature) "]")]
+         [:a {:href (str "/projects/" (:project-id @project) "/stories/" (:story-id story))}
+          (:title story) " "
+          (str "[" (:priority story) "]")]
          [:div.pull-right
-          [:button.btn.btn-link {:on-click #(rf/dispatch [:features/delete-feature (:project-id @project) (:feature-id feature)])}
+          [:button.btn.btn-link {:on-click #(rf/dispatch [:stories/delete-story (:project-id @project) (:story-id story)])}
            [:i.glyphicon.glyphicon-remove]]]]
-        [:p (:description feature)]]))])
+        [:p (:description story)]]))])
 
-(defn project-features-page []
+(defn project-stories-page []
   (r/with-let [project (rf/subscribe [:project])
-               pending-features (rf/subscribe [:features/pending])
-               done-features (rf/subscribe [:features/done])
-               show-completed-features? (rf/subscribe [:features/show-completed?])]
+               pending-stories (rf/subscribe [:stories/pending])
+               done-stories (rf/subscribe [:stories/done])
+               show-completed-stories? (rf/subscribe [:stories/show-completed?])]
     [base
      [breadcrumbs
       {:title (:title @project)
@@ -213,12 +213,12 @@
        [:h2 (:title @project)
         [edit-project-button project]
         [:div.pull-right
-         [new-feature-button project]]]]
-      [list-features project pending-features]
+         [new-story-button project]]]]
+      [list-stories project pending-stories]
       [:button.btn.btn-default.btn-block
-       {:on-click #(rf/dispatch [:features/toggle-show-completed])}
-       (if @show-completed-features?
-         "Hide completed features"
-         "Show completed features")]
-      (when @show-completed-features?
-        [list-features project done-features])]]))
+       {:on-click #(rf/dispatch [:stories/toggle-show-completed])}
+       (if @show-completed-stories?
+         "Hide completed stories"
+         "Show completed stories")]
+      (when @show-completed-stories?
+        [list-stories project done-stories])]]))

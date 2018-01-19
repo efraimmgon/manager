@@ -36,7 +36,7 @@
 ;; read
 (secretary/defroute "/projects/:id" [id]
   (run-events [[:load-project (js/parseInt id)]
-               [:features/load-features-for (js/parseInt id)]
+               [:stories/load-stories-for (js/parseInt id)]
                [:set-active-page :project]]))
 
 (secretary/defroute "/projects/:id/tasks/unfineshed" [id]
@@ -56,52 +56,52 @@
                [:load-recently-updated-tasks-by-project (js/parseInt id)]
                [:set-active-page :project-tasks]]))
 
-; features ---------------------------------------------------------------------
+; stories ---------------------------------------------------------------------
 
 ;; create
-(secretary/defroute "/projects/:project-id/features/new" [project-id]
-  (rf/dispatch-sync [:features/close-feature])
+(secretary/defroute "/projects/:project-id/stories/new" [project-id]
+  (rf/dispatch-sync [:stories/close-story])
   (run-events [[:load-project (js/parseInt project-id)]
-               [:set-active-page :new-feature]]))
+               [:set-active-page :new-story]]))
 
 ;; read
-(secretary/defroute "/projects/:project-id/features/:feature-id"
-  [project-id feature-id]
+(secretary/defroute "/projects/:project-id/stories/:story-id"
+  [project-id story-id]
   (run-events [[:load-project (js/parseInt project-id)]
-               [:features/load-feature (js/parseInt feature-id)]
-               [:tasks/load-tasks-for (js/parseInt feature-id)]
-               [:set-active-page :feature-tasks]]))
+               [:stories/load-story (js/parseInt story-id)]
+               [:tasks/load-tasks-for (js/parseInt story-id)]
+               [:set-active-page :story-tasks]]))
 
 ;; update
-(secretary/defroute "/projects/:project-id/features/:feature-id/edit"
-  [project-id feature-id]
+(secretary/defroute "/projects/:project-id/stories/:story-id/edit"
+  [project-id story-id]
   (run-events [[:load-project (js/parseInt project-id)]
-               [:features/load-feature (js/parseInt feature-id)]
-               [:set-active-page :edit-feature]]))
+               [:stories/load-story (js/parseInt story-id)]
+               [:set-active-page :edit-story]]))
 
 ; tasks ------------------------------------------------------------------------
 
 ;; create
-(secretary/defroute "/projects/:project-id/features/:feature-id/tasks/new"
-  [project-id feature-id task-id]
+(secretary/defroute "/projects/:project-id/stories/:story-id/tasks/new"
+  [project-id story-id task-id]
   (rf/dispatch-sync [:close-task])
   (run-events [[:load-project (js/parseInt project-id)]
-               [:features/load-feature (js/parseInt feature-id)]
+               [:stories/load-story (js/parseInt story-id)]
                [:set-active-page :new-task]]))
 
 ;; read
-(secretary/defroute "/projects/:project-id/features/:feature-id/tasks/:task-id"
-  [project-id feature-id task-id]
+(secretary/defroute "/projects/:project-id/stories/:story-id/tasks/:task-id"
+  [project-id story-id task-id]
   (run-events [[:load-project (js/parseInt project-id)]
-               [:features/load-feature (js/parseInt feature-id)]
+               [:stories/load-story (js/parseInt story-id)]
                [:load-task (js/parseInt task-id)]
                [:set-active-page :task]]))
 
 ;; update
-(secretary/defroute "/projects/:project-id/features/:feature-id/tasks/:task-id/edit"
-  [project-id feature-id task-id]
+(secretary/defroute "/projects/:project-id/stories/:story-id/tasks/:task-id/edit"
+  [project-id story-id task-id]
   (run-events [[:load-project (js/parseInt project-id)]
-               [:features/load-feature (js/parseInt feature-id)]
+               [:stories/load-story (js/parseInt story-id)]
                [:load-task (js/parseInt task-id)]
                [:set-active-page :edit-task]]))
 

@@ -9,40 +9,40 @@ JOIN status s ON t.status_id = s.status_id
 WHERE t.task_id = :task-id;
 
 -- :name get-tasks :? :raw
--- :doc get all tasks by feature-id
+-- :doc get all tasks by story-id
 SELECT t.* FROM tasks t
-WHERE feature_id = :feature-id
+WHERE story_id = :story-id
 ORDER BY t.status_id DESC, t.priority_id;
 
 -- :name get-unfineshed-tasks-by-project :? :raw
 -- :doc get tasks by project-id
 SELECT t.* FROM tasks t
 JOIN status s ON t.status_id = s.status_id
-JOIN features f ON t.feature_id = f.feature_id
-WHERE f.project_id = :project-id
+JOIN stories st ON t.story_id = st.story_id
+WHERE st.project_id = :project-id
   AND s.name != 'done'
 ORDER BY t.priority_id;
 
 -- :name get-recently-updated-tasks-by-project :? :raw
 -- :doc get tasks by project-id ordered by update date desc
 SELECT t.* FROM tasks t
-JOIN features f ON t.feature_id = f.feature_id
-WHERE f.project_id = :project-id
+JOIN stories st ON t.story_id = st.story_id
+WHERE st.project_id = :project-id
 ORDER BY t.updated_at DESC;
 
 -- :name create-task<! :<!
--- :doc create a task for feature-id, returning the :task-id
+-- :doc create a task for story-id, returning the :task-id
 INSERT INTO tasks
 (title, description, orig_est, curr_est, elapsed, remain, velocity,
- feature_id, priority_id, status_id)
+ story_id, priority_id, status_id)
 VALUES (:title, :description, :orig-est, :curr-est, :elapsed, :remain,
-        :velocity, :feature-id, :priority-id, :status-id)
+        :velocity, :story-id, :priority-id, :status-id)
 RETURNING task_id;
 
 -- :name update-task! :! :n
 -- :doc update task by task-id
 UPDATE tasks
-SET feature_id = :feature-id,
+SET story_id = :story-id,
     title = :title,
     description = :description,
     orig_est = :orig-est,

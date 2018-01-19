@@ -16,7 +16,7 @@
    :elapsed s/Int
    :remain s/Int
    :velocity (s/maybe s/Num)
-   :feature-id s/Int
+   :story-id s/Int
    :priority-id s/Int
    :status-id s/Int
    (s/optional-key :status-name) s/Str
@@ -51,7 +51,7 @@
   (ok (db/get-task params)))
 
 (defn get-tasks
-  "get tasks by feature-id"
+  "get tasks by story-id"
   [params]
   (ok (db/get-tasks params)))
 

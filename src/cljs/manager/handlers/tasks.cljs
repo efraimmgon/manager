@@ -10,8 +10,8 @@
 
 (def task-model
   {:task-id :int
-   :feature-id :int
-   :status :keyword
+   :story-id :int
+   :status :int
    :title :str
    :orig-est :float
    :curr-est :float
@@ -19,19 +19,19 @@
    :created-at :timestamp
    :update-at :timestamp})
 
-(defn task-defaults [task feature-id]
+(defn task-defaults [task story-id]
   (-> task
-      (update :feature-id #(or % feature-id))
+      (update :story-id #(or % story-id))
       (update :created-at #(or % (js/Date.)))
       (assoc :updated-at (js/Date.))))
 
-(defn create-task! [ls-key feature-id task]
+(defn create-task! [ls-key story-id task]
   (ls/insert!
    {:into ls-key
     :id :task-id
     ;; update task with default fields
-    ;; assign the feature-id to the task
-    :keyvals (task-defaults task feature-id)}))
+    ;; assign the story-id to the task
+    :keyvals (task-defaults task story-id)}))
 
 (defn update-task! [ls-key task]
   (ls/update!
@@ -57,11 +57,11 @@
 
 (reg-event-fx
  :create-task
- (fn [{:keys [db]} [_ project-id feature-id task]]
-   (ajax/POST (str "/api/features/" feature-id "/tasks")
-              {:params (assoc (task-defaults task feature-id) :feature-id feature-id)
+ (fn [{:keys [db]} [_ project-id story-id task]]
+   (ajax/POST (str "/api/stories/" story-id "/tasks")
+              {:params (assoc (task-defaults task story-id) :story-id story-id)
                :handler #(navigate! (str "/projects/" project-id
-                                         "/features/" feature-id))
+                                         "/stories/" story-id))
                :error-handler #(dispatch [:ajax-error %])})
    nil))
 
@@ -73,7 +73,7 @@
      (ls/delete!
       {:from (:ls-tasks db)
        :where #(= (:task-id %) task-id)}))
-   {:db (update-in db [:features :feature :tasks] dissoc task-id)}))
+   {:db (update-in db [:stories :story :tasks] dissoc task-id)}))
 
 (reg-event-fx
  :edit-task
@@ -81,7 +81,7 @@
    (ajax/PUT "/api/tasks"
              {:params task
               :handler #(navigate! (str "/projects/" project-id
-                                        "/features/" (:feature-id task)))
+                                        "/stories/" (:story-id task)))
               :error-handler #(dispatch [:ajax-error %])})
    nil))
 
@@ -97,13 +97,13 @@
 
 (reg-event-fx
  :tasks/load-tasks-for
- (fn [{:keys [db]} [_ feature-id]]
+ (fn [{:keys [db]} [_ story-id]]
    (let [;; we want the tasks as a map with the id as key
          tasks
          (reduce (fn [acc task]
                    (assoc acc (:task-id task) task))
                  {} (ls/select {:from (:ls-tasks db)
-                                :where #(= (:feature-id %) feature-id)}))]
+                                :where #(= (:story-id %) story-id)}))]
      {:dispatch [:tasks/set-tasks tasks]})))
 
 (reg-event-fx
@@ -134,4 +134,4 @@
 (reg-event-db
  :tasks/set-tasks
  (fn [db [_ tasks]]
-   (assoc-in db [:features :feature :tasks] tasks)))
+   (assoc-in db [:stories :story :tasks] tasks)))

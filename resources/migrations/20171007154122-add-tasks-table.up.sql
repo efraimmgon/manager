@@ -5,7 +5,7 @@ CREATE TABLE tasks (
   orig_est    INT,
   curr_est    INT,
   velocity    NUMERIC,
-  feature_id  INT       NOT NULL REFERENCES features (feature_id),
+  story_id    INT       NOT NULL REFERENCES stories (story_id),
   status_id   INT       NOT NULL REFERENCES status (status_id),
   created_at  TIMESTAMP NOT NULL DEFAULT (now() AT TIME ZONE 'utc'),
   updated_at  TIMESTAMP NOT NULL DEFAULT (now() AT TIME ZONE 'utc')

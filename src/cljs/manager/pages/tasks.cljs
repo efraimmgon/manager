@@ -126,14 +126,14 @@
 
 (defn new-task-page []
   (r/with-let [project (rf/subscribe [:project])
-               feature (rf/subscribe [:feature])
+               story (rf/subscribe [:story])
                task (rf/subscribe [:task])]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
        :title (:title @project)}
-      {:href (str "/projects/" (:project-id @project) "/features/" (:feature-id @feature))
-       :title (:title @feature)}
+      {:href (str "/projects/" (:project-id @project) "/stories/" (:story-id @story))
+       :title (:title @story)}
       {:title "New task", :active? true}]
      [:div.panel.panel-default
       [:div.panel-heading
@@ -142,22 +142,22 @@
        [form-template]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:create-task (:project-id @project) (:feature-id @feature) @task])}
+         {:on-click #(rf/dispatch [:create-task (:project-id @project) (:story-id @story) @task])}
          "Create"]]]]]))
 
 (defn edit-task-page []
   (r/with-let [project (rf/subscribe [:project])
-               feature (rf/subscribe [:feature])
+               story (rf/subscribe [:story])
                task (rf/subscribe [:task])]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
        :title (:title @project)}
-      {:href (str "/projects/" (:project-id @project) "/features/" (:feature-id @feature))
-       :title (:title @feature)}
+      {:href (str "/projects/" (:project-id @project) "/stories/" (:story-id @story))
+       :title (:title @story)}
       {:title (:title @task)
        :href (str "/projects/" (:project-id @project)
-                  "/features/" (:feature-id @feature)
+                  "/stories/" (:story-id @story)
                   "/tasks/" (:task-id @task))
        :active? true}]
      [:div.panel.panel-default
@@ -167,18 +167,18 @@
        [form-template]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:edit-task (:project-id @project) (assoc @task :feature-id (:feature-id @feature))])}
+         {:on-click #(rf/dispatch [:edit-task (:project-id @project) (assoc @task :story-id (:story-id @story))])}
          "Update"]]]]]))
 
-(defn edit-feature-button [project feature]
+(defn edit-story-button [project story]
   [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
-                               "/features/" (:feature-id @feature) "/edit")}
+                               "/stories/" (:story-id @story) "/edit")}
    [:i.glyphicon.glyphicon-edit]
    " Edit"])
 
-(defn new-task-button [project feature]
+(defn new-task-button [project story]
   [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
-                               "/features/" (:feature-id @feature)
+                               "/stories/" (:story-id @story)
                                "/tasks/new")}
    [:i.glyphicon.glyphicon-plus]
    " New task"])
@@ -195,13 +195,13 @@
         {:class (when (= (:status-id task) 2) "list-group-item-success")}
         [:h3
          [:a {:href (str "/projects/" (:project-id @project)
-                         "/features/" (:feature-id task)
+                         "/stories/" (:story-id task)
                          "/tasks/" (:task-id task) "/edit")}
           (:title task)]
          [:div.pull-right
           (:priority-id task)
           [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
-                                       "/features/" (:feature-id task)
+                                       "/stories/" (:story-id task)
                                        "/tasks/" (:task-id task) "/edit")}
            [:i.glyphicon.glyphicon-edit]]
           [:button.btn.btn-link {:on-click #(rf/dispatch [:delete-task (:task-id task)])}
@@ -225,23 +225,23 @@
         [edit-project-button project]]]
       [list-tasks project tasks]]]))
 
-(defn feature-tasks-page
-  "Template listing all the feature's tasks"
+(defn story-tasks-page
+  "Template listing all the story's tasks"
   []
   (r/with-let [project (rf/subscribe [:project])
-               feature (rf/subscribe [:feature])
+               story (rf/subscribe [:story])
                tasks (rf/subscribe [:tasks])]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
        :title (:title @project)}
-      {:href (str "/projects/" (:project-id @project) "/features/" (:feature-id @feature))
-       :title (:title @feature)
+      {:href (str "/projects/" (:project-id @project) "/stories/" (:story-id @story))
+       :title (:title @story)
        :active? true}]
      [:div.panel.panel-default
       [:div.panel-heading
-       [:h2 (:title @feature) " (" (count (<sub [:uncompleted-tasks])) ")"
-        [edit-feature-button project feature]
+       [:h2 (:title @story) " (" (count (<sub [:uncompleted-tasks])) ")"
+        [edit-story-button project story]
         [:div.pull-right
-         [new-task-button project feature]]]]
+         [new-task-button project story]]]]
       [list-tasks project tasks]]]))

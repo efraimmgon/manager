@@ -1,5 +1,5 @@
-CREATE TABLE features (
-  feature_id  SERIAL PRIMARY KEY,
+CREATE TABLE stories (
+  story_id  SERIAL PRIMARY KEY,
   title       TEXT,
   description TEXT,
   project_id  INTEGER REFERENCES projects (project_id),

@@ -4,7 +4,7 @@
    [manager.db :as db]
    [manager.routes :refer [navigate!]]
    [manager.handlers.tasks]
-   [manager.handlers.features]
+   [manager.handlers.stories]
    [manager.handlers.projects]
    [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub subscribe]]
    [stand-lib.handlers]
@@ -108,7 +108,7 @@
  (fn [db _]
    db))
 
-(reg-sub :ls-features query)
+(reg-sub :ls-stories query)
 
 (reg-sub :ls-tasks query)
 

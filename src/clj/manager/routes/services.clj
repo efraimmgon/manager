@@ -8,7 +8,7 @@
    [buddy.auth :refer [authenticated?]]
    [manager.routes.services.priorities :as priorities]
    [manager.routes.services.projects :as projects]
-   [manager.routes.services.features :as features]
+   [manager.routes.services.stories :as stories]
    [manager.routes.services.status :as status]
    [manager.routes.services.tasks :as tasks]))
 
@@ -96,60 +96,60 @@
             (projects/delete-project! {:project-id project-id}))
 
 
-    ;;; FEATURES
+    ;;; stories
 
     ; LIST
-    (GET "/projects/:project-id/features" []
+    (GET "/projects/:project-id/stories" []
          :path-params [project-id :- s/Int]
-         :return [features/Feature]
-         :summary "get features by project-id"
-         (features/get-features-by-project {:project-id project-id}))
+         :return [stories/story]
+         :summary "get stories by project-id"
+         (stories/get-stories-by-project {:project-id project-id}))
 
     ; CREATE
-    (POST "/projects/:project-id/features" []
+    (POST "/projects/:project-id/stories" []
           :path-params [project-id  :- s/Int]
           :body-params [title       :- s/Str
                         description :- s/Str]
-          :return [{:feature-id s/Int}]
-          :summary "create a new feature for project-id"
-          (features/create-feature!
+          :return [{:story-id s/Int}]
+          :summary "create a new story for project-id"
+          (stories/create-story!
            {:project-id project-id
             :title title
             :description description}))
 
     ; READ
-    (GET "/features/:feature-id" []
-         :path-params [feature-id :- s/Int]
-         :return features/Feature
-         :summary "get features by project-id"
-         (features/get-feature {:feature-id feature-id}))
+    (GET "/stories/:story-id" []
+         :path-params [story-id :- s/Int]
+         :return stories/story
+         :summary "get stories by project-id"
+         (stories/get-story {:story-id story-id}))
 
     ; UPDATE
-    (PUT "/features" []
-         :body-params [feature-id :- s/Int
+    (PUT "/stories" []
+         :body-params [story-id :- s/Int
                        title :- s/Str
                        description :- s/Str]
          :return s/Int
-         :summary "update feature by feature-id"
-         (features/update-feature!
-          {:feature-id feature-id
+         :summary "update story by story-id"
+         (stories/update-story!
+          {:story-id story-id
            :title title
            :description description}))
 
     ; DELETE
-    (DELETE "/features" []
-            :body-params [feature-id :- s/Int]
+    (DELETE "/stories" []
+            :body-params [story-id :- s/Int]
             :return s/Int
-            :summary "delete feature by feature-id"
-            (features/delete-feature!
-             {:feature-id feature-id}))
+            :summary "delete story by story-id"
+            (stories/delete-story!
+             {:story-id story-id}))
 
     ;;; TASKS
 
     ; CREATE
 
-    (POST "/features/:feature-id/tasks" []
-          :body-params [feature-id  :- s/Int
+    (POST "/stories/:story-id/tasks" []
+          :body-params [story-id  :- s/Int
                         title       :- s/Str
                         description :- s/Str
                         orig-est    :- s/Int
@@ -159,9 +159,9 @@
                         priority-id :- s/Int
                         status-id   :- s/Int]
           :return [{:task-id s/Int}]
-          :summary "create a task for feature-id"
+          :summary "create a task for story-id"
           (tasks/create-task!
-           {:feature-id feature-id
+           {:story-id story-id
             :title title
             :description description
             :orig-est orig-est
@@ -172,12 +172,12 @@
             :status-id status-id}))
 
     ; LIST
-    (GET "/features/:feature-id/tasks" []
-         :path-params [feature-id :- s/Int]
+    (GET "/stories/:story-id/tasks" []
+         :path-params [story-id :- s/Int]
          :return [tasks/Task]
-         :summary "get tasks by feature-id"
+         :summary "get tasks by story-id"
          (tasks/get-tasks
-          {:feature-id feature-id}))
+          {:story-id story-id}))
 
     ; READ
     (GET "/tasks/:task-id" []
@@ -189,7 +189,7 @@
     ; UPDATE
     (PUT "/tasks" []
          :body-params [task-id     :- s/Int
-                       feature-id  :- s/Int
+                       story-id  :- s/Int
                        title       :- s/Str
                        description :- s/Str
                        orig-est    :- s/Int
@@ -202,7 +202,7 @@
          :summary "update task by task-id"
          (tasks/update-task!
           {:task-id task-id
-           :feature-id feature-id
+           :story-id story-id
            :title title
            :description description
            :orig-est orig-est

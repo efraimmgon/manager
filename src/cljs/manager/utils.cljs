@@ -6,7 +6,7 @@
 (defn done? [x]
   (= :done (:status x)))
 
-(defn feature-estimate [feat]
+(defn story-estimate [feat]
   (->> (:tasks feat)
        (filter (comp #{:done} :status))
        (map :curr-est)

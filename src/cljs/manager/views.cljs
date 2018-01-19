@@ -4,7 +4,7 @@
    [re-frame.core :as rf]
    [manager.components :refer [base breadcrumbs]]
    [manager.events]
-   [manager.pages.features :as features]
+   [manager.pages.stories :as stories]
    [manager.pages.projects :as projects]
    [manager.pages.tasks :as tasks]
    [stand-lib.components :refer [thead tbody]]
@@ -45,18 +45,18 @@
          " Create project"]
         (when @project
           [:li
-           [features/new-feature-button project]])]]]]))
+           [stories/new-story-button project]])]]]]))
 
 (def pages
   {:home #'projects/projects-page
    :new-project #'projects/new-project-page
    :edit-project #'projects/edit-project-page
-   :project #'features/project-features-page
+   :project #'stories/project-stories-page
    :project-tasks #'tasks/project-tasks-page
-   :new-feature #'features/new-feature-page
-   :edit-feature #'features/edit-feature-page
-   ; :feature-tasks #'tasks/feature-tasks-page
-   :feature-tasks #'features/edit-feature-page
+   :new-story #'stories/new-story-page
+   :edit-story #'stories/edit-story-page
+   ; :story-tasks #'tasks/story-tasks-page
+   :story-tasks #'stories/edit-story-page
    :new-task #'tasks/new-task-page
    :edit-task #'tasks/edit-task-page})
 

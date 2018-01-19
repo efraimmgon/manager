@@ -11,7 +11,7 @@
                 {:id :moderate, :name "Moderate" :idx 5},
                 {:id :low, :name "Low" :idx 6},
                 {:id :dont-fix, :name "Don't fix" :idx 7}]
-   :features {:show-completed? false}
+   :stories {:show-completed? false}
    ;; dev only:
-   :ls-features :manager/features
+   :ls-stories :manager/stories
    :ls-tasks :manager/tasks})

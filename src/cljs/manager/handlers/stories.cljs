@@ -15,6 +15,7 @@
    :priority-id :int
    :status :int
    :title :str
+   :type :int
    :description :str
    :created-at :timestamp
    :update-at :timestamp})

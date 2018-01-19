@@ -11,6 +11,9 @@
                 {:id :moderate, :name "Moderate" :idx 5},
                 {:id :low, :name "Low" :idx 6},
                 {:id :dont-fix, :name "Don't fix" :idx 7}]
+   :type [{:name "feature", :idx 1}
+          {:name "bug", :idx 2}
+          {:name "chore", :idx 3}]
    :stories {:show-completed? false}
    ;; dev only:
    :ls-stories :manager/stories

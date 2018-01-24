@@ -107,7 +107,7 @@
      {:dispatch [:tasks/set-tasks tasks]})))
 
 (reg-event-fx
- :load-project-tasks
+ :projects/load-project-tasks
  (fn [_ [_ project-id]]
    (ajax/GET (str "/api/projects/" project-id "/tasks/unfineshed")
              {:handler #(dispatch [:set-tasks %])

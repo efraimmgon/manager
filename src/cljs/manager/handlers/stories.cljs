@@ -4,7 +4,7 @@
    [manager.db :as db]
    [manager.handlers.tasks :refer [create-task! update-task!]]
    [manager.routes :refer [navigate!]]
-   [manager.utils :refer [temp-id? done?]]
+   [manager.utils :refer [temp-id? done? interceptors]]
    [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub]]
    [stand-lib.local-store :as ls]
    [stand-lib.re-frame.utils :refer [query]]))
@@ -84,6 +84,7 @@
 
 (reg-event-db
  :stories/story-tasks-tick
+ interceptors
  (fn [db _]
    (let [temp-id (keyword (gensym "task-id"))]
      (update-in db [:stories :story :tasks]
@@ -93,37 +94,35 @@
 
 (reg-event-db
  :stories/cancel-task
- (fn [db [_ idx]]
+ interceptors
+ (fn [db [idx]]
    (-> (update-in db [:stories :story :tasks] dissoc idx)
        (update-in [:stories :story-tasks-indexes] disj idx))))
 
 
 (reg-event-db
  :stories/close-story
+ interceptors
  (fn [db _]
    (update db :stories dissoc
            :story :story-tasks-counter :story-tasks-indexes)))
 
 (reg-event-fx
- :stories/create-story
- (fn [{:keys [db]} [_ project-id story]]
-   (let [tasks (:tasks story)
-         newstory
-         (ls/insert!
-          {:into (:ls-stories db)
-           :id :story-id
-           ;; update story with default fields
-           ;; assign the project-id to the story
-           :keyvals (dissoc (story-defaults (assoc story :project-id project-id)) :tasks)})]
-     (doseq [task (vals (:tasks story))]
-       (create-task!
-        (:ls-tasks db) (:story-id newstory) task))
-     {:dispatch [:navigate (str "/projects/" project-id)]})))
+ :stories/create-story-with-tasks
+ interceptors
+ (fn [{:keys [db]} [project-id story]]
+   (ajax/PUT (str "/api/projects/" project-id "stories")
+             {:params story
+              :handler #(prn %)
+              :error-handler #(dispatch [:ajax-error %])})
+   nil))
+    ; {:dispatch [:navigate (str "/projects/" project-id)]})))
 
 ;;; Delete stories and their tasks
 (reg-event-fx
  :stories/delete-story
- (fn [{:keys [db]} [_ project-id story-id]]
+ interceptors
+ (fn [{:keys [db]} [project-id story-id]]
    (ls/delete!
     {:from (:ls-stories db)
      :where #(= (:story-id %) story-id)})
@@ -136,7 +135,8 @@
 ;;; Create new tasks
 (reg-event-fx
  :stories/update-story
- (fn [{:keys [db]} [_ story]]
+ interceptors
+ (fn [{:keys [db]} [story]]
    (ls/update! (:ls-stories db)
                {:set (dissoc (story-defaults story)
                              :tasks)
@@ -151,30 +151,37 @@
 
 (reg-event-fx
  :stories/load-story
- (fn [{:keys [db]} [_ story-id]]
+ interceptors
+ (fn [{:keys [db]} [story-id]]
    {:dispatch [:stories/set-story
                (first
                  (ls/select {:from (:ls-stories db)
                              :where #(= (:story-id %) story-id)}))]}))
 (reg-event-fx
  :stories/load-stories-for
- (fn [{:keys [db]} [_ project-id]]
-   (let [feats (ls/select {:from (:ls-stories db)
-                           :where #(= (:project-id %) project-id)
-                           :order-by [:priority-idx <]})]
-     {:dispatch [:stories/set-stories feats]})))
+ interceptors
+ (fn [{:keys [db]} [project-id]]
+   (ajax/GET (str "/api/projects/" project-id "/stories")
+             {:handler #(dispatch [:stories/set-stories %])
+              :error-handler #(dispatch [:ajax-error %])
+              :response-format :json
+              :keywords? true})
+   nil))
 
 (reg-event-db
  :stories/set-stories
- (fn [db [_ stories]]
+ interceptors
+ (fn [db [stories]]
    (assoc-in db [:stories :all] stories)))
 
 (reg-event-db
  :stories/set-story
- (fn [db [_ story]]
+ interceptors
+ (fn [db [story]]
    (assoc-in db [:stories :story] story)))
 
 (reg-event-db
  :stories/toggle-show-completed
+ interceptors
  (fn [db _]
    (update-in db [:stories :show-completed?] not)))

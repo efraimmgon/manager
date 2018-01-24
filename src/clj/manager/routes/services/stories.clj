@@ -6,10 +6,25 @@
   (:import
    [org.joda.time]))
 
+(def NewStoryWithTasks
+  {:project-id s/Int
+   :title s/Str
+   :description s/Str
+   :type s/Int
+   :priority-idx s/Int
+   :status s/Str
+   :tasks [{:title s/Str
+            :orig-est s/Int
+            :curr-est s/Int
+            :status s/Str}]})
+
 (def story
   {:story-id s/Int
    :project-id s/Int
+   :priority-idx s/Int
+   :status s/Str
    :title s/Str
+   :type s/Int
    :description s/Str
    :created-at org.joda.time.DateTime
    :updated-at org.joda.time.DateTime

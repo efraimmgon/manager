@@ -5,7 +5,7 @@ LEFT OUTER JOIN (
   SELECT t.story_id, COUNT(t.*) AS pending_task_count FROM tasks t
   JOIN stories st ON t.story_id = st.story_id
   WHERE st.project_id = :project-id
-    AND s.name != 'done'
+    AND st.status != 'done'
   GROUP BY t.story_id
 ) AS t ON t.story_id = st.story_id
 WHERE st.project_id = :project-id;
@@ -18,8 +18,8 @@ WHERE st.story_id = :story-id;
 -- :name create-story<! :<!
 -- :doc create a story for :project-id, returning the :story-id
 INSERT INTO stories
-(title, description, project_id)
-VALUES (:title, :description, :project-id)
+(title, description, project_id, priority_idx, status, type)
+VALUES (:title, :description, :project-id, :priority-idx, :status, :type)
 RETURNING story_id;
 
 -- :name update-story! :! :n

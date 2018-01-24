@@ -108,14 +108,10 @@
     ; CREATE
     (POST "/projects/:project-id/stories" []
           :path-params [project-id  :- s/Int]
-          :body-params [title       :- s/Str
-                        description :- s/Str]
+          :body [new-story stories/NewStoryWithTasks]
           :return [{:story-id s/Int}]
           :summary "create a new story for project-id"
-          (stories/create-story!
-           {:project-id project-id
-            :title title
-            :description description}))
+          (stories/create-story! new-story))
 
     ; READ
     (GET "/stories/:story-id" []

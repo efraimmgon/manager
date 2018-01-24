@@ -28,10 +28,13 @@
     [:input edited-attrs]))
 
 (defn form-template []
-  (r/with-let [story (rf/subscribe [:stories/story])
+  (r/with-let [project (rf/subscribe [:project])
+               story (rf/subscribe [:stories/story])
                priorities (rf/subscribe [:priorities])
                types (rf/subscribe [:types])]
     [:div.form-horizontal
+     (when-not (:project-id @story)
+       (rf/dispatch [:set-state :stories.story/project-id (:project-id @project)]))
      (when (:story-id @story)
        [form-group
         "story id"
@@ -184,7 +187,7 @@
         " Add task"]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:stories/create-story (:project-id @project) @story])}
+         {:on-click #(rf/dispatch [:stories/create-story-with-tasks (:project-id @project) @story])}
          "Create"]]]]]))
 
 (defn new-story-button [project]

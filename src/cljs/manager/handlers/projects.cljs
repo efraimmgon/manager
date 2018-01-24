@@ -3,6 +3,7 @@
    [ajax.core :as ajax]
    [manager.db :as db]
    [manager.routes :refer [navigate!]]
+   [manager.utils :refer [interceptors]]
    [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub]]
    [stand-lib.re-frame.utils :refer [query]]))
 
@@ -22,13 +23,15 @@
 ; ------------------------------------------------------------------------------
 
 (reg-event-db
- :close-project
+ :projects/close-project
+ interceptors
  (fn [db _]
    (dissoc db :project)))
 
 (reg-event-fx
  :create-project
- (fn [{:keys [db]} [_ project]]
+ interceptors
+ (fn [{:keys [db]} [project]]
    (ajax/POST "/api/projects"
               {:params (project-defaults project)
                :handler #(navigate! (str "/projects/" (:project-id (first %))))
@@ -37,7 +40,8 @@
 
 (reg-event-fx
  :delete-project
- (fn [{:keys [db]} [_ project-id]]
+ interceptors
+ (fn [{:keys [db]} [project-id]]
    (ajax/DELETE "/api/projects"
                 {:params {:project-id project-id}
                  :handler #(navigate! "/")
@@ -46,7 +50,8 @@
 
 (reg-event-fx
  :edit-project
- (fn [{:keys [db]} [_ project]]
+ interceptors
+ (fn [{:keys [db]} [project]]
    (ajax/PUT "/api/projects"
              {:params (select-keys project [:project-id :title :description])
               :handler #(navigate! (str "/projects/" (:project-id project)))
@@ -54,8 +59,9 @@
    nil))
 
 (reg-event-fx
- :load-project
- (fn [{:keys [db]} [_ project-id]]
+ :projects/load-project
+ interceptors
+ (fn [{:keys [db]} [project-id]]
    ; GET project by id
    (ajax/GET (str "/api/projects/" project-id)
              {:handler #(dispatch [:set-project %])
@@ -65,7 +71,8 @@
    nil))
 
 (reg-event-fx
- :load-projects
+ :projects/load-projects
+ interceptors
  (fn [{:keys [db]} _]
    ; GET all projects
    (ajax/GET "/api/projects"
@@ -77,10 +84,12 @@
 
 (reg-event-db
  :set-project
- (fn [db [_ project]]
+ interceptors
+ (fn [db [project]]
    (assoc db :project project)))
 
 (reg-event-db
  :set-projects
- (fn [db [_ projects]]
+ interceptors
+ (fn [db [projects]]
    (assoc db :projects projects)))

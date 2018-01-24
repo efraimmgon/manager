@@ -13,7 +13,7 @@
 (s/def :common/priority-idx number?)
 (s/def :common/status int?)
 (s/def :common/type int?)
-(s/def :common/created-at inst?)
+(s/def :common/created-at string?) ; ISO String
 (s/def :common/updated-at :common/created-at)
 
 ;;; Status
@@ -71,12 +71,13 @@
                         :common/description
                         :common/created-at
                         :common/updated-at]))
-(s/def :projects/projects (s/* :projects/project))
-(s/def ::projects (s/keys :req-un [:project/projects :projects/project]))
+(s/def :projects/all (s/* :projects/project))
+(s/def ::projects (s/keys :opt-un [:project/all :projects/project]))
 
 (s/def ::page keyword?)
 
-(s/def ::db (s/keys :req-un [::page ::status ::priorities ::types ::stories]))
+(s/def ::db (s/keys :req-un [::page ::status ::priorities ::types ::stories]
+                    :opt-un [::projects]))
 
 ; ------------------------------------------------------------------------------
 ; app-db

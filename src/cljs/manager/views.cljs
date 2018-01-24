@@ -11,7 +11,7 @@
    [stand-lib.re-frame.utils :refer [<sub]]))
 
 (defn navbar []
-  (r/with-let [project (rf/subscribe [:project])]
+  (r/with-let [project (rf/subscribe [:projects/project])]
     [:nav.navbar.navbar-inverse
      [:div.container-fluid
       [:div.navbar-header

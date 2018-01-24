@@ -125,7 +125,7 @@
             " " (:name status)]))]]]))
 
 (defn new-task-page []
-  (r/with-let [project (rf/subscribe [:project])
+  (r/with-let [project (rf/subscribe [:projects/project])
                story (rf/subscribe [:story])
                task (rf/subscribe [:task])]
     [base
@@ -146,7 +146,7 @@
          "Create"]]]]]))
 
 (defn edit-task-page []
-  (r/with-let [project (rf/subscribe [:project])
+  (r/with-let [project (rf/subscribe [:projects/project])
                story (rf/subscribe [:story])
                task (rf/subscribe [:task])]
     [base
@@ -211,7 +211,7 @@
 (defn project-tasks-page
   "Template listing all project's tasks"
   []
-  (r/with-let [project (rf/subscribe [:project])
+  (r/with-let [project (rf/subscribe [:projects/project])
                tasks (rf/subscribe [:tasks])]
     [base
      [breadcrumbs
@@ -228,7 +228,7 @@
 (defn story-tasks-page
   "Template listing all the story's tasks"
   []
-  (r/with-let [project (rf/subscribe [:project])
+  (r/with-let [project (rf/subscribe [:projects/project])
                story (rf/subscribe [:story])
                tasks (rf/subscribe [:tasks])]
     [base

@@ -9,7 +9,7 @@
     [handle-change-at]]))
 
 (defn form-template []
-  (r/with-let [project (rf/subscribe [:project])]
+  (r/with-let [project (rf/subscribe [:projects/project])]
     [:div.form-horizontal
      (when (:project-id @project)
        [form-group
@@ -48,7 +48,7 @@
 (defn new-project-page
   "Template to CREATE a project"
   []
-  (r/with-let [project (rf/subscribe [:project])]
+  (r/with-let [project (rf/subscribe [:projects/project])]
     [base
      [breadcrumbs
       {:title "New project"
@@ -66,7 +66,7 @@
 (defn edit-project-page
   "Template to EDIT a project"
   []
-  (r/with-let [project (rf/subscribe [:project])]
+  (r/with-let [project (rf/subscribe [:projects/project])]
     [base
      [breadcrumbs
       {:title (:title @project),
@@ -85,7 +85,7 @@
 (defn projects-page
   "Template to LIST all projects"
   []
-  (r/with-let [projects (rf/subscribe [:projects])]
+  (r/with-let [projects (rf/subscribe [:projects/all])]
     [base
      [breadcrumbs]
      [:div.panel.panel-default

@@ -28,7 +28,7 @@
     [:input edited-attrs]))
 
 (defn form-template []
-  (r/with-let [project (rf/subscribe [:project])
+  (r/with-let [project (rf/subscribe [:projects/project])
                story (rf/subscribe [:stories/story])
                priorities (rf/subscribe [:priorities])
                types (rf/subscribe [:types])]
@@ -139,7 +139,7 @@
 ; with an id are updated
 ; Optionally I can use the on-blur event to persist changes
 (defn edit-story-page []
-  (r/with-let [project (rf/subscribe [:project])
+  (r/with-let [project (rf/subscribe [:projects/project])
                story (rf/subscribe [:stories/story])]
     [base
      [breadcrumbs
@@ -167,7 +167,7 @@
          "Update"]]]]]))
 
 (defn new-story-page []
-  (r/with-let [project (rf/subscribe [:project])
+  (r/with-let [project (rf/subscribe [:projects/project])
                story (rf/subscribe [:stories/story])]
     [base
      [breadcrumbs
@@ -215,7 +215,7 @@
         [:p (:description story)]]))])
 
 (defn project-stories-page []
-  (r/with-let [project (rf/subscribe [:project])
+  (r/with-let [project (rf/subscribe [:projects/project])
                pending-stories (rf/subscribe [:stories/pending])
                done-stories (rf/subscribe [:stories/done])
                show-completed-stories? (rf/subscribe [:stories/show-completed?])]

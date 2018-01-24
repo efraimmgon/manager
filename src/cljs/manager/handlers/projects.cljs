@@ -14,9 +14,9 @@
 ; Subs
 ; ------------------------------------------------------------------------------
 
-(reg-sub :projects query)
+(reg-sub :projects/all query)
 
-(reg-sub :project query)
+(reg-sub :projects/project query)
 
 ; ------------------------------------------------------------------------------
 ; Events
@@ -86,10 +86,10 @@
  :set-project
  interceptors
  (fn [db [project]]
-   (assoc db :project project)))
+   (assoc-in db [:projects :project] project)))
 
 (reg-event-db
  :set-projects
  interceptors
  (fn [db [projects]]
-   (assoc db :projects projects)))
+   (assoc-in db [:projects :all] projects)))

@@ -18,6 +18,8 @@
 
 (reg-sub :projects/project query)
 
+(reg-sub :projects/new-project query)
+
 ; ------------------------------------------------------------------------------
 ; Events
 ; ------------------------------------------------------------------------------
@@ -26,7 +28,7 @@
  :projects/close-project
  interceptors
  (fn [db _]
-   (dissoc db :project)))
+   (update db :projects dissoc :project :new-project)))
 
 (reg-event-fx
  :create-project

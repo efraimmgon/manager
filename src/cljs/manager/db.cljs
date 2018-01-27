@@ -10,9 +10,9 @@
 (s/def ::idx int?)
 (s/def ::title string?)
 (s/def ::description string?)
-(s/def ::priority-idx number?)
-(s/def ::status int?)
-(s/def ::type int?)
+(s/def ::priority-idx (s/int-in 1 8))
+(s/def ::status #{"done" "pending"})
+(s/def ::type (s/int-in 1 4))
 (s/def ::created-at string?) ; ISO String
 (s/def ::updated-at ::created-at)
 
@@ -51,7 +51,7 @@
 (s/def :stories/show-completed? boolean?)
 (s/def :stories/story
        (s/keys :req-un [:story/story-id
-                        :project/project-id,
+                        :project/project-id
                         ::title
                         ::description
                         ::priority-idx
@@ -59,6 +59,13 @@
                         ::type
                         ::created-at
                         ::updated-at]))
+(s/def :stories/new-story
+       (s/keys :req-un [:project/project-id
+                        ::title
+                        ::description
+                        ::priority-idx
+                        ::status
+                        ::type]))
 (s/def :stories/stories (s/* :stories/story))
 (s/def ::stories (s/keys :req-un [:stories/show-completed?]
                          :opt-un [:stories/stories]))
@@ -66,13 +73,20 @@
 ;;; Project ns
 (s/def :project/project-id int?)
 (s/def :projects/project
-       (s/keys :req-un [:project/project-id,
-                        ::title,
+       (s/keys :req-un [:project/project-id
+                        ::title
                         ::description
                         ::created-at
                         ::updated-at]))
+(s/def :projects/new-project
+       (s/keys :req-un [::title
+                        ::description]))
 (s/def :projects/all (s/* :projects/project))
-(s/def ::projects (s/keys :opt-un [:project/all :projects/project]))
+
+(s/def ::projects
+       (s/keys :opt-un [:projects/all
+                        :projects/project
+                        :projects/new-project]))
 
 (s/def ::page keyword?)
 

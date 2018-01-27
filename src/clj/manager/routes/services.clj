@@ -54,7 +54,7 @@
       (POST "/projects" []
             :body-params [title       :- ::domain/title
                           description :- ::domain/description]
-            :return :project/project-id
+            :return (s/keys :req-un [:project/project-id])
             :summary "create a new project"
             (projects/create-project!
              {:title title
@@ -111,12 +111,13 @@
       ; CREATE
       (POST "/projects/:project-id/stories" []
             :path-params [project-id  :- :project/project-id]
-            :body-params [title :- ::domain/title
+            :body-params [project-id  :- :project/project-id
+                          title       :- ::domain/title
                           description :- ::domain/description
-                          type :- ::domain/type
+                          type        :- ::domain/type
                           priority-idx :- ::domain/priority-idx
-                          status :- ::domain/status
-                          tasks :- :tasks.new-without-story/tasks]
+                          status      :- ::domain/status
+                          tasks       :- :tasks.new-without-story/tasks]
             :return (s/keys :req-un [:story/story-id])
             :summary "create a new story for project-id"
             (stories/create-story-with-tasks!

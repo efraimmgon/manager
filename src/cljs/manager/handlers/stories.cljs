@@ -9,17 +9,6 @@
    [stand-lib.local-store :as ls]
    [stand-lib.re-frame.utils :refer [query]]))
 
-(def story-model
-  {:story-id :int
-   :project-id :int
-   :priority-idx :int
-   :status :int
-   :title :str
-   :type :int
-   :description :str
-   :created-at :timestamp
-   :update-at :timestamp})
-
 (defn story-defaults [story]
   (-> story
       (update :description #(or % ""))
@@ -38,6 +27,8 @@
    (filter done? stories)))
 
 (reg-sub :stories/story query)
+
+(reg-sub :stories/new-story query)
 
 (reg-sub :stories/all query)
 
@@ -78,6 +69,12 @@
  (fn [story]
    (vals (:tasks story))))
 
+(reg-sub
+ :stories.new-story/tasks
+ :<- [:stories/new-story]
+ (fn [story]
+   (vals (:tasks story))))
+
 ; ------------------------------------------------------------------------------
 ; Events
 ; ------------------------------------------------------------------------------
@@ -85,34 +82,28 @@
 (reg-event-db
  :stories/story-tasks-tick
  interceptors
- (fn [db _]
+ (fn [db [story-name]]
    (let [temp-id (keyword (gensym "task-id"))]
-     (update-in db [:stories :story :tasks]
+     (update-in db [:stories story-name :tasks]
                 assoc temp-id {:task-id temp-id}))))
-     ; (-> (update-in db [:stories :story-tasks-counter] inc)
-     ;     (update-in [:stories :story-tasks-indexes] (fnil conj #{}) idx))))
-
-(reg-event-db
- :stories/cancel-task
- interceptors
- (fn [db [idx]]
-   (-> (update-in db [:stories :story :tasks] dissoc idx)
-       (update-in [:stories :story-tasks-indexes] disj idx))))
-
 
 (reg-event-db
  :stories/close-story
  interceptors
  (fn [db _]
    (update db :stories dissoc
-           :story :story-tasks-counter :story-tasks-indexes)))
+           :new-story :story :story-tasks-counter :story-tasks-indexes)))
 
 (reg-event-fx
  :stories/create-story-with-tasks
  interceptors
- (fn [{:keys [db]} [project-id story]]
-   (ajax/PUT (str "/api/projects/" project-id "stories")
-             {:params story
+ (fn [{:keys [db]} [story]]
+   (ajax/POST (str "/api/projects/" (:project-id story) "/stories")
+             {:params (update story :tasks
+                              (fn [tasks]
+                                (->> (map #(dissoc % :task-id) (vals tasks))
+                                     (map #(if (:status %) %
+                                             (assoc % :status "pending"))))))  
               :handler #(prn %)
               :error-handler #(dispatch [:ajax-error %])})
    nil))

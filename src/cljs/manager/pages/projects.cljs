@@ -8,8 +8,7 @@
    [stand-lib.utils.forms :refer
     [handle-change-at]]))
 
-(defn form-template []
-  (r/with-let [project (rf/subscribe [:projects/project])]
+(defn form-template [project ns]
     [:div.form-horizontal
      (when (:project-id @project)
        [form-group
@@ -23,13 +22,13 @@
       [:div.input-group
        [input {:type :text
                :class "form-control"
-               :name :projects.project/title
+               :name (conj ns :title)
                :auto-focus true}]
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"
       [textarea {:class "form-control"
-                 :name :projects.project/description}]]
+                 :name (conj ns :description)}]]
      (when (:created-at @project)
        [form-group
         "Created at"
@@ -43,12 +42,12 @@
         [:input {:class "form-control"
                  :type :text
                  :value (:updated-at @project)
-                 :disabled true}]])]))
+                 :disabled true}]])])
 
 (defn new-project-page
   "Template to CREATE a project"
   []
-  (r/with-let [project (rf/subscribe [:projects/project])]
+  (r/with-let [project (rf/subscribe [:projects/new-project])]
     [base
      [breadcrumbs
       {:title "New project"
@@ -57,7 +56,7 @@
       [:div.panel-heading
        [:h2 "Create project"]]
       [:div.panel-body
-       [form-template]
+       [form-template project [:projects :new-project]]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
          {:on-click #(rf/dispatch [:create-project @project])}
@@ -76,7 +75,7 @@
       [:div.panel-heading
        [:h2 "Edit project"]]
       [:div.panel-body
-       [form-template]
+       [form-template project [:projects :project]]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
          {:on-click #(rf/dispatch [:edit-project @project])}

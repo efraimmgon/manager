@@ -27,32 +27,31 @@
       (rf/dispatch [:update-state (:name attrs) f]))
     [:input edited-attrs]))
 
-(defn form-template []
+(defn form-template [story ns]
   (r/with-let [project (rf/subscribe [:projects/project])
-               story (rf/subscribe [:stories/story])
                priorities (rf/subscribe [:priorities])
                types (rf/subscribe [:types])]
     [:div.form-horizontal
      (when-not (:project-id @story)
-       (rf/dispatch [:set-state :stories.story/project-id (:project-id @project)]))
+       (rf/dispatch [:set-state (conj ns :project-id) (:project-id @project)]))
      (when (:story-id @story)
        [form-group
         "story id"
         [input {:type :text
                 :class "form-control"
-                :name :stories.story/story-id}]])
+                :name (conj ns :story-id)}]])
      [form-group
       "Title"
       [:div.input-group
        [input {:type :text
                :class "form-control"
-               :name :stories.story/title
-               :auto-focus (when-not (:stories.story-id @story) true)}]
+               :name (conj ns :title)
+               :auto-focus (when-not (:story-id @story) true)}]
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"
       [textarea {:class "form-control"
-                 :name :stories.story/description}]]
+                 :name (conj ns :description)}]]
      [form-group
       "Status"
       [:div
@@ -61,15 +60,15 @@
            ^{:key id}
            [:label.radio-inline
             [input {:type :radio
-                    :name :stories.story/status
+                    :name (conj ns :status)
                     :default-checked (and (nil? (:status @story)) default?)
-                    :value id}]
+                    :value name}]
             " " (clojure.string/capitalize name)]))]]
      [form-group
       "Type"
       [:div.input-group
        [select {:class "form-control"
-                :name :stories.story/type
+                :name (conj ns :type)
                 :default-value (:idx (first @types))}
         (for [{:keys [name idx]} @types]
           ^{:key idx}
@@ -80,7 +79,7 @@
       "Priority"
       [:div.input-group
        [select {:class "form-control"
-                :name :stories.story/priority-idx
+                :name (conj ns :priority-idx)
                 :default-value (:idx (first @priorities))}
         (for [{:keys [name idx]} @priorities]
           ^{:key idx}
@@ -92,47 +91,46 @@
         "Created at"
         [input {:type :text
                 :class "form-control"
-                :name :stories.story/created-at
+                :name (conj ns :created-at)
                 :disabled true}]])
      (when (:updated-at @story)
        [form-group
         "Updated at"
         [input {:type :text
                 :class "form-control"
-                :name :stories.story/updated-at
+                :name (conj ns :updated-at)
                 :disabled true}]])]))
 
-(defn task-items []
-  (r/with-let [tasks (rf/subscribe [:stories.story/tasks])]
-    (when (seq @tasks)
-      [:table.table
-       [:thead>tr
-        [:th "Done?"]
-        [:th "Title"]
-        [:th "Original estimate"]
-        [:th "Current estimate"]
-        [:th "Delete"]]
-       [:tbody
-        (for [task @tasks]
-          (let [task-id (:task-id task)
-                input-class (if (done? task) "form-control task-input-done" "form-control")]
-            ^{:key (:task-id task)}
-            [:tr {:class (when (done? task) "task-done")}
-             [:td [checkbox-single-input
-                   {:name [:stories :story :tasks task-id :status]
-                    :value "done"}]]
-             [:td [input {:type :text
-                          :class input-class
-                          :name [:stories :story :tasks task-id :title]}]]
-             [:td [input {:type :number
-                          :class input-class
-                          :name [:stories :story :tasks task-id :orig-est]}]]
-             [:td [input {:type :number
-                          :class input-class
-                          :name [:stories :story :tasks task-id :curr-est]}]]
-             [:td [:button.btn.btn-default
-                   {:on-click #(rf/dispatch [:tasks/delete-task task-id])}
-                   [:i.glyphicon.glyphicon-remove]]]]))]])))
+(defn task-items [tasks story-name]
+  (when (seq @tasks)
+    [:table.table
+     [:thead>tr
+      [:th "Done?"]
+      [:th "Title"]
+      [:th "Original estimate"]
+      [:th "Current estimate"]
+      [:th "Delete"]]
+     [:tbody
+      (for [task @tasks]
+        (let [task-id (:task-id task)
+              input-class (if (done? task) "form-control task-input-done" "form-control")]
+          ^{:key (:task-id task)}
+          [:tr {:class (when (done? task) "task-done")}
+           [:td [checkbox-single-input
+                 {:name [:stories story-name :tasks task-id :status]
+                  :value "done"}]]
+           [:td [input {:type :text
+                        :class input-class
+                        :name [:stories story-name :tasks task-id :title]}]]
+           [:td [input {:type :number
+                        :class input-class
+                        :name [:stories story-name :tasks task-id :orig-est]}]]
+           [:td [input {:type :number
+                        :class input-class
+                        :name [:stories story-name :tasks task-id :curr-est]}]]
+           [:td [:button.btn.btn-default
+                 {:on-click #(rf/dispatch [:tasks/delete-task task-id])}
+                 [:i.glyphicon.glyphicon-remove]]]]))]]))
 
 ; Load story with tasks
 ; When clicked on "update" tasks with no story-id are saved, while tasks
@@ -140,7 +138,8 @@
 ; Optionally I can use the on-blur event to persist changes
 (defn edit-story-page []
   (r/with-let [project (rf/subscribe [:projects/project])
-               story (rf/subscribe [:stories/story])]
+               story (rf/subscribe [:stories/story])
+               tasks (rf/subscribe [:stories.story/tasks])]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
@@ -153,12 +152,12 @@
       [:div.panel-heading
        [:h2 "Edit story"]]
       [:div.panel-body
-       [form-template]
+       [form-template story [:stories :story]]
        [:h3 "Tasks"]
-       [task-items]
+       [task-items tasks :story]
        [:button.btn.btn-default
         ; TODO
-        {:on-click #(rf/dispatch [:stories/story-tasks-tick])}
+        {:on-click #(rf/dispatch [:stories/story-tasks-tick :story])}
         [:i.glyphicon.glyphicon-plus]
         " Add task"]
        [:div.col-sm-offset-2.col-sm-10
@@ -168,7 +167,8 @@
 
 (defn new-story-page []
   (r/with-let [project (rf/subscribe [:projects/project])
-               story (rf/subscribe [:stories/story])]
+               story (rf/subscribe [:stories/new-story])
+               tasks (rf/subscribe [:stories.new-story/tasks])]
     [base
      [breadcrumbs
       {:href (str "/projects/" (:project-id @project))
@@ -178,16 +178,17 @@
       [:div.panel-heading
        [:h2 "Create story"]]
       [:div.panel-body
-       [form-template]
+       [pretty-display story]
+       [form-template story [:stories :new-story]]
        [:h3 "Tasks"]
-       [task-items]
+       [task-items tasks :new-story]
        [:button.btn.btn-default
-        {:on-click #(rf/dispatch [:stories/story-tasks-tick])}
+        {:on-click #(rf/dispatch [:stories/story-tasks-tick :new-story])}
         [:i.glyphicon.glyphicon-plus]
         " Add task"]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:stories/create-story-with-tasks (:project-id @project) @story])}
+         {:on-click #(rf/dispatch [:stories/create-story-with-tasks @story])}
          "Create"]]]]]))
 
 (defn new-story-button [project]

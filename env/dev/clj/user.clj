@@ -6,7 +6,8 @@
    [manager.figwheel :refer [start-fw stop-fw cljs]]
    manager.core
    [manager.db.core :as db]
-   [clojure.tools.namespace.repl :refer [refresh]]))
+   [clojure.tools.namespace.repl :refer [refresh]]
+   [clojure.repl :refer :all]))
 
 (defn start []
   (mount/start-without #'manager.core/repl-server))

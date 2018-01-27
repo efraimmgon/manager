@@ -23,13 +23,13 @@
       [:div.input-group
        [input {:type :text
                :class "form-control"
-               :name :project/title
+               :name :projects.project/title
                :auto-focus true}]
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"
       [textarea {:class "form-control"
-                 :name :project/description}]]
+                 :name :projects.project/description}]]
      (when (:created-at @project)
        [form-group
         "Created at"

@@ -6,71 +6,71 @@
 ; ------------------------------------------------------------------------------
 
 ;;; Common fields
-(s/def :common/name string?)
-(s/def :common/idx int?)
-(s/def :common/title string?)
-(s/def :common/description string?)
-(s/def :common/priority-idx number?)
-(s/def :common/status int?)
-(s/def :common/type int?)
-(s/def :common/created-at string?) ; ISO String
-(s/def :common/updated-at :common/created-at)
+(s/def ::name string?)
+(s/def ::idx int?)
+(s/def ::title string?)
+(s/def ::description string?)
+(s/def ::priority-idx number?)
+(s/def ::status int?)
+(s/def ::type int?)
+(s/def ::created-at string?) ; ISO String
+(s/def ::updated-at ::created-at)
 
 ;;; Status
 (s/def :status/id #{:pending, :done})
-(s/def :status/status (s/keys :req-un [:status/id :common/name :common/idx]))
+(s/def :status/status (s/keys :req-un [:status/id ::name ::idx]))
 (s/def ::status (s/* :status/status))
 
 ;;; Priority
 (s/def :priority/id #{:urgent, :high, :important, :medium, :moderate, :low, :dont-fix})
-(s/def :priorities/priority (s/keys :req-un [:priority/id :common/name :common/idx]))
+(s/def :priorities/priority (s/keys :req-un [:priority/id ::name ::idx]))
 (s/def ::priorities (s/* :priorities/priority))
 
 ;;; Types
-(s/def :types/type (s/keys :req-un [:common/name :common/idx]))
+(s/def :types/type (s/keys :req-un [::name ::idx]))
 (s/def ::types (s/* :types/type))
 
 ;;; Tasks
-(s/def :tasks.task/task-id int?)
-(s/def :tasks.task/orig-est (s/and number? pos?))
-(s/def :tasks.task/curr-est :tasks.task/orig-est)
-(s/def :tasks.task/velocity (s/and #(< 0 %) #(<= % 1)))
+(s/def :task/task-id int?)
+(s/def :task/orig-est (s/and number? pos?))
+(s/def :task/curr-est :task/orig-est)
+(s/def :task/velocity (s/and #(< 0 %) #(<= % 1)))
 (s/def :tasks/task
-       (s/keys :req-un [:tasks.task/task-id
-                        :stories.story/story-id
-                        :common/title
-                        :tasks.task/orig-est
-                        :tasks.task/curr-est
-                        :common/status
-                        :tasks.task/velocity
-                        :common/created-at
-                        :common/updated-at]))
-(s/def ::tasks (s/* :tasks/task))
+       (s/keys :req-un [:task/task-id
+                        :story/story-id
+                        ::title
+                        :task/orig-est
+                        :task/curr-est
+                        ::status
+                        :task/velocity
+                        ::created-at
+                        ::updated-at]))
+(s/def :tasks/tasks (s/* :tasks/task))
 
 ;;; Stories ns
 (s/def :stories/show-completed? boolean?)
 (s/def :stories/story
-       (s/keys :req-un [:stories.story/story-id
-                        :projects.project/project-id,
-                        :common/title
-                        :common/description
-                        :common/priority-idx
-                        :common/status
-                        :common/type
-                        :common/created-at
-                        :common/updated-at]))
+       (s/keys :req-un [:story/story-id
+                        :project/project-id,
+                        ::title
+                        ::description
+                        ::priority-idx
+                        ::status
+                        ::type
+                        ::created-at
+                        ::updated-at]))
 (s/def :stories/stories (s/* :stories/story))
 (s/def ::stories (s/keys :req-un [:stories/show-completed?]
                          :opt-un [:stories/stories]))
 
 ;;; Project ns
-(s/def :projects.project/project-id int?)
+(s/def :project/project-id int?)
 (s/def :projects/project
-       (s/keys :req-un [:projects.project/project-id,
-                        :common/title,
-                        :common/description
-                        :common/created-at
-                        :common/updated-at]))
+       (s/keys :req-un [:project/project-id,
+                        ::title,
+                        ::description
+                        ::created-at
+                        ::updated-at]))
 (s/def :projects/all (s/* :projects/project))
 (s/def ::projects (s/keys :opt-un [:project/all :projects/project]))
 

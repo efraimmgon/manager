@@ -1,17 +1,18 @@
 (ns manager.routes.services
   (:require
+   [clojure.spec.alpha :as s]
+   [spec-tools.core :as st]
+   [spec-tools.spec :as spec]
    [ring.util.http-response :refer :all]
    [compojure.api.sweet :refer :all]
-   [schema.core :as s]
+   [schema.core :as schema]
    [compojure.api.meta :refer [restructure-param]]
    [buddy.auth.accessrules :refer [restrict]]
    [buddy.auth :refer [authenticated?]]
-   [manager.routes.services.priorities :as priorities]
+   [manager.routes.services.domain :as domain]
    [manager.routes.services.projects :as projects]
    [manager.routes.services.stories :as stories]
-   [manager.routes.services.status :as status]
    [manager.routes.services.tasks :as tasks]))
-
 
 (defn access-error [_ _]
   (unauthorized {:error "unauthorized"}))
@@ -28,203 +29,191 @@
   [_ binding acc]
   (update-in acc [:letks] into [binding `(:identity ~'+compojure-api-request+)]))
 
-(defapi service-routes
-  {:swagger {:ui "/swagger-ui"
-             :spec "/swagger.json"
-             :data {:info {:version "1.0.0"
-                           :title "Sample API"
-                           :description "Sample Services"}}}}
+(def service-routes
+  (api
+    {:swagger {:ui "/swagger-ui"
+               :spec "/swagger.json"
+               :data {:info {:version "1.0.0"
+                             :title "Sample API"
+                             :description "Sample Services"}}}}
 
-  (context
-    "/api" []
-    :tags ["private"]
-    ;:coercion :schema
-    ;;; PROJECTS
+    (context
+      "/api" []
+      :tags ["private"]
+      :coercion :spec
 
-    ; LIST
-    (GET "/projects" []
-         :return [projects/Project]
-         :summary "list available projects"
-         (projects/get-all-projects))
+      ;;; PROJECTS
 
-    ; CREATE
-    (POST "/projects" []
-          :body-params [title       :- s/Str
-                        description :- s/Str]
-          :return [{:project-id s/Int}]
-          :summary "create a new project"
-          (projects/create-project!
-           {:title title
-            :description description}))
+      ; ; LIST
+      (GET "/projects" []
+           :return :projects/projects
+           :summary "list available projects"
+           (projects/get-all-projects))
 
-    ; READ
-    (GET "/projects/:id" []
-         :path-params [id :- s/Int]
-         :return projects/Project
-         :summary "get project by id"
-         (projects/get-project {:project-id id}))
+      ; CREATE
+      (POST "/projects" []
+            :body-params [title       :- ::domain/title
+                          description :- ::domain/description]
+            :return :project/project-id
+            :summary "create a new project"
+            (projects/create-project!
+             {:title title
+              :description description}))
 
-    (GET "/projects/:id/tasks/unfineshed" []
-         :path-params [id :- s/Int]
-         :return [tasks/Task]
-         :summary "get tasks by project-id"
-         (tasks/get-unfineshed-tasks-by-project {:project-id id}))
+      ; READ
+      (GET "/projects/:id" []
+           :path-params [id :- :project/project-id]
+           :return :projects/project
+           :summary "get project by id"
+           (projects/get-project {:project-id id}))
 
-    (GET "/projects/:id/tasks/recently-updated" []
-         :path-params [id :- s/Int]
-         :return [tasks/Task]
-         :summary "get tasks by project-id ordered by date updated"
-         (tasks/get-recently-updated-tasks-by-project {:project-id id}))
+      (GET "/projects/:id/tasks/unfineshed" []
+           :path-params [id :- :project/project-id]
+           :return :tasks/tasks
+           :summary "get tasks by project-id"
+           (tasks/get-unfineshed-tasks-by-project {:project-id id}))
 
-    ; UPDATE
-    (PUT "/projects" []
-         :body-params [project-id  :- s/Int
-                       title       :- s/Str
-                       description :- s/Str]
-         :return s/Int
-         :summary "update project given project-id"
-         (projects/update-project!
-          {:project-id project-id
-           :title title
-           :description description}))
+      (GET "/projects/:id/tasks/recently-updated" []
+           :path-params [id :- :project/project-id]
+           :return :tasks/tasks
+           :summary "get tasks by project-id ordered by date updated"
+           (tasks/get-recently-updated-tasks-by-project {:project-id id}))
 
-    ; DELETE
-    (DELETE "/projects" []
-            :body-params [project-id :- s/Int]
-            :return s/Int
-            :summary "delete project by id"
-            (projects/delete-project! {:project-id project-id}))
+      ; UPDATE
+      (PUT "/projects" []
+           :body-params [project-id  :- :project/project-id
+                         title       :- ::domain/title
+                         description :- ::domain/description]
+           :return int?
+           :summary "update project given project-id; returns the number of affected rows"
+           (projects/update-project!
+            {:project-id project-id
+             :title title
+             :description description}))
+
+      ; DELETE
+      (DELETE "/projects" []
+              :body-params [project-id :- :project/project-id]
+              :return int?
+              :summary "delete project by id; returns the number of affected rows"
+              (projects/delete-project! {:project-id project-id}))
 
 
-    ;;; stories
+      ;;; stories
 
-    ; LIST
-    (GET "/projects/:project-id/stories" []
-         :path-params [project-id :- s/Int]
-         :return [stories/story]
-         :summary "get stories by project-id"
-         (stories/get-stories-by-project {:project-id project-id}))
+      ; LIST
+      (GET "/projects/:project-id/stories" []
+           :path-params [project-id :- :project/project-id]
+           :return :stories/stories
+           :summary "get stories by project-id"
+           (stories/get-stories-by-project {:project-id project-id}))
 
-    ; CREATE
-    (POST "/projects/:project-id/stories" []
-          :path-params [project-id  :- s/Int]
-          :body [new-story stories/NewStoryWithTasks]
-          :return [{:story-id s/Int}]
-          :summary "create a new story for project-id"
-          (stories/create-story! new-story))
+      ; CREATE
+      (POST "/projects/:project-id/stories" []
+            :path-params [project-id  :- :project/project-id]
+            :body-params [title :- ::domain/title
+                          description :- ::domain/description
+                          type :- ::domain/type
+                          priority-idx :- ::domain/priority-idx
+                          status :- ::domain/status
+                          tasks :- :tasks.new-without-story/tasks]
+            :return (s/keys :req-un [:story/story-id])
+            :summary "create a new story for project-id"
+            (stories/create-story-with-tasks!
+             {:project-id project-id
+              :title title
+              :description description
+              :type type
+              :priority-idx priority-idx
+              :status status
+              :tasks tasks}))
 
-    ; READ
-    (GET "/stories/:story-id" []
-         :path-params [story-id :- s/Int]
-         :return stories/story
-         :summary "get stories by project-id"
-         (stories/get-story {:story-id story-id}))
+      ; READ
+      (GET "/stories/:story-id" []
+           :path-params [story-id :- :story/story-id]
+           :return :stories/story
+           :summary "get stories by project-id"
+           (stories/get-story {:story-id story-id}))
 
-    ; UPDATE
-    (PUT "/stories" []
-         :body-params [story-id :- s/Int
-                       title :- s/Str
-                       description :- s/Str]
-         :return s/Int
-         :summary "update story by story-id"
-         (stories/update-story!
-          {:story-id story-id
-           :title title
-           :description description}))
+      ; UPDATE
+      (PUT "/stories" []
+           :body-params [story-id :- :story/story-id
+                         title :- ::domain/title
+                         description :- ::domain/description]
+           :return int?
+           :summary "update story by story-id; returns num of affected rows"
+           (stories/update-story!
+            {:story-id story-id
+             :title title
+             :description description}))
 
-    ; DELETE
-    (DELETE "/stories" []
-            :body-params [story-id :- s/Int]
-            :return s/Int
-            :summary "delete story by story-id"
-            (stories/delete-story!
-             {:story-id story-id}))
+      ; DELETE
+      (DELETE "/stories" []
+              :body-params [story-id :- :story/story-id]
+              :return int?
+              :summary "delete story by story-id; returns num of affected rows"
+              (stories/delete-story!
+               {:story-id story-id}))
 
-    ;;; TASKS
+      ;;; TASKS
 
-    ; CREATE
+      ; CREATE
 
-    (POST "/stories/:story-id/tasks" []
-          :body-params [story-id  :- s/Int
-                        title       :- s/Str
-                        description :- s/Str
-                        orig-est    :- s/Int
-                        curr-est    :- s/Int
-                        elapsed     :- s/Int
-                        remain      :- s/Int
-                        priority-idx :- s/Int
-                        status   :- s/Int]
-          :return [{:task-id s/Int}]
-          :summary "create a task for story-id"
-          (tasks/create-task!
-           {:story-id story-id
-            :title title
-            :description description
-            :orig-est orig-est
-            :curr-est curr-est
-            :elapsed elapsed
-            :remain remain
-            :priority-idx priority-idx
-            :status status}))
+      (POST "/stories/:story-id/tasks" []
+            :body-params [story-id    :- :story/story-id
+                          title       :- ::domain/title
+                          description :- ::domain/description
+                          orig-est    :- :task/orig-est
+                          curr-est    :- :task/curr-est
+                          status      :- ::domain/status]
+            :return :task/task-id
+            :summary "create a task for story-id; returns the task-id map"
+            (tasks/create-task!
+             {:story-id story-id
+              :title title
+              :description description
+              :orig-est orig-est
+              :curr-est curr-est
+              :status status}))
 
-    ; LIST
-    (GET "/stories/:story-id/tasks" []
-         :path-params [story-id :- s/Int]
-         :return [tasks/Task]
-         :summary "get tasks by story-id"
-         (tasks/get-tasks
-          {:story-id story-id}))
+      ; LIST
+      (GET "/stories/:story-id/tasks" []
+           :path-params [story-id :- :story/story-id]
+           :return :tasks/tasks
+           :summary "get tasks by story-id"
+           (tasks/get-tasks
+            {:story-id story-id}))
 
-    ; READ
-    (GET "/tasks/:task-id" []
-         :path-params [task-id :- s/Int]
-         :return tasks/Task
-         :summary "get task by task-id"
-         (tasks/get-task {:task-id task-id}))
+      ; READ
+      (GET "/tasks/:task-id" []
+           :path-params [task-id :- :task/task-id]
+           :return :tasks/task
+           :summary "get task by task-id"
+           (tasks/get-task {:task-id task-id}))
 
-    ; UPDATE
-    (PUT "/tasks" []
-         :body-params [task-id     :- s/Int
-                       story-id  :- s/Int
-                       title       :- s/Str
-                       description :- s/Str
-                       orig-est    :- s/Int
-                       curr-est    :- s/Int
-                       elapsed     :- s/Int
-                       remain      :- s/Int
-                       priority-idx :- s/Int
-                       status   :- s/Int]
-         :return s/Int
-         :summary "update task by task-id"
-         (tasks/update-task!
-          {:task-id task-id
-           :story-id story-id
-           :title title
-           :description description
-           :orig-est orig-est
-           :curr-est curr-est
-           :elapsed elapsed
-           :remain remain
-           :priority-idx priority-idx
-           :status status}))
+      ; UPDATE
+      (PUT "/tasks" []
+           :body-params [task-id     :- :task/task-id
+                         story-id  :- :story/story-id
+                         title       :- ::domain/title
+                         description :- ::domain/description
+                         orig-est    :- :task/orig-est
+                         curr-est    :- :task/curr-est
+                         status   :- ::domain/status]
+           :return int?
+           :summary "update task by task-id; returns the num of affected rows"
+           (tasks/update-task!
+            {:task-id task-id
+             :story-id story-id
+             :title title
+             :description description
+             :orig-est orig-est
+             :curr-est curr-est
+             :status status}))
 
-    ; DELETE
-    (DELETE "/tasks" []
-            :body-params [task-id :- s/Int]
-            :return s/Int
-            :summary "delete task by task-id"
-            (tasks/delete-task! {:task-id task-id}))
-
-    ;;; Status
-
-    (GET "/status" []
-         :return [status/Status]
-         :summary "get all available status"
-         (status/get-all-status))
-
-    ;;; Priorities
-
-    (GET "/priorities" []
-         :return [priorities/Priority]
-         :summary "get all available priorities"
-         (priorities/get-priorities))))
+      ; DELETE
+      (DELETE "/tasks" []
+              :body-params [task-id :- :task/task-id]
+              :return int?
+              :summary "delete task by task-id; returns the num of affected rows"
+              (tasks/delete-task! {:task-id task-id})))))

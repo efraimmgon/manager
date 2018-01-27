@@ -34,7 +34,7 @@
  (fn [{:keys [db]} [project]]
    (ajax/POST "/api/projects"
               {:params (project-defaults project)
-               :handler #(navigate! (str "/projects/" (:project-id (first %))))
+               :handler #(navigate! (str "/projects/" (:project-id %)))
                :error-handler #(dispatch [:ajax-error %])})
    nil))
 

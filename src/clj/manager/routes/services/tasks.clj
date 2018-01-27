@@ -1,42 +1,8 @@
 (ns manager.routes.services.tasks
   (:require
    [manager.db.core :as db]
-   [ring.util.http-response :refer :all]
-   [schema.core :as s]
-   [schema.coerce :as coerce])
-  (:import
-   [org.joda.time]))
-
-(def Task
-  {:task-id s/Int
-   :title s/Str
-   :description s/Str
-   :orig-est s/Int
-   :curr-est s/Int
-   :elapsed s/Int
-   :remain s/Int
-   :velocity (s/maybe s/Num)
-   :story-id s/Int
-   :priority-idx s/Int
-   :status s/Int
-   :created-at org.joda.time.DateTime
-   :updated-at org.joda.time.DateTime})
-
-(def TaskRequest (dissoc Task :task-id :created-at :updated-at :velocity))
-
-(def parse-task-request
-  (coerce/coercer TaskRequest coerce/json-coercion-matcher))
-
-; (parse-task-request task-request)
-
-(defn calculate-velocity
-  "If the status == done, we calculate velocity like => orig-est / curr-est.
-   Otherwise it's nil."
-  [{:keys [status curr-est orig-est] :as params}]
-  (assoc params :velocity
-         (if (= "done" (:name (db/get-status {:status status})))
-           (float (/ orig-est curr-est))
-           nil)))
+   [manager.routes.services.utils :refer [with-velocity]]
+   [ring.util.http-response :refer [ok]]))
 
 (defn delete-task!
   "delete task by task-id"
@@ -51,7 +17,9 @@
 (defn get-tasks
   "get tasks by story-id"
   [params]
-  (ok (db/get-tasks params)))
+  (let [res (db/get-tasks params)]
+    (println res)
+    (ok res)))
 
 (defn get-recently-updated-tasks-by-project
   [params]
@@ -67,11 +35,11 @@
   [params]
   (ok
    (db/create-task<!
-    (calculate-velocity params))))
+    (with-velocity params))))
 
 (defn update-task!
   "update task with the given params. `updated-at` is updated at the db"
   [params]
   (ok
    (db/update-task!
-    (calculate-velocity params))))
+    (with-velocity params))))

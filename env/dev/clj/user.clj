@@ -1,9 +1,12 @@
 (ns user
-  (:require [luminus-migrations.core :as migrations]
-            [manager.config :refer [env]]
-            [mount.core :as mount]
-            [manager.figwheel :refer [start-fw stop-fw cljs]]
-            manager.core))
+  (:require
+   [luminus-migrations.core :as migrations]
+   [manager.config :refer [env]]
+   [mount.core :as mount]
+   [manager.figwheel :refer [start-fw stop-fw cljs]]
+   manager.core
+   [manager.db.core :as db]
+   [clojure.tools.namespace.repl :refer [refresh]]))
 
 (defn start []
   (mount/start-without #'manager.core/repl-server))
@@ -20,5 +23,3 @@
 
 (defn rollback []
   (migrations/migrate ["rollback"] (select-keys env [:database-url])))
-
-

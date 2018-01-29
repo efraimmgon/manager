@@ -100,8 +100,8 @@
  (fn [{:keys [db]} [_ story-id]]
    (let [;; we want the tasks as a map with the id as key
          tasks
-         (reduce (fn [acc task]
-                   (assoc acc (:task-id task) task))
+         (reduce (fn [m task]
+                   (assoc m (:task-id task) task))
                  {} (ls/select {:from (:ls-tasks db)
                                 :where #(= (:story-id %) story-id)}))]
      {:dispatch [:tasks/set-tasks tasks]})))

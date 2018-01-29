@@ -27,6 +27,9 @@ RETURNING story_id;
 UPDATE stories
 SET title = :title,
     description = :description,
+    priority_idx = :priority-idx,
+    status = :status,
+    type = :type,
     updated_at = (now() AT TIME ZONE 'utc')
 WHERE story_id = :story-id;
 

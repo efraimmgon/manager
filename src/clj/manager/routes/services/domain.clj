@@ -13,7 +13,8 @@
 (s/def ::id spec/int?)
 (s/def ::title spec/string?)
 (s/def ::description spec/string?)
-(s/def ::created-at (st/spec #(instance? org.joda.time.DateTime %)))
+(s/def ::created-at (st/spec (s/or :inst #(instance? org.joda.time.DateTime %)
+                                   :string string?)))
 (s/def ::updated-at ::created-at)
 (s/def ::priority-idx (s/int-in 1 8))
 
@@ -48,7 +49,8 @@
                         ::status
                         ::type
                         ::created-at
-                        ::updated-at]))
+                        ::updated-at]
+               :opt-un [:tasks/tasks]))
 (s/def :stories/stories (s/* :stories/story))
 
 (s/def :stories.new/story
@@ -80,6 +82,20 @@
                         ::updated-at]))
 
 (s/def :tasks/tasks (s/* :tasks/task))
+
+(s/def :maybe-new/task
+       (st/spec
+         (s/keys :req-un [::title
+                          :task/orig-est
+                          :task/curr-est
+                          ::status]
+                 :opt-un [:task/task-id
+                          :story/story-id
+                          ::created-at
+                          ::updated-at
+                          :task/velocity])))
+
+(s/def :maybe-new/tasks (s/* :maybe-new/task))
 
 (s/def :tasks.new/task
        (s/keys :req-un [:story/story-id

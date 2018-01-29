@@ -11,10 +11,29 @@
 
 (defn story-defaults [story]
   (-> story
-      (update :description #(or % ""))
-      (update :created-at #(or % (js/Date.)))
-      (assoc :updated-at (js/Date.))))
+      (update :description #(or % ""))))
 
+(defn- rows->map [rows id]
+  (reduce (fn [m row]
+            (assoc m (get row id) row))
+          {} rows))
+
+(defn remove-temp-ids [tasks]
+  (map #(if (temp-id? (:task-id %))
+          (dissoc % :task-id))
+       tasks))
+
+(defn update-status [tasks]
+  (map #(if (:status %) %
+          (assoc % :status "pending"))
+       tasks))
+
+(defn tasks-map->rows [tasks]
+  (->> (map #(if (temp-id? (:task-id %))
+               (dissoc % :task-id)
+               %)
+            (vals tasks))
+       update-status))
 
 ; ------------------------------------------------------------------------------
 ; Subs
@@ -98,16 +117,12 @@
  :stories/create-story-with-tasks
  interceptors
  (fn [{:keys [db]} [story]]
-   (ajax/POST (str "/api/projects/" (:project-id story) "/stories")
-             {:params (update story :tasks
-                              (fn [tasks]
-                                (->> (map #(dissoc % :task-id) (vals tasks))
-                                     (map #(if (:status %) %
-                                             (assoc % :status "pending"))))))  
-              :handler #(prn %)
-              :error-handler #(dispatch [:ajax-error %])})
-   nil))
-    ; {:dispatch [:navigate (str "/projects/" project-id)]})))
+   (let [story-updated (update story :tasks tasks-map->rows)]
+     (ajax/POST (str "/api/projects/" (:project-id story) "/stories")
+               {:params story-updated
+                :handler #(dispatch [:navigate (str "/projects/" (:project-id story))])
+                :error-handler #(dispatch [:ajax-error %])})
+     nil)))
 
 ;;; Delete stories and their tasks
 (reg-event-fx
@@ -125,29 +140,26 @@
 ;;; Update story and already existent tasks
 ;;; Create new tasks
 (reg-event-fx
- :stories/update-story
+ :stories/update-story-with-tasks
  interceptors
- (fn [{:keys [db]} [story]]
-   (ls/update! (:ls-stories db)
-               {:set (dissoc (story-defaults story)
-                             :tasks)
-                :where #(= (:story-id %) (:story-id story))})
-   (let [old-tasks (filter (comp not temp-id? :task-id) (vals (:tasks story)))
-         new-tasks (filter (comp temp-id? :task-id) (vals (:tasks story)))]
-     (doseq [task new-tasks]
-       (create-task! (:ls-tasks db) (:story-id story) task))
-     (doseq [task old-tasks]
-       (update-task! (:ls-tasks db) task)))
-   {:dispatch [:navigate (str "/projects/" (:project-id story))]}))
+ (fn [_ [story]]
+   (ajax/PUT (str "/api/stories/" (:story-id story) "/with-tasks")
+             {:params (update story :tasks tasks-map->rows)
+              :handler #(dispatch [:navigate (str "/projects/" (:project-id story))])
+              :error-handler #(dispatch [:ajax-error %])})
+   nil))
 
 (reg-event-fx
- :stories/load-story
+ :stories/load-story-with-tasks
  interceptors
  (fn [{:keys [db]} [story-id]]
-   {:dispatch [:stories/set-story
-               (first
-                 (ls/select {:from (:ls-stories db)
-                             :where #(= (:story-id %) story-id)}))]}))
+   (ajax/GET (str "/api/stories/" story-id "/with-tasks")
+             {:handler #(dispatch [:stories/set-story
+                                   (update % :tasks rows->map :task-id)])
+              :error-handler #(dispatch [:ajax-error %])
+              :response-format :json
+              :keywords? true})
+   nil))
 (reg-event-fx
  :stories/load-stories-for
  interceptors
@@ -170,6 +182,8 @@
  interceptors
  (fn [db [story]]
    (assoc-in db [:stories :story] story)))
+
+
 
 (reg-event-db
  :stories/toggle-show-completed

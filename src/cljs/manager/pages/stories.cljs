@@ -34,12 +34,13 @@
     [:div.form-horizontal
      (when-not (:project-id @story)
        (rf/dispatch [:set-state (conj ns :project-id) (:project-id @project)]))
-     (when (:story-id @story)
+     (when-let [story-id (:story-id @story)]
        [form-group
         "story id"
-        [input {:type :text
-                :class "form-control"
-                :name (conj ns :story-id)}]])
+        [:input {:type :text
+                 :class "form-control"
+                 :value story-id
+                 :disabled true}]])
      [form-group
       "Title"
       [:div.input-group
@@ -162,7 +163,7 @@
         " Add task"]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:stories/update-story @story])}
+         {:on-click #(rf/dispatch [:stories/update-story-with-tasks @story])}
          "Update"]]]]]))
 
 (defn new-story-page []
@@ -178,7 +179,6 @@
       [:div.panel-heading
        [:h2 "Create story"]]
       [:div.panel-body
-       [pretty-display story]
        [form-template story [:stories :new-story]]
        [:h3 "Tasks"]
        [task-items tasks :new-story]

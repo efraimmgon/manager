@@ -68,8 +68,7 @@
 (secretary/defroute "/projects/:project-id/stories/:story-id"
   [project-id story-id]
   (run-events [[:projects/load-project (js/parseInt project-id)]
-               [:stories/load-story (js/parseInt story-id)]
-               [:tasks/load-tasks-for (js/parseInt story-id)]
+               [:stories/load-story-with-tasks (js/parseInt story-id)]
                [:set-active-page :story-tasks]]))
 
 ;; update

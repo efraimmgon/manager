@@ -133,8 +133,16 @@
       (GET "/stories/:story-id" []
            :path-params [story-id :- :story/story-id]
            :return :stories/story
-           :summary "get stories by project-id"
+           :summary "get story by story-id"
            (stories/get-story {:story-id story-id}))
+
+      ; READ + tasks
+      (GET "/stories/:story-id/with-tasks" []
+           :path-params [story-id :- :story/story-id]
+           :return :stories/story
+           :summary "get story by story-id with tasks"
+           (stories/get-story-with-tasks {:story-id story-id}))
+
 
       ; UPDATE
       (PUT "/stories" []
@@ -147,6 +155,28 @@
             {:story-id story-id
              :title title
              :description description}))
+
+      ; UPDATE + tasks
+      (PUT "/stories/:story-id/with-tasks" req
+           :body-params [story-id :- :story/story-id
+                         project-id  :- :project/project-id
+                         title       :- ::domain/title
+                         description :- ::domain/description
+                         type        :- ::domain/type
+                         priority-idx :- ::domain/priority-idx
+                         status      :- ::domain/status
+                         tasks :- :maybe-new/tasks]
+           :return int?
+           :summary "update story by story-id; returns num of affected rows"
+           (stories/update-story-with-tasks!
+            ; (:params req)))
+            {:story-id story-id
+             :title title
+             :description description
+             :type type
+             :priority-idx priority-idx
+             :status status
+             :tasks tasks}))
 
       ; DELETE
       (DELETE "/stories" []

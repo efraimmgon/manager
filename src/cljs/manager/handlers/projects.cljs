@@ -53,7 +53,7 @@
 (reg-event-fx
  :edit-project
  interceptors
- (fn [{:keys [db]} [project]]
+ (fn [_ [project]]
    (ajax/PUT "/api/projects"
              {:params (select-keys project [:project-id :title :description])
               :handler #(navigate! (str "/projects/" (:project-id project)))

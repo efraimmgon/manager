@@ -27,18 +27,6 @@
        [:a.navbar-brand {:href "/"} "Manager"]]
       [:div#bs-example-navbar-collapse-1.collapse.navbar-collapse
        [:ul.nav.navbar-nav.navbar-right
-        ;; History button
-        (when @project
-          [:li>a
-           {:href (str "/projects/" (:project-id @project) "/history")}
-           [:i.glyphicon.glyphicon-book]
-           " History"])
-        ;; List pending tasks
-        (when @project
-          [:li>a
-           {:href (str "/projects/" (:project-id @project) "/tasks/unfineshed")}
-           [:i.glyphicon.glyphicon-th-list]
-           " List pending tasks"])
         [:li>a
          {:href "/projects/new"}
          [:i.glyphicon.glyphicon-plus]

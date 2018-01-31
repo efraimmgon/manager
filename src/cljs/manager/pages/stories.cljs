@@ -34,7 +34,8 @@
                story-path (rf/subscribe [:stories/story-path])]
     [:div.form-horizontal
      (when-not (:project-id @story)
-       (rf/dispatch [:set-state (conj @story-path :project-id) (:project-id @project)]))
+       (rf/dispatch [:set-state (conj @story-path :project-id) (:project-id @project)])
+       (rf/dispatch [:set-state (conj @story-path :description) ""]))
      (when-let [story-id (:story-id @story)]
        [form-group
         "story id"
@@ -53,7 +54,8 @@
      [form-group
       "Description"
       [textarea {:class "form-control"
-                 :name (conj @story-path :description)}]]
+                 :name (conj @story-path :description)
+                 :rows 7}]]
      [form-group
       "Status"
       [:div

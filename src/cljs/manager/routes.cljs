@@ -39,22 +39,11 @@
                [:stories/load-stories-for (js/parseInt id)]
                [:set-active-page :project]]))
 
-(secretary/defroute "/projects/:id/tasks/unfineshed" [id]
-  (run-events [[:projects/load-project (js/parseInt id)]
-               [:projects/load-project-tasks (js/parseInt id)]
-               [:set-active-page :project-tasks]]))
-
 ;; update
 (secretary/defroute "/projects/:id/edit" [id]
   (rf/dispatch-sync [:projects/close-project])
   (run-events [[:projects/load-project (js/parseInt id)]
                [:set-active-page :edit-project]]))
-
-;; history
-(secretary/defroute "/projects/:id/history" [id]
-  (run-events [[:projects/load-project (js/parseInt id)]
-               [:load-recently-updated-tasks-by-project (js/parseInt id)]
-               [:set-active-page :project-tasks]]))
 
 ; stories ---------------------------------------------------------------------
 

@@ -12,7 +12,7 @@
 (s/def ::description string?)
 (s/def ::priority-idx (s/int-in 1 8))
 (s/def ::status #{"done" "pending"})
-(s/def ::type (s/int-in 1 4))
+(s/def ::type (s/int-in 1 5))
 (s/def ::created-at string?) ; ISO String
 (s/def ::updated-at ::created-at)
 
@@ -110,5 +110,6 @@
                 {:id :dont-fix, :name "Don't fix" :idx 7}]
    :types [{:name "feature", :idx 1}
            {:name "bug", :idx 2}
-           {:name "chore", :idx 3}]
+           {:name "chore", :idx 3}
+           {:name "enhancement", :idx 4}]
    :stories {:show-completed? false}})

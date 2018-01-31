@@ -220,7 +220,9 @@
          [:div.pull-right
           [:button.btn.btn-link {:on-click #(rf/dispatch [:stories/delete-story (:project-id story) (:story-id story)])}
            [:i.glyphicon.glyphicon-remove]]]]
-        [:p (:description story)]]))])
+        [:p (first
+             (clojure.string/split-lines
+              (:description story)))]]))])
 
 (defn project-stories-page []
   (r/with-let [project (rf/subscribe [:projects/project])

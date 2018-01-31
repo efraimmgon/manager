@@ -1,14 +1,8 @@
 -- :name get-stories-by-project :? :raw
 -- :doc get all stories by project-id
-SELECT st.*, t.pending_task_count FROM stories st
-LEFT OUTER JOIN (
-  SELECT t.story_id, COUNT(t.*) AS pending_task_count FROM tasks t
-  JOIN stories st ON t.story_id = st.story_id
-  WHERE st.project_id = :project-id
-    AND st.status != 'done'
-  GROUP BY t.story_id
-) AS t ON t.story_id = st.story_id
-WHERE st.project_id = :project-id;
+SELECT st.* FROM stories st
+WHERE st.project_id = :project-id
+ORDER BY st.priority_idx ASC;
 
 -- :name get-story :? :1
 -- :doc get story by :story-id

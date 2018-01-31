@@ -67,18 +67,6 @@
            :summary "get project by id"
            (projects/get-project {:project-id id}))
 
-      (GET "/projects/:id/tasks/unfineshed" []
-           :path-params [id :- :project/project-id]
-           :return :tasks/tasks
-           :summary "get tasks by project-id"
-           (tasks/get-unfineshed-tasks-by-project {:project-id id}))
-
-      (GET "/projects/:id/tasks/recently-updated" []
-           :path-params [id :- :project/project-id]
-           :return :tasks/tasks
-           :summary "get tasks by project-id ordered by date updated"
-           (tasks/get-recently-updated-tasks-by-project {:project-id id}))
-
       ; UPDATE
       (PUT "/projects" []
            :body-params [project-id  :- :project/project-id

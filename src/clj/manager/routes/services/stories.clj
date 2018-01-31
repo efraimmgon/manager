@@ -31,7 +31,6 @@
   (ok (db/update-story! params)))
 
 (defn update-story-with-tasks! [params]
-  (clojure.pprint/pprint params)
   (try
     (db/update-story! params)
     (doseq [task (filter :task-id (:tasks params))]

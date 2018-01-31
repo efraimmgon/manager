@@ -18,7 +18,7 @@
 (s/def ::updated-at ::created-at)
 (s/def ::priority-idx (s/int-in 1 8))
 
-(s/def ::type (s/and spec/int? (s/int-in 1 4)))
+(s/def ::type (s/and spec/int? (s/int-in 1 5)))
 (s/def ::status (st/spec #{"pending", "done"}))
 
 ; ------------------------------------------------------------------------------

@@ -27,13 +27,14 @@
       (rf/dispatch [:update-state (:name attrs) f]))
     [:input edited-attrs]))
 
-(defn form-template [story ns]
+(defn form-template [story]
   (r/with-let [project (rf/subscribe [:projects/project])
                priorities (rf/subscribe [:priorities])
-               types (rf/subscribe [:types])]
+               types (rf/subscribe [:types])
+               story-path (rf/subscribe [:stories/story-path])]
     [:div.form-horizontal
      (when-not (:project-id @story)
-       (rf/dispatch [:set-state (conj ns :project-id) (:project-id @project)]))
+       (rf/dispatch [:set-state (conj @story-path :project-id) (:project-id @project)]))
      (when-let [story-id (:story-id @story)]
        [form-group
         "story id"
@@ -46,13 +47,13 @@
       [:div.input-group
        [input {:type :text
                :class "form-control"
-               :name (conj ns :title)
+               :name (conj @story-path :title)
                :auto-focus (when-not (:story-id @story) true)}]
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"
       [textarea {:class "form-control"
-                 :name (conj ns :description)}]]
+                 :name (conj @story-path :description)}]]
      [form-group
       "Status"
       [:div
@@ -61,7 +62,7 @@
            ^{:key id}
            [:label.radio-inline
             [input {:type :radio
-                    :name (conj ns :status)
+                    :name (conj @story-path :status)
                     :default-checked (and (nil? (:status @story)) default?)
                     :value name}]
             " " (clojure.string/capitalize name)]))]]
@@ -69,7 +70,7 @@
       "Type"
       [:div.input-group
        [select {:class "form-control"
-                :name (conj ns :type)
+                :name (conj @story-path :type)
                 :default-value (:idx (first @types))}
         (for [{:keys [name idx]} @types]
           ^{:key idx}
@@ -80,7 +81,7 @@
       "Priority"
       [:div.input-group
        [select {:class "form-control"
-                :name (conj ns :priority-idx)
+                :name (conj @story-path :priority-idx)
                 :default-value (:idx (first @priorities))}
         (for [{:keys [name idx]} @priorities]
           ^{:key idx}
@@ -92,46 +93,48 @@
         "Created at"
         [input {:type :text
                 :class "form-control"
-                :name (conj ns :created-at)
+                :name (conj @story-path :created-at)
                 :disabled true}]])
      (when (:updated-at @story)
        [form-group
         "Updated at"
         [input {:type :text
                 :class "form-control"
-                :name (conj ns :updated-at)
+                :name (conj @story-path :updated-at)
                 :disabled true}]])]))
 
-(defn task-items [tasks story-name]
-  (when (seq @tasks)
-    [:table.table
-     [:thead>tr
-      [:th "Done?"]
-      [:th "Title"]
-      [:th "Original estimate"]
-      [:th "Current estimate"]
-      [:th "Delete"]]
-     [:tbody
-      (for [task @tasks]
-        (let [task-id (:task-id task)
-              input-class (if (done? task) "form-control task-input-done" "form-control")]
-          ^{:key (:task-id task)}
-          [:tr {:class (when (done? task) "task-done")}
-           [:td [checkbox-single-input
-                 {:name [:stories story-name :tasks task-id :status]
-                  :value "done"}]]
-           [:td [input {:type :text
-                        :class input-class
-                        :name [:stories story-name :tasks task-id :title]}]]
-           [:td [input {:type :number
-                        :class input-class
-                        :name [:stories story-name :tasks task-id :orig-est]}]]
-           [:td [input {:type :number
-                        :class input-class
-                        :name [:stories story-name :tasks task-id :curr-est]}]]
-           [:td [:button.btn.btn-default
-                 {:on-click #(rf/dispatch [:tasks/delete-task task-id])}
-                 [:i.glyphicon.glyphicon-remove]]]]))]]))
+(defn task-items [tasks]
+  (r/with-let [story-path (rf/subscribe [:stories/story-path])]
+    (when (seq @tasks)
+      [:table.table
+       [:thead>tr
+        [:th "Done?"]
+        [:th "Title"]
+        [:th "Original estimate"]
+        [:th "Current estimate"]
+        [:th "Delete"]]
+       [:tbody
+        (doall
+          (for [task @tasks]
+            (let [task-id (:task-id task)
+                  input-class (if (done? task) "form-control task-input-done" "form-control")]
+              ^{:key (:task-id task)}
+              [:tr {:class (when (done? task) "task-done")}
+               [:td [checkbox-single-input
+                     {:name (conj @story-path :tasks task-id :status)
+                      :value "done"}]]
+               [:td [input {:type :text
+                            :class input-class
+                            :name (conj @story-path :tasks task-id :title)}]]
+               [:td [input {:type :number
+                            :class input-class
+                            :name (conj @story-path :tasks task-id :orig-est)}]]
+               [:td [input {:type :number
+                            :class input-class
+                            :name (conj @story-path :tasks task-id :curr-est)}]]
+               [:td [:button.btn.btn-default
+                     {:on-click #(rf/dispatch [:tasks/delete-task task-id])}
+                     [:i.glyphicon.glyphicon-remove]]]])))]])))
 
 ; Load story with tasks
 ; When clicked on "update" tasks with no story-id are saved, while tasks
@@ -153,9 +156,9 @@
       [:div.panel-heading
        [:h2 "Edit story"]]
       [:div.panel-body
-       [form-template story [:stories :story]]
+       [form-template story]
        [:h3 "Tasks"]
-       [task-items tasks :story]
+       [task-items tasks]
        [:button.btn.btn-default
         ; TODO
         {:on-click #(rf/dispatch [:stories/story-tasks-tick :story])}
@@ -179,9 +182,9 @@
       [:div.panel-heading
        [:h2 "Create story"]]
       [:div.panel-body
-       [form-template story [:stories :new-story]]
+       [form-template story]
        [:h3 "Tasks"]
-       [task-items tasks :new-story]
+       [task-items tasks]
        [:button.btn.btn-default
         {:on-click #(rf/dispatch [:stories/story-tasks-tick :new-story])}
         [:i.glyphicon.glyphicon-plus]
@@ -192,8 +195,9 @@
          "Create"]]]]]))
 
 (defn new-story-button [project]
-  [:a.btn.btn-link {:href (str "/projects/" (:project-id @project)
-                               "/stories/new")}
+  [:a.btn.btn-link
+   {:href (str "/projects/" (:project-id @project) "/stories/new")
+    :on-click #(rf/dispatch [:stories/set-story-path [:stories :new-story]])}
    [:i.glyphicon.glyphicon-plus]
    " Create story"])
 
@@ -207,11 +211,12 @@
        [:li.list-group-item
         {:class (when (done? story) "archived")}
         [:h3
-         [:a {:href (str "/projects/" (:project-id @project) "/stories/" (:story-id story))}
+         [:a {:href (str "/projects/" (:project-id @project) "/stories/" (:story-id story))
+              :on-click #(rf/dispatch [:stories/set-story-path [:stories :story]])}
           (:title story) " "
           (str "[" (:priority-idx story) "]")]
          [:div.pull-right
-          [:button.btn.btn-link {:on-click #(rf/dispatch [:stories/delete-story (:project-id @project) (:story-id story)])}
+          [:button.btn.btn-link {:on-click #(rf/dispatch [:stories/delete-story (:project-id story) (:story-id story)])}
            [:i.glyphicon.glyphicon-remove]]]]
         [:p (:description story)]]))])
 

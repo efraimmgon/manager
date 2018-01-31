@@ -158,14 +158,14 @@
 
       ; UPDATE + tasks
       (PUT "/stories/:story-id/with-tasks" req
-           :body-params [story-id :- :story/story-id
+           :body-params [story-id    :- :story/story-id
                          project-id  :- :project/project-id
                          title       :- ::domain/title
                          description :- ::domain/description
                          type        :- ::domain/type
                          priority-idx :- ::domain/priority-idx
                          status      :- ::domain/status
-                         tasks :- :maybe-new/tasks]
+                         tasks       :- :maybe-new/tasks]
            :return int?
            :summary "update story by story-id; returns num of affected rows"
            (stories/update-story-with-tasks!

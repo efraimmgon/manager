@@ -7,7 +7,7 @@
   (keyword? x))
 
 (defn done? [x]
-  (= :done (:status x)))
+  (= "done" (:status x)))
 
 (defn story-estimate [feat]
   (->> (:tasks feat)

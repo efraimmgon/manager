@@ -80,6 +80,8 @@
  (fn [stories]
    (filter (comp not done?) stories)))
 
+(reg-sub :stories/story-path query)
+
 (reg-sub :stories/show-completed? query)
 
 (reg-sub
@@ -128,14 +130,12 @@
 (reg-event-fx
  :stories/delete-story
  interceptors
- (fn [{:keys [db]} [project-id story-id]]
-   (ls/delete!
-    {:from (:ls-stories db)
-     :where #(= (:story-id %) story-id)})
-   (ls/delete!
-    {:from (:ls-tasks db)
-     :where #(= (:story-id %) story-id)})
-   {:dispatch [:navigate (str "/projects/" project-id)]}))
+ (fn [_ [project-id story-id]]
+   (ajax/DELETE "/api/stories"
+                {:params {:story-id story-id}
+                 :handler #(dispatch [:navigate (str "/projects/" project-id)])
+                 :error-handler #(dispatch [:ajax-error %])})
+   nil))
 
 ;;; Update story and already existent tasks
 ;;; Create new tasks
@@ -183,7 +183,11 @@
  (fn [db [story]]
    (assoc-in db [:stories :story] story)))
 
-
+(reg-event-db
+ :stories/set-story-path
+ interceptors
+ (fn [db [path]]
+   (assoc-in db [:stories :story-path] path)))
 
 (reg-event-db
  :stories/toggle-show-completed

@@ -3,10 +3,10 @@
    [ajax.core :as ajax]
    [manager.db :as db]
    [manager.routes :refer [navigate!]]
-   [manager.utils :refer [temp-id?]]
-   [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub]]
+   [manager.utils :refer [temp-id? interceptors]]
+   [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub subscribe]]
    [stand-lib.local-store :as ls]
-   [stand-lib.re-frame.utils :refer [query]]))
+   [stand-lib.re-frame.utils :refer [query <sub]]))
 
 (def task-model
   {:task-id :int
@@ -67,13 +67,19 @@
 
 (reg-event-fx
  :tasks/delete-task
- (fn [{:keys [db]} [_ task-id]]
-   ;; check if it isn't a temp-id
+ interceptors
+ (fn [_ [task-id]]
    (when-not (temp-id? task-id)
-     (ls/delete!
-      {:from (:ls-tasks db)
-       :where #(= (:task-id %) task-id)}))
-   {:db (update-in db [:stories :story :tasks] dissoc task-id)}))
+     (ajax/DELETE "/api/tasks"
+                  {:params {:task-id task-id}
+                   :error-handler #(dispatch [:ajax-error %])}))
+   {:dispatch [:tasks/delete-task-frontend task-id]}))
+
+(reg-event-db
+ :tasks/delete-task-frontend
+ interceptors
+ (fn [db [task-id]]
+   (update-in db (conj (<sub [:stories/story-path]) :tasks) dissoc task-id)))
 
 (reg-event-fx
  :edit-task
@@ -110,7 +116,7 @@
  :projects/load-project-tasks
  (fn [_ [_ project-id]]
    (ajax/GET (str "/api/projects/" project-id "/tasks/unfineshed")
-             {:handler #(dispatch [:set-tasks %])
+             {:handler #(dispatch [:tasks/set-tasks %])
               :error-handler #(dispatch [:ajax-error %])
               :response-format :json
               :keywords? true})
@@ -120,7 +126,7 @@
  :load-recently-updated-tasks-by-project
  (fn [_ [_ project-id]]
    (ajax/GET (str "/api/projects/" project-id "/tasks/recently-updated")
-             {:handler #(dispatch [:set-tasks %])
+             {:handler #(dispatch [:tasks/set-tasks %])
               :error-handler #(dispatch [:ajax-error %])
               :response-format :json
               :keywords? true})

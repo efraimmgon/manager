@@ -7,6 +7,7 @@
    [manager.pages.stories :as stories]
    [manager.pages.projects :as projects]
    [manager.pages.tasks :as tasks]
+   [manager.pages.users :as users]
    [stand-lib.components :refer [thead tbody]]
    [stand-lib.re-frame.utils :refer [<sub]]))
 
@@ -28,6 +29,10 @@
       [:div#bs-example-navbar-collapse-1.collapse.navbar-collapse
        [:ul.nav.navbar-nav.navbar-right
         [:li>a
+         {:href "/users"}
+         [:i.glyphicon.glyphicon-user]
+         " Users"]
+        [:li>a
          {:href "/projects/new"}
          [:i.glyphicon.glyphicon-plus]
          " Create project"]
@@ -43,10 +48,10 @@
    :project-tasks #'tasks/project-tasks-page
    :new-story #'stories/new-story-page
    :edit-story #'stories/edit-story-page
-   ; :story-tasks #'tasks/story-tasks-page
    :story-tasks #'stories/edit-story-page
    :new-task #'tasks/new-task-page
-   :edit-task #'tasks/edit-task-page})
+   :edit-task #'tasks/edit-task-page
+   :users/users #'users/list-users-page})
 
 (defn modal [header body footer]
   [:div

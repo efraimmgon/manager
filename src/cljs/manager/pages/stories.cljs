@@ -198,8 +198,7 @@
 
 (defn new-story-button [project]
   [:a.btn.btn-link
-   {:href (str "/projects/" (:project-id @project) "/stories/new")
-    :on-click #(rf/dispatch [:stories/set-story-path [:stories :new-story]])}
+   {:href (str "/projects/" (:project-id @project) "/stories/new")}
    [:i.glyphicon.glyphicon-plus]
    " Create story"])
 
@@ -213,13 +212,13 @@
        [:li.list-group-item
         {:class (when (done? story) "archived")}
         [:h3
-         [:a {:href (str "/projects/" (:project-id @project) "/stories/" (:story-id story))
-              :on-click #(rf/dispatch [:stories/set-story-path [:stories :story]])}
+         [:a {:href (str "/projects/" (:project-id @project) "/stories/" (:story-id story))}
           (:title story) " "
           (str "[" (:priority-idx story) "]")]
          [:div.pull-right
           [:button.btn.btn-link {:on-click #(rf/dispatch [:stories/delete-story (:project-id story) (:story-id story)])}
            [:i.glyphicon.glyphicon-remove]]]]
+        ;; Display only the first line of the description.
         [:p (first
              (clojure.string/split-lines
               (:description story)))]]))])

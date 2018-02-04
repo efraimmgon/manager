@@ -111,3 +111,37 @@
                         ::status]))
 (s/def :tasks.new-without-story/tasks
        (s/* :tasks.new-without-story/task))
+
+; ------------------------------------------------------------------------------
+; Users
+; ------------------------------------------------------------------------------
+
+(def email-regex #"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$")
+
+(s/def :users/first-name string?)
+(s/def :users/last-name string?)
+(s/def :users/email (s/and string? #(re-matches email-regex %)))
+(s/def :users/admin boolean?)
+(s/def :users/last-login ::created-at)
+(s/def :users/is-active boolean?)
+(s/def :users/pass string?)
+
+(s/def :users/user
+       (s/keys :req-un [:users/first-name
+                        :users/last-name
+                        :users/email
+                        :users/admin
+                        :users/last-login
+                        :users/is-active
+                        ::created-at
+                        ::updated-at
+                        :users/pass]))
+
+(s/def :new/user
+       (s/keys :req-un [:users/email
+                        :users/admin
+                        :users/pass]
+               :opt-un [:users/first-name
+                        :users/last-name]))
+
+(s/def :users/users (s/* :users/user))

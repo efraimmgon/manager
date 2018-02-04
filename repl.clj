@@ -1,5 +1,3 @@
-(require '[manager.db.core :as db])
-(require '[manager.routes.services.projects :as projects])
 (in-ns 'user)
 
 ;;; recompile queries

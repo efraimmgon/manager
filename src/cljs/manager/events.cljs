@@ -6,6 +6,7 @@
    [manager.handlers.tasks]
    [manager.handlers.stories]
    [manager.handlers.projects]
+   [manager.handlers.users]
    [manager.utils :refer [interceptors]]
    [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub subscribe]]
    [stand-lib.handlers]

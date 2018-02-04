@@ -18,6 +18,8 @@
 
 (reg-sub :projects/project query)
 
+(reg-sub :projects/project-path query)
+
 (reg-sub :projects/new-project query)
 
 ; ------------------------------------------------------------------------------
@@ -83,6 +85,12 @@
               :response-format :json
               :keywords? true})
    nil))
+
+(reg-event-db
+ :projects/set-project-path
+ interceptors
+ (fn [db [path]]
+   (assoc-in db [:projects :project-path] path)))
 
 (reg-event-db
  :set-project

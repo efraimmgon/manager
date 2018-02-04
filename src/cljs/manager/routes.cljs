@@ -31,7 +31,8 @@
 ;; create
 (secretary/defroute "/projects/new" []
   (rf/dispatch-sync [:projects/close-project])
-  (run-events [[:set-active-page :new-project]]))
+  (run-events [[:set-active-page :new-project]
+               [:projects/set-project-path [:projects :new-project]]]))
 
 ;; read
 (secretary/defroute "/projects/:id" [id]
@@ -43,7 +44,8 @@
 (secretary/defroute "/projects/:id/edit" [id]
   (rf/dispatch-sync [:projects/close-project])
   (run-events [[:projects/load-project (js/parseInt id)]
-               [:set-active-page :edit-project]]))
+               [:set-active-page :edit-project]
+               [:projects/set-project-path [:projects :project]]]))
 
 ; stories ---------------------------------------------------------------------
 
@@ -51,21 +53,16 @@
 (secretary/defroute "/projects/:project-id/stories/new" [project-id]
   (rf/dispatch-sync [:stories/close-story])
   (run-events [[:projects/load-project (js/parseInt project-id)]
-               [:set-active-page :new-story]]))
+               [:set-active-page :new-story]
+               [:stories/set-story-path [:stories :new-story]]]))
 
 ;; read
 (secretary/defroute "/projects/:project-id/stories/:story-id"
   [project-id story-id]
   (run-events [[:projects/load-project (js/parseInt project-id)]
                [:stories/load-story-with-tasks (js/parseInt story-id)]
-               [:set-active-page :story-tasks]]))
-
-;; update
-(secretary/defroute "/projects/:project-id/stories/:story-id/edit"
-  [project-id story-id]
-  (run-events [[:projects/load-project (js/parseInt project-id)]
-               [:stories/load-story (js/parseInt story-id)]
-               [:set-active-page :edit-story]]))
+               [:set-active-page :story-tasks]
+               [:stories/set-story-path [:stories :story]]]))
 
 ; tasks ------------------------------------------------------------------------
 
@@ -92,6 +89,13 @@
                [:stories/load-story (js/parseInt story-id)]
                [:load-task (js/parseInt task-id)]
                [:set-active-page :edit-task]]))
+
+
+; users ------------------------------------------------------------------------
+
+(secretary/defroute "/users" []
+  (run-events [[:users/load-users]
+               [:set-active-page :users/users]]))
 
 ; ------------------------------------------------------------------------------
 ; History

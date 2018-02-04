@@ -8,7 +8,10 @@
    [stand-lib.utils.forms :refer
     [handle-change-at]]))
 
-(defn form-template [project ns]
+(defn form-template [project]
+  (r/with-let [project-path (rf/subscribe [:projects/project-path])]
+    (when-not (:project-id @project)
+      (rf/dispatch [:set-state (conj @project-path :description) ""]))
     [:div.form-horizontal
      (when (:project-id @project)
        [form-group
@@ -22,13 +25,14 @@
       [:div.input-group
        [input {:type :text
                :class "form-control"
-               :name (conj ns :title)
+               :name (conj @project-path :title)
                :auto-focus true}]
        [:div.input-group-addon "*"]]]
      [form-group
       "Description"
       [textarea {:class "form-control"
-                 :name (conj ns :description)}]]
+                 :name (conj @project-path :description)
+                 :rows 10}]]
      (when (:created-at @project)
        [form-group
         "Created at"
@@ -42,7 +46,7 @@
         [:input {:class "form-control"
                  :type :text
                  :value (:updated-at @project)
-                 :disabled true}]])])
+                 :disabled true}]])]))
 
 (defn new-project-page
   "Template to CREATE a project"
@@ -56,7 +60,7 @@
       [:div.panel-heading
        [:h2 "Create project"]]
       [:div.panel-body
-       [form-template project [:projects :new-project]]
+       [form-template project]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
          {:on-click #(rf/dispatch [:create-project @project])}
@@ -75,7 +79,7 @@
       [:div.panel-heading
        [:h2 "Edit project"]]
       [:div.panel-body
-       [form-template project [:projects :project]]
+       [form-template project]
        [:div.col-sm-offset-2.col-sm-10
         [:button.btn.btn-primary
          {:on-click #(rf/dispatch [:edit-project @project])}
@@ -104,8 +108,10 @@
            [:a {:href (str "/projects/" (:project-id project))}
             (:title project)]
            [:div.pull-right
-            [:a.btn.btn-link {:href (str "/projects/" (:project-id project) "/edit")}
+            [:a.btn.btn-link
+             {:href (str "/projects/" (:project-id project) "/edit")
+              :on-click #(rf/dispatch [:projects/set-project-path [:projects :project]])}
              [:i.glyphicon.glyphicon-edit]]
             [:button.btn.btn-link {:on-click #(rf/dispatch [:delete-project (:project-id project)])}
              [:i.glyphicon.glyphicon-remove]]]]
-          [:p (:description project)]])]]]))
+          [:p (first (clojure.string/split-lines (:description project)))]])]]]))

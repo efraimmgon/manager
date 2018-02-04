@@ -12,7 +12,8 @@
    [manager.routes.services.domain :as domain]
    [manager.routes.services.projects :as projects]
    [manager.routes.services.stories :as stories]
-   [manager.routes.services.tasks :as tasks]))
+   [manager.routes.services.tasks :as tasks]
+   [manager.routes.services.users :as users]))
 
 (defn access-error [_ _]
   (unauthorized {:error "unauthorized"}))
@@ -235,4 +236,12 @@
               :body-params [task-id :- :task/task-id]
               :return int?
               :summary "delete task by task-id; returns the num of affected rows"
-              (tasks/delete-task! {:task-id task-id})))))
+              (tasks/delete-task! {:task-id task-id}))
+
+      (context
+       "/users" []
+
+       (GET "/" []
+            :return :users/users
+            :summary "get users"
+            (users/get-users))))))

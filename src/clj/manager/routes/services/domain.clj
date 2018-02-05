@@ -118,6 +118,7 @@
 
 (def email-regex #"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$")
 
+(s/def :users/user-id ::id)
 (s/def :users/first-name string?)
 (s/def :users/last-name string?)
 (s/def :users/email (s/and string? #(re-matches email-regex %)))
@@ -127,7 +128,8 @@
 (s/def :users/pass string?)
 
 (s/def :users/user
-       (s/keys :req-un [:users/first-name
+       (s/keys :req-un [:users/user-id
+                        :users/first-name
                         :users/last-name
                         :users/email
                         :users/admin
@@ -140,7 +142,8 @@
 (s/def :new/user
        (s/keys :req-un [:users/email
                         :users/admin
-                        :users/pass]
+                        :users/pass
+                        :users/is-active]
                :opt-un [:users/first-name
                         :users/last-name]))
 

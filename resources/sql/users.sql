@@ -1,3 +1,9 @@
+-- :name create-user<! :<!
+INSERT INTO users
+(first_name, last_name, email, is_active, admin, pass)
+VALUES (:first-name, :last-name, :email, :is-active, :admin, :pass)
+RETURNING user_id;
+
 -- :name get-users :? :raw
 -- :doc retrieve all users
 SELECT * FROM users;

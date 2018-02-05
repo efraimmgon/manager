@@ -7,7 +7,6 @@
    [re-frame.core :as rf]
    [stand-lib.components :refer [pretty-display thead tbody]]
    [stand-lib.comps.forms :refer [input textarea select]]
-   [stand-lib.local-store :as ls]
    [stand-lib.re-frame.utils :refer [<sub]]))
 
 (defn checkbox-single-input

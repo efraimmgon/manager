@@ -88,10 +88,38 @@
                         :projects/project
                         :projects/new-project]))
 
+;;; User
+(def email-regex #"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$")
+
+(s/def :users/first-name string?)
+(s/def :users/last-name string?)
+(s/def :users/email (s/and string? #(re-matches email-regex %)))
+(s/def :users/admin boolean?)
+(s/def :users/last-login ::created-at)
+(s/def :users/is-active boolean?)
+(s/def :users/pass string?)
+
+(s/def :users/user
+       (s/keys :req-un [:users/email
+                        :users/admin
+                        :users/is-active
+                        :users/pass]
+               :opt-un [:users/first-name
+                        :users/last-name
+                        :users/last-login
+                        ::created-at
+                        ::updated-at]))
+
+(s/def :users/all (s/* :users/user))
+
+(s/def ::users
+       (s/keys :opt-un [:users/all
+                        :users/user]))
+
 (s/def ::page keyword?)
 
 (s/def ::db (s/keys :req-un [::page ::status ::priorities ::types ::stories]
-                    :opt-un [::projects]))
+                    :opt-un [::projects ::users]))
 
 ; ------------------------------------------------------------------------------
 ; app-db

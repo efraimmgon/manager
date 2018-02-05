@@ -244,4 +244,9 @@
        (GET "/" []
             :return :users/users
             :summary "get users"
-            (users/get-users))))))
+            (users/get-users))
+       (POST "/" []
+             :body [user :new/user]
+             :return (s/keys :req-un [:users/user-id])
+             :summary "create a user"
+             (users/create-user<! user))))))

@@ -5,3 +5,6 @@
 
 (defn get-users []
   (ok (db/get-users)))
+
+(defn create-user<! [params]
+  (ok (db/create-user<! params)))

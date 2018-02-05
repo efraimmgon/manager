@@ -64,38 +64,16 @@
                [:set-active-page :story-tasks]
                [:stories/set-story-path [:stories :story]]]))
 
-; tasks ------------------------------------------------------------------------
-
-;; create
-(secretary/defroute "/projects/:project-id/stories/:story-id/tasks/new"
-  [project-id story-id task-id]
-  (rf/dispatch-sync [:close-task])
-  (run-events [[:projects/load-project (js/parseInt project-id)]
-               [:stories/load-story (js/parseInt story-id)]
-               [:set-active-page :new-task]]))
-
-;; read
-(secretary/defroute "/projects/:project-id/stories/:story-id/tasks/:task-id"
-  [project-id story-id task-id]
-  (run-events [[:projects/load-project (js/parseInt project-id)]
-               [:stories/load-story (js/parseInt story-id)]
-               [:load-task (js/parseInt task-id)]
-               [:set-active-page :task]]))
-
-;; update
-(secretary/defroute "/projects/:project-id/stories/:story-id/tasks/:task-id/edit"
-  [project-id story-id task-id]
-  (run-events [[:projects/load-project (js/parseInt project-id)]
-               [:stories/load-story (js/parseInt story-id)]
-               [:load-task (js/parseInt task-id)]
-               [:set-active-page :edit-task]]))
-
 
 ; users ------------------------------------------------------------------------
 
 (secretary/defroute "/users" []
   (run-events [[:users/load-users]
                [:set-active-page :users/users]]))
+
+(secretary/defroute "/users/new" []
+  (run-events [[:users/close-user]
+               [:set-active-page :users/new-user]]))
 
 ; ------------------------------------------------------------------------------
 ; History

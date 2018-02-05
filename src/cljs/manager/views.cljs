@@ -51,7 +51,8 @@
    :story-tasks #'stories/edit-story-page
    :new-task #'tasks/new-task-page
    :edit-task #'tasks/edit-task-page
-   :users/users #'users/list-users-page})
+   :users/users #'users/list-users-page
+   :users/new-user #'users/new-user-page})
 
 (defn modal [header body footer]
   [:div

@@ -139,7 +139,6 @@
        [:td [:a.btn.btn-link
              {:href (str "/users/" user-id "/edit")}
              [:i.glyphicon.glyphicon-edit]]]
-       ;; TODO
        [:td [:button.btn.btn-link {:on-click #(rf/dispatch [:users/delete-user user-id])}
              [:i.glyphicon.glyphicon-remove]]]])]])
 
@@ -155,7 +154,7 @@
          [:a.btn.btn-link {:href (str "/users/new")}
           [:i.glyphicon.glyphicon-plus]
           " New user"]]]]
-      [:ul.list-group
-       (when-not (seq @users)
-         [:li.list-group-item "No users yet."])]
-      [list-users-table users]]]))
+      (if (seq @users)
+        [list-users-table users]
+        [:ul.list-group
+         [:li.list-group-item "No users yet."]])]]))

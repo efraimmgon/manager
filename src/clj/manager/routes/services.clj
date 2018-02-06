@@ -273,4 +273,9 @@
                                  :admin admin
                                  :last-login last-login
                                  :is-active is-active
-                                 :pass pass}))))))
+                                 :pass pass}))
+       (DELETE "/:user-id" []
+               :path-params [user-id :- :users/user-id]
+               :return int?
+               :summary "delete user by id; return the num of affected rows."
+               (users/delete-user! {:user-id user-id}))))))

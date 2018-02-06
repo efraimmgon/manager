@@ -32,6 +32,15 @@
    nil))
 
 (reg-event-fx
+ :users/delete-user
+ interceptors
+ (fn [_ [user-id]]
+   (ajax/DELETE (str "/api/users/" user-id)
+                {:handler #(dispatch [:navigate "/users"])
+                 :error-handler #(dispatch [:ajax-error %])})
+   nil))
+
+(reg-event-fx
  :users/load-user
  interceptors
  (fn [_ [user-id]]

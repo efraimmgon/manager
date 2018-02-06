@@ -79,9 +79,14 @@
                [:set-active-page :users/users]]))
 
 (secretary/defroute "/users/new" []
+  (rf/dispatch-sync [:users/close-user])
   (run-events [[:set-title "Manager - Create user"]
-               [:users/close-user]
                [:set-active-page :users/new-user]]))
+
+(secretary/defroute "/users/:user-id/edit" [user-id]
+  (run-events [[:set-title "Manager - Edit user"]
+               [:users/load-user (js/parseInt user-id)]
+               [:set-active-page :users/edit-user]]))
 
 ; ------------------------------------------------------------------------------
 ; History

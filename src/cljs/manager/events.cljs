@@ -107,7 +107,8 @@
 (reg-event-fx
  :set-title
  (fn [_ [_ new-title]]
-   (set! (.-title js/document) new-title)))
+   (set! (.-title js/document) new-title)
+   nil))
 
 ; ------------------------------------------------------------------------------
 ; Subs

@@ -139,6 +139,18 @@
                         ::updated-at
                         :users/pass]))
 
+;; same as user, but doesn't have the ::created-at field
+(s/def :update/user
+       (s/keys :req-un [:users/user-id
+                        :users/first-name
+                        :users/last-name
+                        :users/email
+                        :users/admin
+                        :users/last-login
+                        :users/is-active
+                        ::updated-at
+                        :users/pass]))
+
 (s/def :new/user
        (s/keys :req-un [:users/email
                         :users/admin

@@ -103,6 +103,23 @@
          {:on-click #(rf/dispatch [:users/create-user @user])}
          "Create"]]]]]))
 
+(defn edit-user-page []
+  (r/with-let [user (rf/subscribe [:users/user])]
+    [base
+     [breadcrumbs
+      {:title "Edit user"
+       :active? true}]
+     [:div.panel.panel-default
+      [:div.panel-heading
+       [:h2 "Edit user"]]
+      [:div.panel-body
+       [form-template]
+       [:div.col-sm-offset-2.col-sm-10
+        [:button.btn.btn-primary
+         {:on-click #(rf/dispatch [:users/update-user @user])}
+         "Update"]]]]]))
+
+
 (defn list-users-table [users]
   [:table.table
    [:thead
@@ -119,7 +136,6 @@
        [:td user-id]
        [:td email]
        [:td (str admin)]
-       ;; TODO
        [:td [:a.btn.btn-link
              {:href (str "/users/" user-id "/edit")}
              [:i.glyphicon.glyphicon-edit]]]

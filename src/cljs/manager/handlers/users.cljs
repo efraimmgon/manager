@@ -25,12 +25,21 @@
  :users/create-user
  interceptors
  (fn [_ [user]]
-   ; create user
-   ; navigate to user
    (ajax/POST "/api/users"
               {:params (user-defaults user)
                :handler #(dispatch [:navigate "/users"])
                :error-handler #(dispatch [:ajax-error %])})
+   nil))
+
+(reg-event-fx
+ :users/load-user
+ interceptors
+ (fn [_ [user-id]]
+   (ajax/GET (str "/api/users/" user-id)
+             {:handler #(dispatch [:users/set-user %])
+              :error-handler #(dispatch [:ajax-error %])
+              :keywords? true
+              :response-format :json})
    nil))
 
 (reg-event-fx
@@ -43,6 +52,22 @@
               :keywords? true
               :response-format :json})
    nil))
+
+(reg-event-fx
+ :users/update-user
+ interceptors
+ (fn [_ [user]]
+   (ajax/PUT (str "/api/users/" (:user-id user))
+             {:params user
+              :handler #(dispatch [:navigate "/users"])
+              :error-handler #(dispatch [:ajax-error %])})
+   nil))
+
+(reg-event-db
+ :users/set-user
+ interceptors
+ (fn [db [user]]
+   (assoc-in db [:users :user] user)))
 
 (reg-event-db
  :users/set-users

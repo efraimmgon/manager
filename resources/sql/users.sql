@@ -4,14 +4,14 @@ INSERT INTO users
 VALUES (:first-name, :last-name, :email, :is-active, :admin, :pass)
 RETURNING user_id;
 
--- :name get-users :? :raw
--- :doc retrieve all users
-SELECT * FROM users;
-
 -- :name get-user :? :1
 -- :doc retrieve user by user-id
 SELECT * FROM users
 WHERE user_id = :user-id;
+
+-- :name get-users :? :raw
+-- :doc retrieve all users
+SELECT * FROM users;
 
 -- :name update-user! :! :n
 -- :doc update user by user-id

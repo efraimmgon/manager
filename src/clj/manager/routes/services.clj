@@ -214,12 +214,12 @@
       ; UPDATE
       (PUT "/tasks" []
            :body-params [task-id     :- :task/task-id
-                         story-id  :- :story/story-id
+                         story-id    :- :story/story-id
                          title       :- ::domain/title
                          description :- ::domain/description
                          orig-est    :- :task/orig-est
                          curr-est    :- :task/curr-est
-                         status   :- ::domain/status]
+                         status      :- ::domain/status]
            :return int?
            :summary "update task by task-id; returns the num of affected rows"
            (tasks/update-task!
@@ -249,4 +249,28 @@
              :body [user :new/user]
              :return (s/keys :req-un [:users/user-id])
              :summary "create a user"
-             (users/create-user<! user))))))
+             (users/create-user<! user))
+       (GET "/:user-id" []
+            :path-params [user-id :- :users/user-id]
+            :return :users/user
+            :summary "get user by id"
+            (users/get-user {:user-id user-id}))
+       (PUT "/:user-id" []
+            :path-params [user-id     :- :users/user-id]
+            :body-params [first-name  :- :users/first-name
+                          last-name   :- :users/last-name
+                          email       :- :users/email
+                          admin       :- :users/admin
+                          last-login  :- :users/last-login
+                          is-active   :- :users/is-active
+                          pass        :- :users/pass]
+            :return int?
+            :summary "update an user by id; return the num of affected rows."
+            (users/update-user! {:user-id user-id
+                                 :first-name first-name
+                                 :last-name last-name
+                                 :email email
+                                 :admin admin
+                                 :last-login last-login
+                                 :is-active is-active
+                                 :pass pass}))))))

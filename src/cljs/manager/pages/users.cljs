@@ -4,7 +4,7 @@
    [reagent.core :as r]
    [re-frame.core :as rf]
    [stand-lib.comps.forms :refer [input textarea select]]
-   [stand-lib.components :refer [pretty-display]]))
+   [stand-lib.components :refer [pretty-display tabulate]]))
 
 
 (defn checkbox-single-input
@@ -103,6 +103,30 @@
          {:on-click #(rf/dispatch [:users/create-user @user])}
          "Create"]]]]]))
 
+(defn list-users-table [users]
+  [:table.table
+   [:thead
+    [:tr
+     [:th "ID"]
+     [:th "Email"]
+     [:th "Admin?"]
+     [:th "Edit"]
+     [:th "Delete"]]]
+   [:tbody
+    (for [{:keys [user-id email admin] :as user} @users]
+      ^{:key (:user-id user)}
+      [:tr
+       [:td user-id]
+       [:td email]
+       [:td (str admin)]
+       ;; TODO
+       [:td [:a.btn.btn-link
+             {:href (str "/users/" user-id "/edit")}
+             [:i.glyphicon.glyphicon-edit]]]
+       ;; TODO
+       [:td [:button.btn.btn-link {:on-click #(rf/dispatch [:users/delete-user user-id])}
+             [:i.glyphicon.glyphicon-remove]]]])]])
+
 
 (defn list-users-page []
   (r/with-let [users (rf/subscribe [:users/all])]
@@ -117,19 +141,5 @@
           " New user"]]]]
       [:ul.list-group
        (when-not (seq @users)
-         [:li.list-group-item "No users yet."])
-       (for [user @users]
-         ^{:key (:user-id user)}
-         [:li.list-group-item
-          [:h3
-           ;; TODO read
-           [:a {:href (str "/users/" (:user-id user))}
-            (:title user)]
-           [:div.pull-right
-            ;; TODO edit
-            [:a.btn.btn-link
-             {:href (str "/users/" (:user-id user) "/edit")}
-             [:i.glyphicon.glyphicon-edit]]
-            ;; TODO delete
-            [:button.btn.btn-link {:on-click #(rf/dispatch [:users/delete-user (:user-id user)])}
-             [:i.glyphicon.glyphicon-remove]]]]])]]]))
+         [:li.list-group-item "No users yet."])]
+      [list-users-table users]]]))

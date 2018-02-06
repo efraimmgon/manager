@@ -7,4 +7,4 @@
   (ok (db/get-users)))
 
 (defn create-user<! [params]
-  (ok (db/create-user<! params)))
+  (ok (first (db/create-user<! params))))

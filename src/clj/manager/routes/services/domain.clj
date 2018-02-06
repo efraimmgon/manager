@@ -123,7 +123,7 @@
 (s/def :users/last-name string?)
 (s/def :users/email (s/and string? #(re-matches email-regex %)))
 (s/def :users/admin boolean?)
-(s/def :users/last-login ::created-at)
+(s/def :users/last-login (s/nilable ::created-at))
 (s/def :users/is-active boolean?)
 (s/def :users/pass string?)
 

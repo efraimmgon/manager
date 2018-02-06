@@ -8,7 +8,8 @@
 (defn user-defaults [u]
   (-> u
       (update :first-name #(or % ""))
-      (update :last-name #(or % ""))))
+      (update :last-name #(or % ""))
+      (update :admin #(or % false))))
 
 (reg-sub :users/all query)
 

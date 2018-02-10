@@ -40,6 +40,7 @@
 ; ------------------------------------------------------------------------------
 
 (s/def :story/story-id ::id)
+(s/def :story/owner (s/nilable spec/int?))
 (s/def :stories/story
        (s/keys :req-un [:story/story-id
                         :project/project-id,
@@ -50,7 +51,8 @@
                         ::type
                         ::created-at
                         ::updated-at]
-               :opt-un [:tasks/tasks]))
+               :opt-un [:tasks/tasks
+                        :story/owner]))
 (s/def :stories/stories (s/* :stories/story))
 
 (s/def :stories.new/story

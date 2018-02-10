@@ -5,7 +5,7 @@
    [manager.handlers.tasks :refer [create-task! update-task!]]
    [manager.routes :refer [navigate!]]
    [manager.utils :refer [temp-id? done? interceptors]]
-   [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub]]
+   [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-sub subscribe]]
    [stand-lib.local-store :as ls]
    [stand-lib.re-frame.utils :refer [query]]))
 
@@ -38,6 +38,8 @@
 ; ------------------------------------------------------------------------------
 ; Subs
 ; ------------------------------------------------------------------------------
+
+(reg-sub :stories/add-owner? query)
 
 (reg-sub
  :stories/done
@@ -126,6 +128,16 @@
                 :error-handler #(dispatch [:ajax-error %])})
      nil)))
 
+(reg-event-fx
+ :stories/deassign-user
+ interceptors
+ (fn [_ [owner-id story-id]]
+   (ajax/DELETE (str "/api/stories/" story-id "/owner/" owner-id)
+                {:error-handler #(dispatch [:ajax-error %])})
+   {:dispatch-n [[:stories/set-add-owner false]
+                 [:set-state (conj @(subscribe [:stories/story-path]) :owner)
+                  nil]]}))
+
 ;;; Delete stories and their tasks
 (reg-event-fx
  :stories/delete-story
@@ -170,6 +182,12 @@
               :response-format :json
               :keywords? true})
    nil))
+
+(reg-event-db
+ :stories/set-add-owner
+ interceptors
+ (fn [db [new-value]]
+   (assoc-in db [:stories :add-owner?] new-value)))
 
 (reg-event-db
  :stories/set-stories

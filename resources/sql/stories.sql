@@ -6,7 +6,9 @@ ORDER BY st.priority_idx ASC;
 
 -- :name get-story :? :1
 -- :doc get story by :story-id
-SELECT * FROM stories st
+SELECT st.*, users_stories.user_id AS owner
+FROM stories st
+LEFT JOIN users_stories ON st.story_id = users_stories.story_id
 WHERE st.story_id = :story-id;
 
 -- :name create-story<! :<!

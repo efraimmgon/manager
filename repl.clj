@@ -10,3 +10,19 @@
 ;;; misc
 (start)
 (restart)
+
+
+;;; Stories can be assigned to a user
+
+; create users_stories table [ok]
+;  > user-id
+;  > story-id
+; CREATE, DELETE sql functions [ok]
+
+
+;;; assign user to story
+
+; typehead input
+; find users as typing
+; new: create if not null
+; update: on change => create or delete

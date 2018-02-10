@@ -2,11 +2,11 @@
   (:require
    [manager.components :refer [base breadcrumbs form-group]]
    [manager.pages.components :refer [edit-project-button]]
-   [manager.utils :refer [done?]]
+   [manager.utils :refer [done? full-name-or-email]]
    [reagent.core :as r]
    [re-frame.core :as rf]
    [stand-lib.components :refer [pretty-display thead tbody]]
-   [stand-lib.comps.forms :refer [input textarea select]]
+   [stand-lib.comps.forms :refer [input textarea select] :as forms]
    [stand-lib.re-frame.utils :refer [<sub]]))
 
 (defn checkbox-single-input
@@ -30,7 +30,9 @@
   (r/with-let [project (rf/subscribe [:projects/project])
                priorities (rf/subscribe [:priorities])
                types (rf/subscribe [:types])
-               story-path (rf/subscribe [:stories/story-path])]
+               story-path (rf/subscribe [:stories/story-path])
+               users (rf/subscribe [:users/all])
+               add-owner? (rf/subscribe [:stories/add-owner?])]
     [:div.form-horizontal
      (when-not (:project-id @story)
        (rf/dispatch [:set-state (conj @story-path :project-id) (:project-id @project)])
@@ -89,6 +91,24 @@
           [:option {:value idx}
            (clojure.string/capitalize name)])]
        [:div.input-group-addon "*"]]]
+     (if (or (:owner @story) @add-owner?)
+       [form-group
+        "Owner"
+        [:div.input-group
+          [select {:class "form-control"
+                   :name (conj @story-path :owner)
+                   :default-value (:user-id (first @users))}
+           (for [{:keys [user-id] :as user} @users]
+             ^{:key user-id}
+             [:option {:value user-id}
+              (full-name-or-email user)])]
+         [:div.input-group-addon
+          {:on-click #(rf/dispatch [:stories/deassign-user (:owner @story) (:story-id @story)])}
+          [:i.glyphicon.glyphicon-remove]]]]
+       [form-group
+        "Owner"
+        [:button.btn.btn-default {:on-click #(rf/dispatch [:stories/set-add-owner true])}
+         "Nobody"]])
      (when (:created-at @story)
        [form-group
         "Created at"

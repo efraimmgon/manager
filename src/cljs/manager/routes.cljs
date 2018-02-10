@@ -58,6 +58,8 @@
   (rf/dispatch-sync [:stories/close-story])
   (run-events [[:set-title "Manager - Create story"]
                [:projects/load-project (js/parseInt project-id)]
+               [:users/load-users]
+               [:stories/set-add-owner false]
                [:set-active-page :new-story]
                [:stories/set-story-path [:stories :new-story]]]))
 
@@ -67,6 +69,8 @@
   (run-events [[:set-title "Manager - View story"]
                [:projects/load-project (js/parseInt project-id)]
                [:stories/load-story-with-tasks (js/parseInt story-id)]
+               [:users/load-users]
+               [:stories/set-add-owner false]
                [:set-active-page :story-tasks]
                [:stories/set-story-path [:stories :story]]]))
 

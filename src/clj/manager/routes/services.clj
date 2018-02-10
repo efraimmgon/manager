@@ -100,23 +100,18 @@
       ; CREATE
       (POST "/projects/:project-id/stories" []
             :path-params [project-id  :- :project/project-id]
-            :body-params [project-id  :- :project/project-id
-                          title       :- ::domain/title
-                          description :- ::domain/description
-                          type        :- ::domain/type
-                          priority-idx :- ::domain/priority-idx
-                          status      :- ::domain/status
-                          tasks       :- :tasks.new-without-story/tasks]
+            :body [params (s/keys :req-un [:project/project-id
+                                           ::domain/title
+                                           ::domain/type
+                                           ::domain/priority-idx
+                                           ::domain/status
+                                           :tasks.new-without-story/tasks]
+                                  :opt-un [:story/owner
+                                           ::domain/description])]
             :return (s/keys :req-un [:story/story-id])
             :summary "create a new story for project-id"
             (stories/create-story-with-tasks!
-             {:project-id project-id
-              :title title
-              :description description
-              :type type
-              :priority-idx priority-idx
-              :status status
-              :tasks tasks}))
+             params))
 
       ; READ
       (GET "/stories/:story-id" []
@@ -128,7 +123,7 @@
       ; READ + tasks
       (GET "/stories/:story-id/with-tasks" []
            :path-params [story-id :- :story/story-id]
-           :return :stories/story
+           ;:return :stories/story
            :summary "get story by story-id with tasks"
            (stories/get-story-with-tasks {:story-id story-id}))
 
@@ -146,26 +141,19 @@
              :description description}))
 
       ; UPDATE + tasks
-      (PUT "/stories/:story-id/with-tasks" req
-           :body-params [story-id    :- :story/story-id
-                         project-id  :- :project/project-id
-                         title       :- ::domain/title
-                         description :- ::domain/description
-                         type        :- ::domain/type
-                         priority-idx :- ::domain/priority-idx
-                         status      :- ::domain/status
-                         tasks       :- :maybe-new/tasks]
+      (PUT "/stories/:story-id/with-tasks" []
+           :body [params (s/keys :req-un [:story/story-id
+                                          ::domain/title
+                                          ::domain/type
+                                          ::domain/priority-idx
+                                          ::domain/status
+                                          :maybe-new/tasks]
+                                 :opt-un [:story/owner
+                                          ::domain/description])]
            :return int?
            :summary "update story by story-id; returns num of affected rows"
            (stories/update-story-with-tasks!
-            ; (:params req)))
-            {:story-id story-id
-             :title title
-             :description description
-             :type type
-             :priority-idx priority-idx
-             :status status
-             :tasks tasks}))
+            params))
 
       ; DELETE
       (DELETE "/stories" []
@@ -174,6 +162,14 @@
               :summary "delete story by story-id; returns num of affected rows"
               (stories/delete-story!
                {:story-id story-id}))
+
+      (DELETE "/stories/:story-id/owner/:owner" []
+              :path-params [story-id :- :story/story-id
+                            owner :- :story/owner]
+              :return int?
+              :summary "deassign user from story"
+              (stories/deassign-user-from-story!
+               {:story-id story-id, :user-id owner}))
 
       ;;; TASKS
 

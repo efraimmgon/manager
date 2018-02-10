@@ -29,3 +29,11 @@
   [check-spec-interceptor
    (when ^boolean js/goog.DEBUG rf/debug)
    rf/trim-v])
+
+(defn full-name-or-email [user]
+  (let [name
+        (str (:first-name user) " "
+             (:last-name user))]
+    (if (clojure.string/blank? name)
+      (:email user)
+      name)))

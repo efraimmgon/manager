@@ -1,6 +1,7 @@
 (ns manager.utils
   (:require
    [cljs.spec.alpha :as s]
+   [reagent.core :as r]
    [re-frame.core :as rf]))
 
 (defn temp-id? [x]
@@ -26,7 +27,7 @@
    (partial check-and-throw :manager.db/db)))
 
 (def interceptors
-  [check-spec-interceptor
+  [
    (when ^boolean js/goog.DEBUG rf/debug)
    rf/trim-v])
 
@@ -37,3 +38,9 @@
     (if (clojure.string/blank? name)
       (:email user)
       name)))
+
+; ------------------------------------------------------------------------------
+; Datepicker
+; ------------------------------------------------------------------------------
+
+(def datetime-format "yyyy-mm-ddT03:00:00.000Z")

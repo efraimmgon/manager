@@ -36,12 +36,12 @@
                :spec "/swagger.json"
                :data {:info {:version "1.0.0"
                              :title "Sample API"
-                             :description "Sample Services"}}}}
+                             :description "Sample Services"}}}
+     :coercion domain/custom-coercion}
 
     (context
       "/api" []
       :tags ["private"]
-      :coercion :spec
 
       ;;; PROJECTS
 
@@ -105,6 +105,7 @@
                                            ::domain/type
                                            ::domain/priority-idx
                                            ::domain/status
+                                           :story/deadline
                                            :tasks.new-without-story/tasks]
                                   :opt-un [:story/owner
                                            ::domain/description])]
@@ -127,31 +128,21 @@
            :summary "get story by story-id with tasks"
            (stories/get-story-with-tasks {:story-id story-id}))
 
-
-      ; UPDATE
-      (PUT "/stories" []
-           :body-params [story-id :- :story/story-id
-                         title :- ::domain/title
-                         description :- ::domain/description]
-           :return int?
-           :summary "update story by story-id; returns num of affected rows"
-           (stories/update-story!
-            {:story-id story-id
-             :title title
-             :description description}))
-
       ; UPDATE + tasks
-      (PUT "/stories/:story-id/with-tasks" []
+      (PUT "/stories/:story-id/with-tasks" req
            :body [params (s/keys :req-un [:story/story-id
                                           ::domain/title
                                           ::domain/type
                                           ::domain/priority-idx
                                           ::domain/status
+                                          :story/deadline
                                           :maybe-new/tasks]
                                  :opt-un [:story/owner
                                           ::domain/description])]
            :return int?
            :summary "update story by story-id; returns num of affected rows"
+           (prn (get (:headers req) "content-type"))
+           (clojure.pprint/pprint (dissoc params :tasks))
            (stories/update-story-with-tasks!
             params))
 

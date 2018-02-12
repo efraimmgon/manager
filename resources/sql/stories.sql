@@ -14,8 +14,9 @@ WHERE st.story_id = :story-id;
 -- :name create-story<! :<!
 -- :doc create a story for :project-id, returning the :story-id
 INSERT INTO stories
-(title, description, project_id, priority_idx, status, type)
-VALUES (:title, :description, :project-id, :priority-idx, :status, :type)
+(title, description, project_id, priority_idx, status, type, deadline)
+VALUES
+(:title, :description, :project-id, :priority-idx, :status, :type, :deadline)
 RETURNING story_id;
 
 -- :name update-story! :! :n
@@ -26,6 +27,7 @@ SET title = :title,
     priority_idx = :priority-idx,
     status = :status,
     type = :type,
+    deadline = :deadline,
     updated_at = (now() AT TIME ZONE 'utc')
 WHERE story_id = :story-id;
 

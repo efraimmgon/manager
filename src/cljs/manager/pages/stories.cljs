@@ -2,7 +2,7 @@
   (:require
    [manager.components :refer [base breadcrumbs form-group]]
    [manager.pages.components :refer [edit-project-button]]
-   [manager.utils :refer [done? full-name-or-email]]
+   [manager.utils :refer [done? full-name-or-email datetime-format]]
    [reagent.core :as r]
    [re-frame.core :as rf]
    [stand-lib.components :refer [pretty-display thead tbody]]
@@ -25,6 +25,24 @@
                (not (= @field-value (:value attrs))))
       (rf/dispatch [:update-state (:name attrs) f]))
     [:input edited-attrs]))
+
+(defn deadline-component [story-path]
+  (r/create-class
+   {:display-name "deadline component"
+    :reagent-render
+    (fn []
+      [input {:type :text
+              :class "form-control"
+              :placeholder "No date"
+              :name (conj @story-path :deadline)}])
+    :component-did-mount
+    (fn [this]
+      (.datepicker (js/$ (r/dom-node this))
+                   (clj->js {:format datetime-format}))
+      (-> (.datepicker (js/$ (r/dom-node this)))
+          (.on "changeDate"
+               #(rf/dispatch [:set-state (conj @story-path :deadline)
+                              (-> % .-target .-value)]))))}))
 
 (defn form-template [story]
   (r/with-let [project (rf/subscribe [:projects/project])
@@ -109,6 +127,9 @@
         "Owner"
         [:button.btn.btn-default {:on-click #(rf/dispatch [:stories/set-add-owner true])}
          "Nobody"]])
+     [form-group
+      "Deadline"
+      [deadline-component story-path]]
      (when (:created-at @story)
        [form-group
         "Created at"

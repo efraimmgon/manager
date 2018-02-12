@@ -1,6 +1,8 @@
 (ns manager.routes.services.domain
   (:require
    [clojure.spec.alpha :as s]
+   [manager.routes.services.utils :refer [parse-date]]
+   [spec-tools.conform :as conform]
    [spec-tools.core :as st]
    [spec-tools.spec :as spec])
   (:import
@@ -10,12 +12,32 @@
 ; Common
 ; ------------------------------------------------------------------------------
 
+(def timestamp
+  (st/spec
+   {:spec #(or (instance? org.joda.time.DateTime %) (string? %))
+    :json-schema/default "2017-10-12T05:04:57.585Z"
+    :type :timestamp}))
+
+(defn json-timestamp->joda-datetime [_ val]
+  (parse-date :date-time val))
+
+(def custom-coercion
+  (-> compojure.api.coercion.spec/default-options
+      (assoc-in
+       [:body :formats "application/transit+json"]
+       (st/type-conforming
+        (merge
+         conform/json-type-conforming
+         {:timestamp json-timestamp->joda-datetime}
+         conform/strip-extra-keys-type-conforming)))
+      compojure.api.coercion.spec/create-coercion))
+
 (s/def ::id spec/int?)
 (s/def ::title spec/string?)
 (s/def ::description spec/string?)
-(s/def ::created-at (st/spec (s/or :inst #(instance? org.joda.time.DateTime %)
-                                   :string string?)))
-(s/def ::updated-at ::created-at)
+(s/def ::date timestamp)
+(s/def ::created-at ::date)
+(s/def ::updated-at ::date)
 (s/def ::priority-idx (s/int-in 1 8))
 
 (s/def ::type (s/and spec/int? (s/int-in 1 5)))
@@ -41,6 +63,7 @@
 
 (s/def :story/story-id ::id)
 (s/def :story/owner (s/nilable spec/int?))
+(s/def :story/deadline (s/nilable ::date))
 (s/def :stories/story
        (s/keys :req-un [:story/story-id
                         :project/project-id,
@@ -50,7 +73,8 @@
                         ::status
                         ::type
                         ::created-at
-                        ::updated-at]
+                        ::updated-at
+                        :story/deadline]
                :opt-un [:tasks/tasks
                         :story/owner]))
 (s/def :stories/stories (s/* :stories/story))

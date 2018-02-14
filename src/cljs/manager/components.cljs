@@ -2,9 +2,10 @@
   (:require
    [cljs.reader :as reader]
    [clojure.string :as string]
+   [manager.utils :refer [datetime-format]]
    [reagent.core :as r :refer [atom]]
-   [re-frame.core :as rf]))
-
+   [re-frame.core :as rf]
+   [stand-lib.comps.forms :refer [input]]))
 
 ; ------------------------------------------------------------------------------
 ; Forms
@@ -16,6 +17,31 @@
    (into
     [:div.col-sm-10]
     input)])
+
+(defn datetime-input-group
+  "Takes a path to where to save the input."
+  [path]
+  (r/create-class
+   {:display-name "deadline component"
+    :reagent-render
+    (fn [path]
+      [:div.input-group.date
+       [input {:type :text
+               :class "form-control"
+               :placeholder "No date"
+               :name path}]
+       [:div.input-group-addon
+        [:i.glyphicon.glyphicon-calendar]]])
+    :component-did-mount
+    (fn [this]
+      (.datepicker (js/$ (r/dom-node this))
+                   (clj->js {:format datetime-format}))
+      (-> (.datepicker (js/$ (r/dom-node this)))
+          (.on "changeDate"
+               #(let [d (.datepicker (js/$ (r/dom-node this))
+                                     "getDate")]
+                 (rf/dispatch [:set-state path
+                               (.toISOString d)])))))}))
 
 ; --------------------------------------------------------------------
 ; MISC

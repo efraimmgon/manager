@@ -227,6 +227,7 @@
 
       (context
        "/users" []
+       :tags ["users"]
 
        (GET "/" []
             :return :users/users

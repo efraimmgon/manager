@@ -9,6 +9,7 @@
                  [cljs-ajax "0.7.2"]
                  [compojure "1.6.0"]
                  [com.pupeno/free-form "0.6.0"]
+                 [com.andrewmcveigh/cljs-time "0.5.2"]
                  [conman "0.6.8"]
                  [cprop "0.1.11"]
                  [funcool/struct "1.1.0"]

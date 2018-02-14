@@ -1,6 +1,8 @@
 (ns manager.utils
   (:require
    [cljs.spec.alpha :as s]
+   [cljs-time.core :as t]
+   [cljs-time.format :as tf]
    [reagent.core :as r]
    [re-frame.core :as rf]))
 
@@ -40,7 +42,29 @@
       name)))
 
 ; ------------------------------------------------------------------------------
-; Datepicker
+; Datetime
 ; ------------------------------------------------------------------------------
+(defn parse-date
+  "Takes a string and parses it to an instance of cljs-time.core/date-time.
+  :args (s/cat :format keyword? :s string?), where :s is a
+  (.toISOString (js/Date.))
+  :ret #(cljs-time.core/date? %)"
+  [format s]
+  (let [formats {:date-time :date-time}]
+    (tf/parse (tf/formatters (get formats format))
+              s)))
+
+(defn deadline-status
+  "Takes a (.toISOString (js/Date.)) and checks whats the deadline status.
+  :ret #{:expired :warning :on-schedule}"
+  [deadline]
+  (let [now (t/now)
+        deadline (parse-date :date-time deadline)]
+    (cond
+      (t/before? deadline now)
+      :expired
+      (t/before? deadline (t/plus now (t/days 7)))
+      :warning
+      :else :on-schedule)))
 
 (def datetime-format "yyyy-mm-ddT03:00:00.000Z")

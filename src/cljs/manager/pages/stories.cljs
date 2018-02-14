@@ -1,8 +1,8 @@
 (ns manager.pages.stories
   (:require
-   [manager.components :refer [base breadcrumbs form-group]]
+   [manager.components :refer [base breadcrumbs form-group datetime-input-group]]
    [manager.pages.components :refer [edit-project-button]]
-   [manager.utils :refer [done? full-name-or-email datetime-format]]
+   [manager.utils :refer [done? full-name-or-email deadline-status]]
    [reagent.core :as r]
    [re-frame.core :as rf]
    [stand-lib.components :refer [pretty-display thead tbody]]
@@ -25,24 +25,6 @@
                (not (= @field-value (:value attrs))))
       (rf/dispatch [:update-state (:name attrs) f]))
     [:input edited-attrs]))
-
-(defn deadline-component [story-path]
-  (r/create-class
-   {:display-name "deadline component"
-    :reagent-render
-    (fn []
-      [input {:type :text
-              :class "form-control"
-              :placeholder "No date"
-              :name (conj @story-path :deadline)}])
-    :component-did-mount
-    (fn [this]
-      (.datepicker (js/$ (r/dom-node this))
-                   (clj->js {:format datetime-format}))
-      (-> (.datepicker (js/$ (r/dom-node this)))
-          (.on "changeDate"
-               #(rf/dispatch [:set-state (conj @story-path :deadline)
-                              (-> % .-target .-value)]))))}))
 
 (defn form-template [story]
   (r/with-let [project (rf/subscribe [:projects/project])
@@ -129,7 +111,7 @@
          "Nobody"]])
      [form-group
       "Deadline"
-      [deadline-component story-path]]
+      [datetime-input-group (conj @story-path :deadline)]]
      (when (:created-at @story)
        [form-group
         "Created at"
@@ -251,17 +233,24 @@
        ^{:key (:story-id story)}
        [:li.list-group-item
         {:class (when (done? story) "archived")}
-        [:h3
-         [:a {:href (str "/projects/" (:project-id @project) "/stories/" (:story-id story))}
-          (:title story) " "
-          (str "[" (:priority-idx story) "]")]
-         [:div.pull-right
-          [:button.btn.btn-link {:on-click #(rf/dispatch [:stories/delete-story (:project-id story) (:story-id story)])}
-           [:i.glyphicon.glyphicon-remove]]]]
-        ;; Display only the first line of the description.
-        [:p (first
-             (clojure.string/split-lines
-              (:description story)))]]))])
+        [:div
+         {:class (and (not= "done" (:status story))
+                      (:deadline story)
+                      (condp = (deadline-status (:deadline story))
+                            :expired "bg-danger"
+                            :warning "bg-warning"
+                            nil))}
+         [:h3
+          [:a {:href (str "/projects/" (:project-id @project) "/stories/" (:story-id story))}
+           (:title story) " "
+           (str "[" (:priority-idx story) "]")]
+          [:div.pull-right
+           [:button.btn.btn-link {:on-click #(rf/dispatch [:stories/delete-story (:project-id story) (:story-id story)])}
+            [:i.glyphicon.glyphicon-remove]]]]
+         ;; Display only the first line of the description.
+         [:p (first
+              (clojure.string/split-lines
+               (:description story)))]]]))])
 
 (defn project-stories-page []
   (r/with-let [project (rf/subscribe [:projects/project])

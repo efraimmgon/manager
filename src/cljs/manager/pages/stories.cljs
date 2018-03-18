@@ -36,7 +36,8 @@
     [:div.form-horizontal
      (when-not (:project-id @story)
        (rf/dispatch [:set-state (conj @story-path :project-id) (:project-id @project)])
-       (rf/dispatch [:set-state (conj @story-path :description) ""]))
+       (rf/dispatch [:set-state (conj @story-path :description) ""])
+       (rf/dispatch [:set-state (conj @story-path :deadline) nil]))
      (when-let [story-id (:story-id @story)]
        [form-group
         "story id"
@@ -232,14 +233,14 @@
      (for [story @stories]
        ^{:key (:story-id story)}
        [:li.list-group-item
-        {:class (when (done? story) "archived")}
+        {:class
+         (cond
+           (done? story) "archived"
+           (= :expired (deadline-status (:deadline story))) "story-status story-expired"
+           (= :warning (deadline-status (:deadline story))) "story-status story-warning"
+           (= :on-schedule (deadline-status (:deadline story))) "story-status story-on-schedule"
+           :else "story-status story-unscheduled")}
         [:div
-         {:class (and (not= "done" (:status story))
-                      (:deadline story)
-                      (condp = (deadline-status (:deadline story))
-                            :expired "bg-danger"
-                            :warning "bg-warning"
-                            nil))}
          [:h3
           [:a {:href (str "/projects/" (:project-id @project) "/stories/" (:story-id story))}
            (:title story) " "

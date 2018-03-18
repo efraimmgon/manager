@@ -9,10 +9,6 @@
    [stand-lib.local-store :as ls]
    [stand-lib.re-frame.utils :refer [query]]))
 
-(defn story-defaults [story]
-  (-> story
-      (update :description #(or % ""))))
-
 (defn- rows->map [rows id]
   (reduce (fn [m row]
             (assoc m (get row id) row))

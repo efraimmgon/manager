@@ -95,3 +95,25 @@ body {
 	color: #777 !important;
 	border: none;
 }
+
+.story-status {
+	border-left-style: solid !important;
+	border-left-width: 4px !important;
+}
+
+.story-expired {
+	border-left-color: red !important;
+
+}
+
+.story-warning {
+	border-left-color: yellow !important;
+}
+
+.story-on-schedule {
+	border-left-color: green !important;
+}
+
+.story-unscheduled {
+	border-left-color: grey !important;
+}

@@ -58,13 +58,14 @@
   "Takes a (.toISOString (js/Date.)) and checks whats the deadline status.
   :ret #{:expired :warning :on-schedule}"
   [deadline]
-  (let [now (t/now)
-        deadline (parse-date :date-time deadline)]
-    (cond
-      (t/before? deadline now)
-      :expired
-      (t/before? deadline (t/plus now (t/days 7)))
-      :warning
-      :else :on-schedule)))
+  (when deadline
+    (let [now (t/now)
+          deadline (parse-date :date-time deadline)]
+      (cond
+        (t/before? deadline now)
+        :expired
+        (t/before? deadline (t/plus now (t/days 7)))
+        :warning
+        :else :on-schedule))))
 
 (def datetime-format "yyyy-mm-ddT03:00:00.000Z")

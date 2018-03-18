@@ -71,9 +71,10 @@
     [modal
      "An error has occured"
      [:div.alert.bg-danger
-      [:ul
-       (for [err error]
-         [:li (str err)])]]
+      (into
+        [:ul]
+        (for [err error]
+          [:li (str err)]))]
      [:div
       [:button.btn.btn-sm.btn-danger
        {:on-click #(rf/dispatch [:set-error nil])}

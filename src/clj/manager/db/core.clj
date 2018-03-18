@@ -23,7 +23,8 @@
 (conman/bind-connection
  *db*
  "sql/queries.sql" "sql/projects.sql" "sql/stories.sql" "sql/tasks.sql"
- "sql/users.sql" "sql/users_stories.sql")
+ "sql/users.sql" "sql/users_stories.sql" "sql/activities_history.sql"
+ "sql/story_relationships.sql")
 
 (extend-protocol jdbc/IResultSetReadColumn
   Array

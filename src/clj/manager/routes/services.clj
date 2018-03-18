@@ -46,10 +46,10 @@
       ;;; PROJECTS
 
       ; ; LIST
-      (GET "/projects" []
+      (GET "/projects" req
            :return :projects/projects
            :summary "list available projects"
-           (projects/get-all-projects))
+           (projects/get-all-projects req))
 
       ; CREATE
       (POST "/projects" []

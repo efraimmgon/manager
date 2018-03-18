@@ -23,7 +23,7 @@
  interceptors
  (fn [_ [response]]
    (js/console.log response)
-   (dispatch [:set-error (-> response :response :errors)])))
+   (dispatch [:set-error (-> response :response)])))
 
 (reg-event-db
   :initialize-db

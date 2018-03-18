@@ -8,10 +8,11 @@
    [org.joda.time]))
 
 (defn delete-project! [params]
-  (ok (db/delete-project! params)))
+  (let [ret (db/delete-project! params)]
+    (ok ret)))
 
 
-(defn get-all-projects []
+(defn get-all-projects [req]
   (ok (db/get-all-projects)))
 
 (defn create-project!

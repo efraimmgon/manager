@@ -9,6 +9,9 @@
    [stand-lib.local-store :as ls]
    [stand-lib.re-frame.utils :refer [query]]))
 
+(def str->int #(js/parseInt %))
+(def str->float #(js/parseFloat %))
+
 (defn- rows->map [rows id]
   (reduce (fn [m row]
             (assoc m (get row id) row))
@@ -30,6 +33,22 @@
                %)
             (vals tasks))
        update-status))
+
+(defn task-coercions [task]
+  (-> task
+      (update :orig-est str->float)
+      (update :curr-est str->float)))
+
+(defn tasks-coercions [tasks]
+  (->> tasks
+       tasks-map->rows
+       (map task-coercions)))
+
+(defn story-coercions [story]
+  (-> story
+      (update :type str->int)
+      (update :priority-idx str->int)
+      (update :tasks tasks-coercions)))
 
 ; ------------------------------------------------------------------------------
 ; Subs
@@ -117,7 +136,7 @@
  :stories/create-story-with-tasks
  interceptors
  (fn [{:keys [db]} [story]]
-   (let [story-updated (update story :tasks tasks-map->rows)]
+   (let [story-updated (story-coercions story)]
      (ajax/POST (str "/api/projects/" (:project-id story) "/stories")
                {:params story-updated
                 :handler #(dispatch [:navigate (str "/projects/" (:project-id story))])
@@ -128,8 +147,14 @@
  :stories/deassign-user
  interceptors
  (fn [_ [owner-id story-id]]
-   (ajax/DELETE (str "/api/stories/" story-id "/owner/" owner-id)
-                {:error-handler #(dispatch [:ajax-error %])})
+   ;; If it's a new story, nothing has been persisted yet.
+   ;; OTOH, we have to deassign users now, because later we'll only know
+   ;; which are *assigned* to the story, and not whether there was someone who
+   ;; *was* assigned that got deassigned.
+   ;; (Even though there can only be one owner, this can be changed later.)
+   (when story-id
+     (ajax/DELETE (str "/api/stories/" story-id "/owner/" owner-id)
+                  {:error-handler #(dispatch [:ajax-error %])}))
    {:dispatch-n [[:stories/set-add-owner false]
                  [:set-state (conj @(subscribe [:stories/story-path]) :owner)
                   nil]]}))

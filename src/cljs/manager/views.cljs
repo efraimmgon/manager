@@ -11,6 +11,25 @@
    [stand-lib.components :refer [thead tbody]]
    [stand-lib.re-frame.utils :refer [<sub]]))
 
+(defn create-dropdown []
+  [:li.dropdown
+   [:a.dropdown-toggle
+    {:aria-expanded "false",
+     :aria-haspopup "true",
+     :role "button",
+     :data-toggle "dropdown",
+     :href "#"}
+    "Dropdown "
+    [:span.caret]]
+   [:ul.dropdown-menu
+    [:li [:a {:href "#"} "Action"]]
+    [:li [:a {:href "#"} "Another action"]]
+    [:li [:a {:href "#"} "Something else here"]]
+    [:li.divider {:role "separator"}]
+    [:li [:a {:href "#"} "Separated link"]]]])
+
+
+
 (defn navbar []
   (r/with-let [project (rf/subscribe [:projects/project])]
     [:nav.navbar.navbar-inverse
@@ -32,6 +51,7 @@
          {:href "/users"}
          [:i.glyphicon.glyphicon-user]
          " Users"]
+        [create-dropdown]
         [:li>a
          {:href "/projects/new"}
          [:i.glyphicon.glyphicon-plus]

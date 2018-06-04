@@ -9,44 +9,45 @@
     [handle-change-at]]))
 
 (defn form-template [project]
-  (r/with-let [project-path (rf/subscribe [:projects/project-path])]
+  (let [project-path (rf/subscribe [:projects/project-path])]
     (when-not (:project-id @project)
       (rf/dispatch [:set-state (conj @project-path :description) ""]))
-    [:div.form-horizontal
-     (when (:project-id @project)
+    (fn []
+      [:div.form-horizontal
+       (when (:project-id @project)
+         [form-group
+          "Project id"
+          [:input {:class "form-control"
+                   :type :text
+                   :value (:project-id @project)
+                   :disabled true}]])
        [form-group
-        "Project id"
-        [:input {:class "form-control"
-                 :type :text
-                 :value (:project-id @project)
-                 :disabled true}]])
-     [form-group
-      "Title"
-      [:div.input-group
-       [input {:type :text
-               :class "form-control"
-               :name (conj @project-path :title)
-               :auto-focus true}]
-       [:div.input-group-addon "*"]]]
-     [form-group
-      "Description"
-      [textarea {:class "form-control"
-                 :name (conj @project-path :description)
-                 :rows 10}]]
-     (when (:created-at @project)
+        "Title"
+        [:div.input-group
+         [input {:type :text
+                 :class "form-control"
+                 :name (conj @project-path :title)
+                 :auto-focus true}]
+         [:div.input-group-addon "*"]]]
        [form-group
-        "Created at"
-        [:input {:class "form-control"
-                 :type :text
-                 :value (:created-at @project)
-                 :disabled true}]])
-     (when (:updated-at @project)
-       [form-group
-        "Updated at"
-        [:input {:class "form-control"
-                 :type :text
-                 :value (:updated-at @project)
-                 :disabled true}]])]))
+        "Description"
+        [textarea  {:class "form-control"
+                    :name (conj @project-path :description)
+                    :rows 10}]]
+       (when (:created-at @project)
+         [form-group
+          "Created at"
+          [:input {:class "form-control"
+                   :type :text
+                   :value (:created-at @project)
+                   :disabled true}]])
+       (when (:updated-at @project)
+         [form-group
+          "Updated at"
+          [:input {:class "form-control"
+                   :type :text
+                   :value (:updated-at @project)
+                   :disabled true}]])])))
 
 (defn new-project-page
   "Template to CREATE a project"

@@ -9,23 +9,6 @@
    [stand-lib.comps.forms :refer [input textarea select] :as forms]
    [stand-lib.re-frame.utils :refer [<sub]]))
 
-(defn checkbox-single-input
-  [attrs]
-  (let [field-value (rf/subscribe [:query (:name attrs)])
-        f (fn [acc] (if (nil? acc) (:value attrs) nil))
-        edited-attrs
-        (-> attrs
-            (assoc :type :checkbox)
-            (update :on-change #(or % (fn [e] (rf/dispatch [:update-state (:name attrs) f]))))
-            (assoc :checked (or (:default-checked attrs)
-                                (= (:value attrs) @field-value)))
-            (dissoc :default-checked))]
-    ;; persist value when it's the default
-    (when (and (:checked edited-attrs)
-               (not (= @field-value (:value attrs))))
-      (rf/dispatch [:update-state (:name attrs) f]))
-    [:input edited-attrs]))
-
 (defn form-template [story]
   (r/with-let [project (rf/subscribe [:projects/project])
                priorities (rf/subscribe [:priorities])
@@ -145,9 +128,9 @@
                   input-class (if (done? task) "form-control task-input-done" "form-control")]
               ^{:key (:task-id task)}
               [:tr {:class (when (done? task) "task-done")}
-               [:td [checkbox-single-input
-                     {:name (conj @story-path :tasks task-id :status)
-                      :value "done"}]]
+               [:td [input
+                     {:type :checkbox
+                      :name (conj @story-path :tasks task-id :status)}]]
                [:td [input {:type :text
                             :class input-class
                             :name (conj @story-path :tasks task-id :title)}]]

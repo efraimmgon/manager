@@ -10,106 +10,107 @@
    [stand-lib.re-frame.utils :refer [<sub]]))
 
 (defn form-template [story]
-  (r/with-let [project (rf/subscribe [:projects/project])
-               priorities (rf/subscribe [:priorities])
-               types (rf/subscribe [:types])
-               story-path (rf/subscribe [:stories/story-path])
-               users (rf/subscribe [:users/all])
-               add-owner? (rf/subscribe [:stories/add-owner?])]
-    [:div.form-horizontal
-     (when-not (:project-id @story)
-       (rf/dispatch [:set-state (conj @story-path :project-id) (:project-id @project)])
-       (rf/dispatch [:set-state (conj @story-path :description) ""])
-       (rf/dispatch [:set-state (conj @story-path :deadline) nil]))
-     (when-let [story-id (:story-id @story)]
+  (let [project (rf/subscribe [:projects/project])
+        priorities (rf/subscribe [:priorities])
+        types (rf/subscribe [:types])
+        story-path (rf/subscribe [:stories/story-path])
+        users (rf/subscribe [:users/all])
+        add-owner? (rf/subscribe [:stories/add-owner?])]
+    (fn []
+      [:div.form-horizontal
+       (when-let [story-id (:story-id @story)]
+         [form-group
+          "story id"
+          [:input {:type :text
+                   :class "form-control"
+                   :value story-id
+                   :disabled true}]])
+       [input {:type :hidden
+               :name (conj @story-path :project-id)
+               :default-value (:project-id @project)}]
        [form-group
-        "story id"
-        [:input {:type :text
-                 :class "form-control"
-                 :value story-id
-                 :disabled true}]])
-     [form-group
-      "Title"
-      [:div.input-group
-       [input {:type :text
-               :class "form-control"
-               :name (conj @story-path :title)
-               :auto-focus (when-not (:story-id @story) true)}]
-       [:div.input-group-addon "*"]]]
-     [form-group
-      "Description"
-      [textarea {:class "form-control"
-                 :name (conj @story-path :description)
-                 :rows 7}]]
-     [form-group
-      "Status"
-      [:div
-       (doall
-         (for [{:keys [id name default?]} (<sub [:status])]
-           ^{:key id}
-           [:label.radio-inline
-            [input {:type :radio
-                    :name (conj @story-path :status)
-                    :default-checked (and (nil? (:status @story)) default?)
-                    :value name}]
-            " " (clojure.string/capitalize name)]))]]
-     [form-group
-      "Type"
-      [:div.input-group
-       [select {:class "form-control"
-                :name (conj @story-path :type)
-                :default-value (:idx (first @types))}
-        (for [{:keys [name idx]} @types]
-          ^{:key idx}
-          [:option {:value idx}
-           (clojure.string/capitalize name)])]
-       [:div.input-group-addon "*"]]]
-     [form-group
-      "Priority"
-      [:div.input-group
-       [select {:class "form-control"
-                :name (conj @story-path :priority-idx)
-                :default-value (:idx (first @priorities))}
-        (for [{:keys [name idx]} @priorities]
-          ^{:key idx}
-          [:option {:value idx}
-           (clojure.string/capitalize name)])]
-       [:div.input-group-addon "*"]]]
-     (if (or (:owner @story) @add-owner?)
-       [form-group
-        "Owner"
+        "Title"
         [:div.input-group
-          [select {:class "form-control"
-                   :name (conj @story-path :owner)
-                   :default-value (:user-id (first @users))}
-           (for [{:keys [user-id] :as user} @users]
-             ^{:key user-id}
-             [:option {:value user-id}
-              (full-name-or-email user)])]
-         [:div.input-group-addon
-          {:on-click #(rf/dispatch [:stories/deassign-user (:owner @story) (:story-id @story)])}
-          [:i.glyphicon.glyphicon-remove]]]]
+         [input {:type :text
+                 :class "form-control"
+                 :name (conj @story-path :title)
+                 :auto-focus (when-not (:story-id @story) true)}]
+         [:div.input-group-addon "*"]]]
        [form-group
-        "Owner"
-        [:button.btn.btn-default {:on-click #(rf/dispatch [:stories/set-add-owner true])}
-         "Nobody"]])
-     [form-group
-      "Deadline"
-      [datetime-input-group (conj @story-path :deadline)]]
-     (when (:created-at @story)
+        "Description"
+        [textarea {:class "form-control"
+                   :name (conj @story-path :description)
+                   :rows 7
+                   :default-value ""}]]
        [form-group
-        "Created at"
-        [input {:type :text
-                :class "form-control"
-                :name (conj @story-path :created-at)
-                :disabled true}]])
-     (when (:updated-at @story)
+        "Status"
+        [:div
+         (doall
+           (for [{:keys [id name default?]} (<sub [:status])]
+             ^{:key id}
+             [:label.radio-inline
+              [input {:type :radio
+                      :name (conj @story-path :status)
+                      :default-checked (and (nil? (:status @story)) default?)
+                      :value name}]
+              " " (clojure.string/capitalize name)]))]]
        [form-group
-        "Updated at"
-        [input {:type :text
-                :class "form-control"
-                :name (conj @story-path :updated-at)
-                :disabled true}]])]))
+        "Type"
+        [:div.input-group
+         [select {:class "form-control"
+                  :name (conj @story-path :type)
+                  :default-value (:idx (first @types))}
+          (for [{:keys [name idx]} @types]
+            ^{:key idx}
+            [:option {:value idx}
+             (clojure.string/capitalize name)])]
+         [:div.input-group-addon "*"]]]
+       [form-group
+        "Priority"
+        [:div.input-group
+         [select {:class "form-control"
+                  :name (conj @story-path :priority-idx)
+                  :default-value (:idx (first @priorities))}
+          (for [{:keys [name idx]} @priorities]
+            ^{:key idx}
+            [:option {:value idx}
+             (clojure.string/capitalize name)])]
+         [:div.input-group-addon "*"]]]
+       (if (or (:owner @story) @add-owner?)
+         [form-group
+          "Owner"
+          [:div.input-group
+            [select {:class "form-control"
+                     :name (conj @story-path :owner)
+                     :default-value (:user-id (first @users))}
+             (for [{:keys [user-id] :as user} @users]
+               ^{:key user-id}
+               [:option {:value user-id}
+                (full-name-or-email user)])]
+           [:div.input-group-addon
+            {:on-click #(rf/dispatch [:stories/deassign-user (:owner @story) (:story-id @story)])}
+            [:i.glyphicon.glyphicon-remove]]]]
+         [form-group
+          "Owner"
+          [:button.btn.btn-default {:on-click #(rf/dispatch [:stories/set-add-owner true])}
+           "Nobody"]])
+       [form-group
+        "Deadline"
+        [datetime-input-group (conj @story-path :deadline)]]
+       (when (:created-at @story)
+         [form-group
+          "Created at"
+          [input {:type :text
+                  :class "form-control"
+                  :name (conj @story-path :created-at)
+                  :disabled true}]])
+       (when (:updated-at @story)
+         [form-group
+          "Updated at"
+          [input {:type :text
+                  :class "form-control"
+                  :name (conj @story-path :updated-at)
+                  :disabled true}]])])))
 
 (defn task-items [tasks]
   (r/with-let [story-path (rf/subscribe [:stories/story-path])]

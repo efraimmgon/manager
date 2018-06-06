@@ -177,7 +177,7 @@
  interceptors
  (fn [_ [story]]
    (ajax/PUT (str "/api/stories/" (:story-id story) "/with-tasks")
-             {:params (update story :tasks tasks-map->rows)
+             {:params (story-coercions story)
               :handler #(dispatch [:navigate (str "/projects/" (:project-id story))])
               :error-handler #(dispatch [:ajax-error %])})
    nil))

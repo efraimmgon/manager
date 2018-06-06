@@ -6,7 +6,7 @@
    [stand-lib.re-frame.utils :refer [<sub]]
    [stand-lib.comps.forms :refer [input textarea]]
    [stand-lib.utils.forms :refer
-    [handle-change-at]]))
+    [handle-change-at!]]))
 
 (defn form-template [project]
   (let [project-path (rf/subscribe [:projects/project-path])]

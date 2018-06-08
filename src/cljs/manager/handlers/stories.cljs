@@ -36,8 +36,10 @@
 
 (defn task-coercions [task]
   (-> task
+      (assoc :status (if (:done? task) "done" "pending"))
       (update :orig-est str->float)
-      (update :curr-est str->float)))
+      (update :curr-est str->float)
+      (dissoc :done?)))
 
 (defn tasks-coercions [tasks]
   (->> tasks

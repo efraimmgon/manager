@@ -51,7 +51,7 @@
              [:label.radio-inline
               [input {:type :radio
                       :name (conj @story-path :status)
-                      :default-checked (and (nil? (:status @story)) default?)
+                      :default-checked (and (not (:status @story)) default?)
                       :value name}]
               " " (clojure.string/capitalize name)]))]]
        [form-group
@@ -126,12 +126,12 @@
         (doall
           (for [task @tasks]
             (let [task-id (:task-id task)
-                  input-class (if (done? task) "form-control task-input-done" "form-control")]
+                  input-class (if (:done? task) "form-control task-input-done" "form-control")]
               ^{:key (:task-id task)}
-              [:tr {:class (when (done? task) "task-done")}
-               [:td [input
-                     {:type :checkbox
-                      :name (conj @story-path :tasks task-id :status)}]]
+              [:tr {:class (when (:done? task) "task-done")}
+               [:td [input {:type :checkbox
+                            :name (conj @story-path :tasks task-id :done?)
+                            :default-value (= (:status task) "done")}]]
                [:td [input {:type :text
                             :class input-class
                             :name (conj @story-path :tasks task-id :title)}]]

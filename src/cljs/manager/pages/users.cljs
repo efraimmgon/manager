@@ -8,49 +8,51 @@
 
 (defn form-template []
   (let [user (rf/subscribe [:users/user])
-        ns [:users :user]]
-    (when-not (:user-id @user)
-      (rf/dispatch [:set-state (conj ns :is-active) true]))
+        user-path [:users :user]]
     (fn []
       [:div.form-horizontal
-       (when (:user-id @user)
+       (when-let [user-id (:user-id @user)]
          [form-group
           "User id"
           [:input {:class "form-control"
                    :type :text
-                   :value (:user-id @user)
+                   :value user-id
                    :disabled true}]])
        [form-group
         "First name"
         [input {:type :text
                 :class "form-control"
-                :name (conj ns :first-name)
+                :name (conj user-path :first-name)
                 :auto-focus true}]]
        [form-group
         "Last name"
         [input {:type :text
                 :class "form-control"
-                :name (conj ns :last-name)}]]
+                :name (conj user-path :last-name)}]]
        [form-group
         "Email"
         [input {:type :email
                 :class "form-control"
-                :name (conj ns :email)}]]
+                :name (conj user-path :email)}]]
        [form-group
         "Password"
         [input {:type :password
                 :class "form-control"
-                :name (conj ns :pass)}]]
+                :name (conj user-path :pass)
+                ;; Reacts complains about change from controlled to uncontrolled
+                ;; comps. This seems to make it stop. Still don't know why.
+                :value (or (:pass @user) "")}]]
        [form-group
         "Active?"
         [input {:type :checkbox
                 :class "form-control"
-                :name (conj ns :is-active)}]]
+                :name (conj user-path :is-active)
+                :default-checked true}]]
        [form-group
         "Admin?"
         [input {:type :checkbox
                 :class "form-control"
-                :name (conj ns :admin)}]]
+                :name (conj user-path :admin)}]]
        (when (:created-at @user)
          [form-group
           "Created at"

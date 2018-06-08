@@ -11,7 +11,7 @@
    [stand-lib.components :refer [thead tbody]]
    [stand-lib.re-frame.utils :refer [<sub]]))
 
-(defn create-dropdown []
+(defn create-dropdown [project]
   [:li.dropdown
    [:a.dropdown-toggle
     {:aria-expanded "false",
@@ -19,16 +19,18 @@
      :role "button",
      :data-toggle "dropdown",
      :href "#"}
-    "Dropdown "
+    [:i.glyphicon.glyphicon-plus]
+    " Create "
     [:span.caret]]
    [:ul.dropdown-menu
-    [:li [:a {:href "#"} "Action"]]
-    [:li [:a {:href "#"} "Another action"]]
-    [:li [:a {:href "#"} "Something else here"]]
-    [:li.divider {:role "separator"}]
-    [:li [:a {:href "#"} "Separated link"]]]])
-
-
+    (when @project
+      [:li>a
+       {:href (str "/projects/" (:project-id @project) "/stories/new")}
+       "Story"])
+    ;[:li.divider {:role "separator"}]
+    [:li>a
+     {:href "/projects/new"}
+     "Project"]]])
 
 (defn navbar []
   (r/with-let [project (rf/subscribe [:projects/project])]
@@ -51,14 +53,7 @@
          {:href "/users"}
          [:i.glyphicon.glyphicon-user]
          " Users"]
-        [create-dropdown]
-        [:li>a
-         {:href "/projects/new"}
-         [:i.glyphicon.glyphicon-plus]
-         " Create project"]
-        (when @project
-          [:li
-           [stories/new-story-button project]])]]]]))
+        [create-dropdown project]]]]]))
 
 (def pages
   {:home #'projects/projects-page

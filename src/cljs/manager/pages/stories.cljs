@@ -9,6 +9,99 @@
    [stand-lib.comps.forms :refer [input textarea select] :as forms]
    [stand-lib.re-frame.utils :refer [<sub]]))
 
+(defn form-template-sidebar [story]
+  (let [project (rf/subscribe [:projects/project])
+        priorities (rf/subscribe [:priorities])
+        types (rf/subscribe [:types])
+        story-path (rf/subscribe [:stories/story-path])
+        users (rf/subscribe [:users/all])
+        add-owner? (rf/subscribe [:stories/add-owner?])]
+    (fn []
+      [:div
+       (when-let [story-id (:story-id @story)]
+         [:div.form-group
+          [:label "story id"]
+          [:input {:type :text
+                   :class "form-control"
+                   :value story-id
+                   :disabled true}]])
+       [:div.form-group
+        [:label "project id"]
+        [input {:type :text
+                :class "form-control"
+                :name (conj @story-path :project-id)
+                :default-value (:project-id @project)
+                :disabled true}]]
+       [:div.form-group
+        [:label "Status"]
+        [:div
+         (doall
+           (for [{:keys [id name default?]} (<sub [:status])]
+             ^{:key id}
+             [:label.radio-inline
+              [input {:type :radio
+                      :name (conj @story-path :status)
+                      :default-checked (and (not (:status @story)) default?)
+                      :value name}]
+              " " (clojure.string/capitalize name)]))]]
+       [:div.form-group
+        [:label "Type"]
+        [:div.input-group
+         [select {:class "form-control"
+                  :name (conj @story-path :type)
+                  :default-value (:idx (first @types))}
+          (for [{:keys [name idx]} @types]
+            ^{:key idx}
+            [:option {:value idx}
+             (clojure.string/capitalize name)])]
+         [:div.input-group-addon "*"]]]
+       [:div.form-group
+        [:label "Priority"]
+        [:div.input-group
+         [select {:class "form-control"
+                  :name (conj @story-path :priority-idx)
+                  :default-value (:idx (first @priorities))}
+          (for [{:keys [name idx]} @priorities]
+            ^{:key idx}
+            [:option {:value idx}
+             (clojure.string/capitalize name)])]
+         [:div.input-group-addon "*"]]]
+       (if (or (:owner @story) @add-owner?)
+         [:div.form-group
+          [:label "Owner"]
+          [:div.input-group
+            [select {:class "form-control"
+                     :name (conj @story-path :owner)
+                     :default-value (:user-id (first @users))}
+             (for [{:keys [user-id] :as user} @users]
+               ^{:key user-id}
+               [:option {:value user-id}
+                (full-name-or-email user)])]
+           [:div.input-group-addon
+            {:on-click #(rf/dispatch [:stories/deassign-user (:owner @story) (:story-id @story)])}
+            [:i.glyphicon.glyphicon-remove]]]]
+         [:div.form-group
+          [:label "Owner"] [:br]
+          [:button.btn.btn-default {:on-click #(rf/dispatch [:stories/set-add-owner true])}
+           "Nobody"]])
+       [:div.form-group
+        [:label "Deadline"]
+        [datetime-input-group (conj @story-path :deadline)]]
+       (when (:created-at @story)
+         [:div.form-group
+          [:label "Created at"]
+          [input {:type :text
+                  :class "form-control"
+                  :name (conj @story-path :created-at)
+                  :disabled true}]])
+       (when (:updated-at @story)
+         [:div.form-group
+          [:label "Updated at"]
+          [input {:type :text
+                  :class "form-control"
+                  :name (conj @story-path :updated-at)
+                  :disabled true}]])])))
+
 (defn form-template [story]
   (let [project (rf/subscribe [:projects/project])
         priorities (rf/subscribe [:priorities])
@@ -18,16 +111,6 @@
         add-owner? (rf/subscribe [:stories/add-owner?])]
     (fn []
       [:div.form-horizontal
-       (when-let [story-id (:story-id @story)]
-         [form-group
-          "story id"
-          [:input {:type :text
-                   :class "form-control"
-                   :value story-id
-                   :disabled true}]])
-       [input {:type :hidden
-               :name (conj @story-path :project-id)
-               :default-value (:project-id @project)}]
        [form-group
         "Title"
         [:div.input-group
@@ -41,76 +124,7 @@
         [textarea {:class "form-control"
                    :name (conj @story-path :description)
                    :rows 7
-                   :default-value ""}]]
-       [form-group
-        "Status"
-        [:div
-         (doall
-           (for [{:keys [id name default?]} (<sub [:status])]
-             ^{:key id}
-             [:label.radio-inline
-              [input {:type :radio
-                      :name (conj @story-path :status)
-                      :default-checked (and (not (:status @story)) default?)
-                      :value name}]
-              " " (clojure.string/capitalize name)]))]]
-       [form-group
-        "Type"
-        [:div.input-group
-         [select {:class "form-control"
-                  :name (conj @story-path :type)
-                  :default-value (:idx (first @types))}
-          (for [{:keys [name idx]} @types]
-            ^{:key idx}
-            [:option {:value idx}
-             (clojure.string/capitalize name)])]
-         [:div.input-group-addon "*"]]]
-       [form-group
-        "Priority"
-        [:div.input-group
-         [select {:class "form-control"
-                  :name (conj @story-path :priority-idx)
-                  :default-value (:idx (first @priorities))}
-          (for [{:keys [name idx]} @priorities]
-            ^{:key idx}
-            [:option {:value idx}
-             (clojure.string/capitalize name)])]
-         [:div.input-group-addon "*"]]]
-       (if (or (:owner @story) @add-owner?)
-         [form-group
-          "Owner"
-          [:div.input-group
-            [select {:class "form-control"
-                     :name (conj @story-path :owner)
-                     :default-value (:user-id (first @users))}
-             (for [{:keys [user-id] :as user} @users]
-               ^{:key user-id}
-               [:option {:value user-id}
-                (full-name-or-email user)])]
-           [:div.input-group-addon
-            {:on-click #(rf/dispatch [:stories/deassign-user (:owner @story) (:story-id @story)])}
-            [:i.glyphicon.glyphicon-remove]]]]
-         [form-group
-          "Owner"
-          [:button.btn.btn-default {:on-click #(rf/dispatch [:stories/set-add-owner true])}
-           "Nobody"]])
-       [form-group
-        "Deadline"
-        [datetime-input-group (conj @story-path :deadline)]]
-       (when (:created-at @story)
-         [form-group
-          "Created at"
-          [input {:type :text
-                  :class "form-control"
-                  :name (conj @story-path :created-at)
-                  :disabled true}]])
-       (when (:updated-at @story)
-         [form-group
-          "Updated at"
-          [input {:type :text
-                  :class "form-control"
-                  :name (conj @story-path :updated-at)
-                  :disabled true}]])])))
+                   :default-value ""}]]])))
 
 (defn task-items [tasks]
   (r/with-let [story-path (rf/subscribe [:stories/story-path])]
@@ -145,10 +159,6 @@
                      {:on-click #(rf/dispatch [:tasks/delete-task task-id])}
                      [:i.glyphicon.glyphicon-remove]]]])))]])))
 
-; Load story with tasks
-; When clicked on "update" tasks with no story-id are saved, while tasks
-; with an id are updated
-; Optionally I can use the on-blur event to persist changes
 (defn edit-story-page []
   (r/with-let [project (rf/subscribe [:projects/project])
                story (rf/subscribe [:stories/story])
@@ -163,20 +173,23 @@
        :active? true}]
      [:div.panel.panel-default
       [:div.panel-heading
-       [:h2 "Edit story"]]
+       [:h2 (:title @story)]]
       [:div.panel-body
-       [form-template story]
-       [:h3 "Tasks"]
-       [task-items tasks]
-       [:button.btn.btn-default
-        ; TODO
-        {:on-click #(rf/dispatch [:stories/story-tasks-tick :story])}
-        [:i.glyphicon.glyphicon-plus]
-        " Add task"]
-       [:div.col-sm-offset-2.col-sm-10
-        [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:stories/update-story-with-tasks @story])}
-         "Update"]]]]]))
+       [:div.col-md-9
+        [form-template story]
+        [:h4 "Tasks"]
+        [task-items tasks]
+        [:button.btn.btn-default
+         {:on-click #(rf/dispatch [:stories/story-tasks-tick :story])}
+         " Add task"]
+        [:hr]
+        [:div.row>div.col-sm-offset-2.col-sm-10
+         [:button.btn.btn-primary
+          {:on-click #(rf/dispatch [:stories/update-story-with-tasks @story])}
+          "Update"]]]
+       [:div.col-md-3
+        [form-template-sidebar story]]]]]))
+
 
 (defn new-story-page []
   (r/with-let [project (rf/subscribe [:projects/project])
@@ -191,17 +204,20 @@
       [:div.panel-heading
        [:h2 "Create story"]]
       [:div.panel-body
-       [form-template story]
-       [:h3 "Tasks"]
-       [task-items tasks]
-       [:button.btn.btn-default
-        {:on-click #(rf/dispatch [:stories/story-tasks-tick :new-story])}
-        [:i.glyphicon.glyphicon-plus]
-        " Add task"]
-       [:div.col-sm-offset-2.col-sm-10
-        [:button.btn.btn-primary
-         {:on-click #(rf/dispatch [:stories/create-story-with-tasks @story])}
-         "Create"]]]]]))
+       [:div.col-md-9
+        [form-template story]
+        [:h4 "Tasks"]
+        [task-items tasks]
+        [:button.btn.btn-default
+         {:on-click #(rf/dispatch [:stories/story-tasks-tick :story])}
+         " Add task"]
+        [:hr]
+        [:div.row>div.col-sm-offset-2.col-sm-10
+         [:button.btn.btn-primary
+          {:on-click #(rf/dispatch [:stories/create-story-with-tasks @story])}
+          "Create"]]]
+       [:div.col-md-3
+        [form-template-sidebar story]]]]]))
 
 (defn new-story-button [project]
   [:a.btn.btn-link
